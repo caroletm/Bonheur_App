@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct BoutonFusee: View {
-    
+
+   @State var isPressed : Bool
+  
     struct Octagon: Shape {
         func path(in rect: CGRect) -> Path {
             let w = rect.width
@@ -29,21 +31,63 @@ struct BoutonFusee: View {
         }
     }
     
+    func boutonFusee(width : CGFloat, height : CGFloat, image : ImageResource, isPressed: Bool) -> some View {
+        
+        if !isPressed {
+            return AnyView (
+                ZStack {
+                    Circle()
+                        .frame(width: width, height: height)
+                        .foregroundColor(.greyDarkButton)
+                    Octagon()
+                        .fill(Color.greyLightButton)
+                        .frame(width: width-12, height: height-12)
+                        .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)
+                    Image(image)
+                        .shadow(color: .black, radius: 2)
+                }
+            )
+        } else {
+            return AnyView (
+                ZStack {
+                    Circle()
+                        .frame(width: width, height: height)
+                        .foregroundColor(.greyDarkButton)
+                    
+                    Octagon()
+                        .fill(Color.greyDarkButton)
+                        .frame(width: width-12, height: height-12)
+                        .overlay(
+                            Octagon()
+                                .stroke(Color.greyDarkText.opacity(0.2), lineWidth: 4)
+                        )
+                        .overlay(
+                            Octagon()
+                                .stroke(Color.black.opacity(0.6), lineWidth: 3)
+                                .blur(radius: 4)
+                                .offset(x: -2, y: 2)
+                                .mask(Octagon().fill(LinearGradient(
+                                    gradient: Gradient(colors: [.black, .gray]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )))
+                        )
+                    Image(image)
+                        .shadow(color: .black, radius: 2)
+
+                }
+            )
+        }
+    }
+    
     var body: some View {
         
-        ZStack {
-            Circle()
-                .frame(width: 62, height: 62)
-                .foregroundColor(.greyDarkButton)
-            Octagon()
-                      .fill(Color.greyLightButton)
-                      .frame(width: 50, height: 50)
-                      .shadow(color: .black, radius: 4, x: 2, y: 2)
-
-        }
+        boutonFusee(width: 62, height: 62, image : .fuseeSeule, isPressed: isPressed)
     }
 }
 
 #Preview {
-    BoutonFusee()
+    VStack {
+        BoutonFusee(isPressed: true)
+    }
 }
