@@ -61,7 +61,6 @@ struct SouvenirsView: View {
                     }
                 }
                 .padding(.top, 60)
-                
             }
 
             .toolbar {
@@ -69,7 +68,7 @@ struct SouvenirsView: View {
                     BoutonFusee(isPressed: false)
                 }
                 ToolbarItem(placement : .navigationBarLeading) {
-                    ChevronGauche()
+                    BoutonChevron(image: .chevronLeft)
                 }
                 ToolbarItem(placement: .principal) {
                     Text("Mes souvenirs")
@@ -78,7 +77,6 @@ struct SouvenirsView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.large)
-         
         }
     }
 }

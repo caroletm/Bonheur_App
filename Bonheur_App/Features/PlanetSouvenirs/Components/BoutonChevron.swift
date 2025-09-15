@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct ChevronDroit: View {
+struct BoutonChevron: View {
+    
+   @State var image : ImageResource
   
     struct Octagon: Shape {
         func path(in rect: CGRect) -> Path {
@@ -29,7 +31,7 @@ struct ChevronDroit: View {
         }
     }
     
-    func chevronDroit(width : CGFloat, height : CGFloat, image : ImageResource) -> some View {
+    func boutonChevron(width : CGFloat, height : CGFloat, image : ImageResource) -> some View {
         
         ZStack {
             Circle()
@@ -40,16 +42,18 @@ struct ChevronDroit: View {
                       .frame(width: width-12, height: height-12)
                       .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)
             Image(image)
-
         }
     }
     
     var body: some View {
         
-        chevronDroit(width: 44, height: 44, image : .chevronRight)
+        boutonChevron(width: 44, height: 44, image : image)
     }
 }
 
 #Preview {
-    ChevronGauche()
+    VStack {
+        BoutonChevron(image : .chevronRight)
+        BoutonChevron(image: .chevronLeft)
+    }
 }
