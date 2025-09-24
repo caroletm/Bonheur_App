@@ -88,6 +88,6 @@ struct BoutonFusee: View {
 
 #Preview {
     VStack {
-        BoutonFusee(isPressed: true)
+        BoutonFusee(isPressed: false)
     }
 }
