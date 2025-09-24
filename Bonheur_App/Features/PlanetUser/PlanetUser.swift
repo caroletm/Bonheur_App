@@ -72,6 +72,11 @@ struct PlanetUserView: View {
                 .scaledToFit()
                 .frame(width: 85, height: 85)
                 .offset(x: 145, y: 530)
+            //Bouton Fusée
+            BoutonFusee(isPressed: false)
+                .offset(x: 0, y: 650)
+            
+            
             
             // Contenu au premier plan
             VStack {
