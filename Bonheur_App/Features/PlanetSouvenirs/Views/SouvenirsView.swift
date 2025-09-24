@@ -38,7 +38,7 @@ struct SouvenirsView: View {
                                 ScrollView (.horizontal) {
                                     HStack {
                                         ForEach(last5Souvenirs, id: \.id) { souvenir in
-                                            CadreVignette(image : souvenir.photo ?? .photoDog)
+                                            CadreVignette(image : souvenir.photo ?? .photoDog, date : Date(), iconTheme: souvenir.theme.iconName)
                                         }
                                     }
                                     .padding()
@@ -58,6 +58,7 @@ struct SouvenirsView: View {
                                     Spacer()
                                     BoutonFiltre()
                                         .padding(.trailing)
+                                   
                                 }
                                 
                                 // lazyVgrid : grille verticale de 3 colonnes
@@ -77,7 +78,7 @@ struct SouvenirsView: View {
             
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    BoutonFusee(isPressed: false)
+                        BoutonFusee(isPressed: false)
                 }
                 ToolbarItem(placement : .navigationBarLeading) {
                     BoutonChevron(image: .chevronLeft)

@@ -28,5 +28,11 @@ class SouvenirsViewModel {
         return grouped.sorted { $0.key > $1.key }
     }
     
+    func dateFormatter(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "fr_FR")
+        formatter.dateFormat = "dd MMMM yyyy"
+        return formatter.string(from: date)
+    }
     
 }

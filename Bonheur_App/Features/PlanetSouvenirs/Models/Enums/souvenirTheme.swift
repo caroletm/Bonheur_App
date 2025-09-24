@@ -34,7 +34,7 @@ enum SouvenirTheme: CaseIterable {
         case .social:
             return .logoSocial
         case .apprentissage:
-            return .logoSocial
+            return .logoApprentisage
         case .energie:
             return .logoEnergie
         }
