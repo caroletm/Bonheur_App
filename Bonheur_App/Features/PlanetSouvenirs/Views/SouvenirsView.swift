@@ -58,7 +58,6 @@ struct SouvenirsView: View {
                                     Spacer()
                                     BoutonFiltre()
                                         .padding(.trailing)
-                                   
                                 }
                                 
                                 // lazyVgrid : grille verticale de 3 colonnes
