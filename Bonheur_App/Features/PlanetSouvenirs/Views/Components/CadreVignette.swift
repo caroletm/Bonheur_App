@@ -48,6 +48,7 @@ struct CadreVignette: View {
                                 .scaledToFit()
                                 .frame(width: 50, height: 50)
                                 .padding(10)
+                                .shadow(color: .white, radius: 10)
                             Spacer()
                         }
                         Spacer()

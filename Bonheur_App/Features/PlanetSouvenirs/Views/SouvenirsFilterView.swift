@@ -9,13 +9,19 @@ import SwiftUI
 
 struct SouvenirsFilterView: View {
     
-    @State private var selectedMonth = 7
-    @State private var selectedYear = 2025
+    @State private var selectedMonth : Int?
+    @State private var selectedYear : Int?
     
     @State var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-                  "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+                         "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
     
- @State var years = Array(2010...2030)
+    @State var years = Array(2010...2030)
+    
+    @State var isSelectedDefi : Bool = false
+    @State var isSelectedMap : Bool = false
+    @State var isSelectedTheme : Bool = false
+    @State var selectedTheme : SouvenirTheme?
+    
     
     var body: some View {
         
@@ -32,7 +38,7 @@ struct SouvenirsFilterView: View {
                     Spacer()
                     ZStack {
                         HStack {
-                          MonthPicker(selectedMonth: $selectedMonth, months: $months)
+                            MonthPicker(selectedMonth: $selectedMonth, months: $months)
                             YearPicker(selectedYear: $selectedYear, years: $years)
                         }
                         .padding(.bottom, 10)
@@ -43,31 +49,70 @@ struct SouvenirsFilterView: View {
                 HStack {
                     Text("Défi : ")
                     Spacer()
-                    BoutonSwitch(isOn: true)
+                    Button {
+                        isSelectedDefi.toggle()
+                    }label: {
+                        if isSelectedDefi {
+                            BoutonSwitch(isOn: true)
+                        }else {
+                            BoutonSwitch(isOn: false)
+                        }
+                    }
                 }.padding(5)
                 HStack {
                     Text("Map :")
                     Spacer()
-                    BoutonSwitch(isOn: false)
+                    Button {
+                        isSelectedMap.toggle()
+                    }label: {
+                        if isSelectedMap {
+                            BoutonSwitch(isOn: true)
+                        }else {
+                            BoutonSwitch(isOn: false)
+                        }
+                    }
                 }.padding(5)
                 HStack {
-                    Text("Type :")
+                    Text("Theme :")
                     Spacer()
                 }
                 .padding(5)
                 HStack (spacing : 10) {
                     Spacer()
                     ForEach(SouvenirTheme.allCases, id: \.self) { theme in
-                        Image(theme.iconName)
-                            .resizable()
-                            .frame(width: 65, height: 65)
-                            .shadow(color : .white, radius: 10)
+                        
+                        Button {
+                            
+                            isSelectedTheme.toggle()
+                            
+                            if isSelectedTheme {
+                                selectedTheme = theme
+                                
+                            }else{
+                                selectedTheme = nil
+                            }
+                            
+                        }label: {
+                            
+                            if selectedTheme == theme {
+                                Image(theme.iconName)
+                                    .resizable()
+                                    .frame(width: 65, height: 65)
+                                    .shadow(color : .white, radius: 10)
+                            }else {
+                                Image(theme.iconName)
+                                    .resizable()
+                                    .frame(width: 65, height: 65)
+                                    .opacity(0.3)
+                            }
+                            
+                        }
                     }
                     Spacer()
                 }
                 HStack {
                     Spacer()
-                    BoutonText(text: "OK", width: 40)
+                    BoutonText(text: "OK", width: 45)
                     Spacer()
                 }.padding(10)
             }
@@ -75,14 +120,15 @@ struct SouvenirsFilterView: View {
             .foregroundColor(.white)
             .frame(width: 300, height: 433)
             .padding(.top, 105)
-
         }
     }
 }
 
 #Preview {
-    SouvenirsFilterView()
+    SouvenirsFilterView(selectedTheme : nil)
 }
+
+//MARK: - Extracted Views
 
 struct LignePointilles: View {
     var body: some View {
@@ -101,7 +147,7 @@ struct LignePointilles: View {
 
 struct MonthPicker: View {
     
-    @Binding var selectedMonth: Int
+    @Binding var selectedMonth: Int?
     @Binding var months: [String]
     
     var body: some View {
@@ -114,7 +160,7 @@ struct MonthPicker: View {
                 }
             }
         } label: {
-            Text(months[selectedMonth - 1])
+            Text(months[(selectedMonth ?? 1) - 1])
                 .foregroundColor(.white)
         }
     }
@@ -122,7 +168,7 @@ struct MonthPicker: View {
 
 struct YearPicker: View {
     
-    @Binding var selectedYear: Int
+    @Binding var selectedYear: Int?
     @Binding var years: [Int]
     
     var body: some View {
@@ -136,7 +182,7 @@ struct YearPicker: View {
                 }
             }
         } label: {
-            Text("\(selectedYear)")
+            Text("\(selectedYear ?? 2020)")
                 .foregroundColor(.white)
         }
     }
