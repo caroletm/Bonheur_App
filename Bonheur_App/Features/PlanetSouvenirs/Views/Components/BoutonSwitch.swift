@@ -62,7 +62,7 @@ struct BoutonSwitch: View {
                         .opacity(0.5)
                         .frame(width: 67, height: 34)
                         .cornerRadius(50)
-                        .shadow(color: .greenSwitch.opacity(1), radius: 8)
+                        .shadow(color: .white, radius: 10)
                     ZStack {
                         Circle()
                             .fill(Color.greyDarkButton)

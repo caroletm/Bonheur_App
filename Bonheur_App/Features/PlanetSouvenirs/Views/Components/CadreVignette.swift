@@ -46,8 +46,8 @@ struct CadreVignette: View {
                             Image(iconTheme)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 70, height: 70)
-                                .padding(0)
+                                .frame(width: 50, height: 50)
+                                .padding(10)
                             Spacer()
                         }
                         Spacer()
@@ -65,7 +65,7 @@ struct CadreVignette: View {
 #Preview {
     ZStack {
         Color.blueDark.edgesIgnoringSafeArea(.all)
-        CadreVignette(image :.photoVoiture, date : Date(), iconTheme: .logoEnergie)
+        CadreVignette(image :.photoVoiture, date : Date(), iconTheme: .logoJaune)
             .environment(SouvenirsViewModel())
     }
 }
