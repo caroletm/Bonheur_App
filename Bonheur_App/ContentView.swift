@@ -8,19 +8,48 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var navigationViewModel = NavigationViewModel()
+    @Environment(PlanetViewModel.self) private var planetViewModel
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Patate Branch(Planete_User)")
-                .font(.custom("SpaceMono-Regular", size: 24))
-                .foregroundStyle(.greyDarkText)
+        
+        NavigationStack(path: $navigationViewModel.path) {
+            
+            PageCitation()
+            
+                .navigationDestination(for: AppRoute.self) { route in
+                    
+                    switch route {
+                        
+                    case .pageCitation:
+                        PageCitation()
+                        
+                    case .planeteUserTest:
+                        PlaneteUserTest()
+                        
+                    case .landing (let planete):
+                        LandingPlanet(planete : planete)
+                        
+                    case .onboarding(let planete):
+                        OnboardingPlanete(planete: planete)
+                        
+                    case .planeteSouvenirs:
+                        SouvenirsView()
+                    }
+                }
         }
-        .padding()
+        .environment(navigationViewModel)
+        .environment(planetViewModel)
+        .environment(souvenirsViewModel)
+        
     }
 }
 
 #Preview {
     ContentView()
+        .environment(NavigationViewModel())
+        .environment(PlanetViewModel())
+        .environment(SouvenirsViewModel())
 }

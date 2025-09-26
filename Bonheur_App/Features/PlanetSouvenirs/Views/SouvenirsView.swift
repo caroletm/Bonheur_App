@@ -10,6 +10,8 @@ import SwiftUI
 struct SouvenirsView: View {
     
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
+    @Environment(NavigationViewModel.self) private var navigationViewModel
+
     
     //3 gridItems car 3 colonnes
     let columns = [
@@ -58,7 +60,6 @@ struct SouvenirsView: View {
                                     Spacer()
                                     BoutonFiltre()
                                         .padding(.trailing)
-                                   
                                 }
                                 
                                 // lazyVgrid : grille verticale de 3 colonnes
@@ -97,4 +98,5 @@ struct SouvenirsView: View {
 #Preview {
     SouvenirsView()
         .environment(SouvenirsViewModel())
+        .environment(NavigationViewModel())
 }

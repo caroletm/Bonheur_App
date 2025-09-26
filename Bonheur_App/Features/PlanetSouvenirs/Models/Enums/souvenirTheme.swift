@@ -30,13 +30,13 @@ enum SouvenirTheme: CaseIterable {
     var iconName: ImageResource {
         switch self {
         case .inspiration:
-            return .logoInspiration
+            return .logoRose
         case .social:
-            return .logoSocial
+            return .logoBleu
         case .apprentissage:
-            return .logoApprentisage
+            return .logoJaune
         case .energie:
-            return .logoEnergie
+            return .logoVert
         }
     }
     
