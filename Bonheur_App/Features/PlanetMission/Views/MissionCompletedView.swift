@@ -98,7 +98,7 @@ struct MissionCompletedView: View {
                         .padding(.leading)
                     
                     
-                    TextEditor(text: $descriptionText)
+                    TextField("clcl", text: $descriptionText)
                         .padding()
                         .background(Color.blueGrey)
                     
