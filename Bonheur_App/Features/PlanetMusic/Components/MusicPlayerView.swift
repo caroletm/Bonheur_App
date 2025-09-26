@@ -124,9 +124,7 @@ struct MusicSelector: View {
 }
 
 
-
-// Exemple d'utilisation avec vos 6 catégories
-struct MusicPlayerView: View {
+struct CircularMusicPlayer: View {
     let categories = [
         MusicCategory(icon: "leaf.fill", title: "Jungle", color: .green),
         MusicCategory(icon: "flame.fill", title: "Feu de camp", color: .orange),
@@ -157,5 +155,5 @@ struct MusicPlayerView: View {
 }
 
 #Preview {
-    MusicPlayerView()
+    CircularMusicPlayer()
 }
