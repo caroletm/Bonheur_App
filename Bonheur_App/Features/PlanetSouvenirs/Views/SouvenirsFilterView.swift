@@ -22,7 +22,6 @@ struct SouvenirsFilterView: View {
     @State var isSelectedTheme : Bool = false
     @State var selectedTheme : SouvenirTheme?
     
-    
     var body: some View {
         
         ZStack (alignment: .top) {
@@ -105,7 +104,6 @@ struct SouvenirsFilterView: View {
                                     .frame(width: 65, height: 65)
                                     .opacity(0.3)
                             }
-                            
                         }
                     }
                     Spacer()
@@ -153,9 +151,7 @@ struct MonthPicker: View {
     var body: some View {
         Menu {
             ForEach(0..<months.count, id: \.self) { index in
-                Button(action: {
-                    selectedMonth = index + 1
-                }) {
+                Button(action: {selectedMonth = index + 1}) {
                     Text(months[index])
                 }
             }
@@ -175,9 +171,8 @@ struct YearPicker: View {
         
         Menu {
             ForEach(years, id: \.self) { year in
-                Button(action: {
-                    selectedYear = year
-                }) {
+                Button(action: {selectedYear = year})
+                {
                     Text("\(year)")
                 }
             }
