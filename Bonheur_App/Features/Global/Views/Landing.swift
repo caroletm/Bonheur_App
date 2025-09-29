@@ -11,6 +11,8 @@ struct LandingPlanet: View {
 
     @Environment(PlanetViewModel.self) private var planetViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
+    
+    var isOnboardingPresented : Bool = true
 
     var planete: Planete
     
@@ -43,7 +45,11 @@ struct LandingPlanet: View {
                     }
                     
                     Button {
-                        navigationViewModel.path.append(AppRoute.onboarding(planete: planete))
+                        if isOnboardingPresented {
+                            navigationViewModel.path.append(AppRoute.onboarding(planete: planete))
+                        }else{
+                            navigationViewModel.path.append(AppRoute.pageSouvenirs)
+                        }
                         
                     }label:{
                         
@@ -76,9 +82,8 @@ struct LandingPlanet: View {
                     .foregroundStyle(.white)
 
                 Button {
-                    navigationViewModel.path.removeLast()
-//                    navigationViewModel.path = NavigationPath()
-//                    navigationViewModel.path.append(AppRoute.planeteUserTest)
+                    navigationViewModel.path = NavigationPath()
+                    navigationViewModel.path.append(AppRoute.planeteUserTest)
                 } label: {
                     BoutonRetour()
                 }
