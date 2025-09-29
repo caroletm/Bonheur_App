@@ -10,7 +10,7 @@ import SwiftUI
 struct MusicPlayerView: View {
     var body: some View {
         ZStack(alignment: .top){
-            // Image de fond d'ecran qui remplit tout l'écran
+            // Image de fond d'ecran
             Image(.backgroundMusic)
                 .resizable()
                 .scaledToFill()
@@ -18,10 +18,11 @@ struct MusicPlayerView: View {
            
             CadreBlanc()
                 .padding(.top, 120)
-            
+            MusicSelectorView()
+                .padding(.top, 200)
             // Contenu au premier plan
             VStack {
-                Spacer() // Pour centrer le texte ou le positionner
+                Spacer() 
                 
                 Text("Choisis ton ambiance :")
                     .font(.custom("SpaceMono-Bold", size: 20))

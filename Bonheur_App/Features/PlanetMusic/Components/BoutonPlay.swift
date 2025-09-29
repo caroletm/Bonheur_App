@@ -28,42 +28,52 @@ struct Octagon: Shape {
         return path
     }
 }
-
 struct PlayButtonOctagon: View {
-    @State private var isPlaying = false
+    @Binding var isPlaying: Bool
+    @Binding var selectedSegment: Int?
     
     var body: some View {
         Button {
             withAnimation(.easeInOut(duration: 0.2)) {
-                isPlaying.toggle()
+                if isPlaying {
+                    // Arrêt → désélection et pause musique
+                    isPlaying = false
+                    selectedSegment = nil
+                    // stopMusic()
+                } else {
+                    // Lecture → si aucun segment choisi, sélectionner le premier
+                    isPlaying = true
+                    if selectedSegment == nil {
+                        selectedSegment = 0
+                        // playMusic(for: 0)
+                    }
+                }
             }
         } label: {
             ZStack {
-                // Octogone 
                 Octagon()
                     .fill(isPlaying ? Color.greyDarkButton : Color.greyLightButton)
                     .frame(width: 120, height: 120)
-                    .overlay(
-                        Octagon()
-                            .stroke(Color.white, lineWidth: 3)
-                    )
-                    .shadow(color: .pinkMusic.opacity(0.5),
-                            radius: 6, x: 0, y: 0)
+                    .overlay(Octagon().stroke(Color.white, lineWidth: 3))
                 
-                // Bouton Play
-                Image(systemName: "play.fill")
+                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 35, height: 35)
                     .foregroundColor(.pinkMusic)
-                 
             }
         }
+        .buttonStyle(.plain)
     }
 }
 
+
+
 #Preview {
     ZStack {
-        PlayButtonOctagon()
+        PlayButtonOctagon(
+            isPlaying: .constant(false),
+            selectedSegment: .constant(nil)
+        )
     }
 }
