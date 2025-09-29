@@ -19,8 +19,8 @@ struct SouvenirsFilterView: View {
     
     @State var isSelectedDefi : Bool = false
     @State var isSelectedMap : Bool = false
-    @State var isSelectedTheme : Bool = false
-    @State var selectedTheme : SouvenirTheme?
+//    @State var isSelectedTheme : Bool = false
+    @State var selectedTheme : [SouvenirTheme]
     
     var body: some View {
         
@@ -82,18 +82,17 @@ struct SouvenirsFilterView: View {
                         
                         Button {
                             
-                            isSelectedTheme.toggle()
-                            
-                            if isSelectedTheme {
-                                selectedTheme = theme
+                            if selectedTheme.contains(theme) {
+                                selectedTheme.removeAll { $0 == theme}
                                 
-                            }else{
-                                selectedTheme = nil
+                            }else {
+                                selectedTheme.append(theme)
                             }
+                            print(selectedTheme)
                             
                         }label: {
                             
-                            if selectedTheme == theme {
+                            if selectedTheme.contains(theme) {
                                 Image(theme.iconName)
                                     .resizable()
                                     .frame(width: 65, height: 65)
@@ -123,62 +122,7 @@ struct SouvenirsFilterView: View {
 }
 
 #Preview {
-    SouvenirsFilterView(selectedTheme : nil)
+    SouvenirsFilterView(selectedTheme : [])
 }
 
-//MARK: - Extracted Views
 
-struct LignePointilles: View {
-    var body: some View {
-        Rectangle()
-            .frame(height: 1)
-            .foregroundColor(.clear)
-            .overlay(
-                Rectangle()
-                    .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
-                    .foregroundColor(.white)
-            )
-            .padding(.horizontal)
-            .padding(.top, 10)
-    }
-}
-
-struct MonthPicker: View {
-    
-    @Binding var selectedMonth: Int?
-    @Binding var months: [String]
-    
-    var body: some View {
-        Menu {
-            ForEach(0..<months.count, id: \.self) { index in
-                Button(action: {selectedMonth = index + 1}) {
-                    Text(months[index])
-                }
-            }
-        } label: {
-            Text(months[(selectedMonth ?? 1) - 1])
-                .foregroundColor(.white)
-        }
-    }
-}
-
-struct YearPicker: View {
-    
-    @Binding var selectedYear: Int?
-    @Binding var years: [Int]
-    
-    var body: some View {
-        
-        Menu {
-            ForEach(years, id: \.self) { year in
-                Button(action: {selectedYear = year})
-                {
-                    Text("\(year)")
-                }
-            }
-        } label: {
-            Text("\(selectedYear ?? 2020)")
-                .foregroundColor(.white)
-        }
-    }
-}

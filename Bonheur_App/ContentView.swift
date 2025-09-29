@@ -35,7 +35,7 @@ struct ContentView: View {
                     case .onboarding(let planete):
                         OnboardingPlanete(planete: planete)
                         
-                    case .planeteSouvenirs:
+                    case .pageSouvenirs:
                         SouvenirsView()
                     }
                 }
