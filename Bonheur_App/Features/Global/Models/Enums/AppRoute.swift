@@ -13,4 +13,5 @@ enum AppRoute: Hashable {
     case landing(planete : Planete)
     case onboarding(planete : Planete)
     case pageSouvenirs
+    case souvenirsFiltre
 }
