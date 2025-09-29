@@ -18,7 +18,7 @@ struct OnboardingPlanete: View  {
         
         ZStack {
     
-            Image(.backgroundSouvenirs)
+            Image(planete.backgroundPlanete)
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea(.all)
@@ -33,7 +33,7 @@ struct OnboardingPlanete: View  {
                     .font(.custom("Poppins-Regular", size: 14))
                     .foregroundStyle(.white)
                 Button {
-                    navigationViewModel.path.append(AppRoute.planeteSouvenirs)
+                    navigationViewModel.path.append(AppRoute.pageSouvenirs)
                 }label : {
                     BoutonText(text: "OK", width: 45)
                 }
