@@ -16,30 +16,46 @@ struct OnboardingPlanete: View  {
 
     var body: some View {
         
-        ZStack {
-    
-            Image(planete.backgroundPlanete)
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea(.all)
+        GeometryReader { geometry in
             
-            VStack {
-                Text("Bienvenue sur \(planete.nom)")
-                    .font(.custom("SpaceMono-Bold", size: 20))
-                    .foregroundStyle(.white)
-                
-                Image(planete.iconOnboarding)
-                Text("\(planete.onboarding)")
-                    .font(.custom("Poppins-Regular", size: 14))
-                    .foregroundStyle(.white)
-                Button {
-                    navigationViewModel.path.append(AppRoute.pageSouvenirs)
-                }label : {
-                    BoutonText(text: "OK", width: 45)
+            NavigationView {
+                ZStack {
+                    
+                    Image(planete.backgroundPlanete)
+                        .resizable()
+                        .scaledToFill()
+                        .ignoresSafeArea(.all)
+                    
+                    CadreBlanc()
+                        .offset(y : -130)
+                    
+                    VStack (spacing : 40){
+                        Text("Bienvenue sur \(planete.nom)")
+                            .font(.custom("SpaceMono-Bold", size: 20))
+                            .foregroundStyle(.white)
+                        
+                        Image(planete.iconOnboarding)
+                        Text("\(planete.onboarding)")
+                            .font(.custom("Poppins-Regular", size: 14))
+                            .foregroundStyle(.white)
+                            .frame(width : 263, height : 42)
+                            .multilineTextAlignment(.center)
+                        
+                        Button {
+                            navigationViewModel.path.append(AppRoute.pageSouvenirs)
+                        }label : {
+                            BoutonText(text: "OK", width: 45)
+                        }
+                        Spacer()
+                            .frame(height: 250)
+                    }
+                    .offset(y: 10)
+                    BoutonsFuseeRetour(planete: planete)
+                        
                 }
-                Spacer()
-                    .frame(height: 250)
+             
             }
+            .navigationBarBackButtonHidden(true)
         }
     }
 }
@@ -49,3 +65,4 @@ struct OnboardingPlanete: View  {
     .environment(PlanetViewModel())
     .environment(NavigationViewModel())
 }
+
