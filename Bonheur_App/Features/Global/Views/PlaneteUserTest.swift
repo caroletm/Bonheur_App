@@ -16,8 +16,6 @@ struct PlaneteUserTest: View {
     @State private var planetsVisible: Bool = false
     @State private var rocketPressed: Bool = false
     
-//    var planete :  Planete
-    
     // Position de la fusée (point de départ des planètes)
     @State var rocketPosition = CGPoint(x: 0, y: 650)
     
@@ -33,10 +31,8 @@ struct PlaneteUserTest: View {
             // Génération des planètes-boutons avec animation de sortie de la fusée
             if planetsVisible {
                 ForEach(planetViewModel.planetes.indices, id: \.self) { index in
-                    // MODIFICATION: Suppression du paramètre selectedPlanet dans l'appel
                     PlanetButton(
                         planet: planetViewModel.planetes[index],
-                        // selectedPlanet: $selectedPlanet,  // ❌ SUPPRIMÉ - Plus besoin de passer selectedPlanet
                         rocketPosition: rocketPosition,
                         animationDelay: Double(index) * 0.2,
                         breathingPhaseOffset: Double(index) * 1.2
@@ -92,10 +88,7 @@ struct PlaneteUserTest: View {
                     .foregroundStyle(.white)
                     .padding(.top, -380)
                     .animation(.easeInOut(duration: 0.5), value: planetsVisible)
-                
-                // Affichage de la planète sélectionnée (optionnel)
-//                if !selectedPlanet.isEmpty && planetsVisible {
-//                }
+                    .allowsHitTesting(false) // ✅ Le texte ne bloque pas les clics
                 
                 Spacer()
             }
@@ -108,37 +101,28 @@ struct PlanetButton: View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
 
     let planet: Planete
-    // MODIFICATION: @Binding var selectedPlanet supprimé - Plus besoin de synchroniser avec la vue parente
-    // @Binding var selectedPlanet: Planete  // ❌ SUPPRIMÉ
     @State private var isPressed = false
     @State private var rotationAngle = 0.0
     @State private var currentPosition: CGPoint
-    @State private var breathingScale = 1.0 // Animation de respiration
+    @State private var breathingScale = 1.0
     
     let rocketPosition: CGPoint
     let animationDelay: Double
-    let breathingPhaseOffset: Double // Nouveau: décalage de phase pour la respiration
+    let breathingPhaseOffset: Double
     
-    // MODIFICATION: Paramètre selectedPlanet supprimé de l'init
     init(planet: Planete, rocketPosition: CGPoint, animationDelay: Double, breathingPhaseOffset: Double) {
         self.planet = planet
-        // self.selectedPlanet = selectedPlanet  // ❌ SUPPRIMÉ
         self.rocketPosition = rocketPosition
         self.animationDelay = animationDelay
         self.breathingPhaseOffset = breathingPhaseOffset
-        // Initialise la position actuelle à la position de la fusée
         self._currentPosition = State(initialValue: rocketPosition)
     }
     
     var body: some View {
         Button(action: {
-            // MODIFICATION: Ligne selectedPlanet = planet supprimée
-            // selectedPlanet = planet  // ❌ SUPPRIMÉ - La navigation se fait directement sans stocker
             handlePlanetTap(planet.nom)
-            // Navigation directe vers la vue de destination
             navigationViewModel.path = NavigationPath()
             navigationViewModel.path.append(AppRoute.landing(planete: planet))
-
         }) {
             ZStack {
                 // Cercle d'animation rotatif - avec bounce synchronisé + respiration
@@ -148,17 +132,18 @@ struct PlanetButton: View {
                     .frame(width: planet.circleSize.width,
                            height: planet.circleSize.height)
                     .rotationEffect(.degrees(rotationAngle))
-                    .offset(x: currentPosition.x + planet.circleRelativeOffset.x,
-                            y: currentPosition.y + planet.circleRelativeOffset.y)
+                    .offset(x: planet.circleRelativeOffset.x,
+                            y: planet.circleRelativeOffset.y) // ✅ Garde seulement l'offset relatif
                     .scaleEffect((isPressed ? 1.05 : 1.0) * breathingScale)
                     .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
+                    .allowsHitTesting(false) // ✅ Le cercle décoratif ne bloque pas les clics
                 
                 // Image de la planète - avec bounce synchronisé + respiration
                 Image(planet.image)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 150, height: 150)
-                    .offset(x: currentPosition.x, y: currentPosition.y)
+                    // ✅ Pas d'offset ici, c'est le centre du bouton
                     .scaleEffect((isPressed ? 1.05 : 1.0) * breathingScale)
                     .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
                 
@@ -168,16 +153,17 @@ struct PlanetButton: View {
                     .foregroundStyle(.white)
                     .fontWeight(.bold)
                     .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
-                    .offset(x: currentPosition.x,
-                            y: currentPosition.y + max(planet.circleSize.height/2, 75) + 15)
+                    .offset(x: 0,
+                            y: max(planet.circleSize.height/2, 75) + 15) // ✅ Garde seulement l'offset relatif en Y
                     .scaleEffect((isPressed ? 1.05 : 1.0) * breathingScale)
                     .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
+                    .allowsHitTesting(false) // ✅ Le texte ne bloque pas les clics
             }
-            
         }
         .buttonStyle(PlainButtonStyle())
         .contentShape(Circle())
         .frame(width: 150, height: 150)
+        .offset(x: currentPosition.x, y: currentPosition.y) // ✅ L'offset de position est au niveau du bouton
         .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
             isPressed = pressing
         }, perform: {})
@@ -226,27 +212,6 @@ func handlePlanetTap(_ planetName: String) {
         break
     }
 }
-
-
-
-//        ZStack {
-//            Color.blueDark.edgesIgnoringSafeArea(.all)
-//            VStack{
-//                ForEach (planetViewModel.planetes, id: \.ID) { planete in
-//                    Button {
-//                        navigationViewModel.path.append(AppRoute.landing(planete : planete))
-//                    }label: {
-//                        Image(planete.image)
-//                            .resizable()
-//                            .frame(width: 100, height: 100)
-//                            .scaledToFit()
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
 
 #Preview {
     PlaneteUserTest()
