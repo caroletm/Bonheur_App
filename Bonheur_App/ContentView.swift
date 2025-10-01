@@ -27,7 +27,7 @@ struct ContentView: View {
                         PageCitation()
                         
                     case .planeteUserTest:
-                        PlaneteUserTest()
+                        PlaneteUser()
                         
                     case .landing (let planete):
                         LandingPlanet(planete : planete)
