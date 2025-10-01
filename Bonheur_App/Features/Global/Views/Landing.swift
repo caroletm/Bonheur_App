@@ -65,8 +65,8 @@ struct LandingPlanet: View {
                                 Image(currentPlanete.image)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 290, height: 260)
-                                    .offset(x: -15, y: 10)
+                                    .frame(width: 260, height: 240)
+                                    .offset(x: 2)
                             }
                         }
                         
