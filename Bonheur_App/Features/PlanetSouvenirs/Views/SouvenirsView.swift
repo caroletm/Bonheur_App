@@ -58,8 +58,12 @@ struct SouvenirsView: View {
                                         .foregroundStyle(.white)
                                         .padding()
                                     Spacer()
-                                    BoutonFiltre()
-                                        .padding(.trailing)
+                                    Button {
+                                        navigationViewModel.path.append(AppRoute.souvenirsFiltre)
+                                    }label: {
+                                        BoutonFiltre()
+                                            .padding(.trailing)
+                                    }
                                 }
                                 
                                 // lazyVgrid : grille verticale de 3 colonnes
@@ -79,10 +83,21 @@ struct SouvenirsView: View {
             
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        navigationViewModel.path = NavigationPath()
+                        navigationViewModel.path.append(AppRoute.planeteUserTest)
+                    }label:{
                         BoutonFusee(isPressed: false)
+                    }
                 }
                 ToolbarItem(placement : .navigationBarLeading) {
-                    BoutonChevron(image: .chevronLeft)
+                    Button {
+                        navigationViewModel.path = NavigationPath()
+                        navigationViewModel.path.append(AppRoute.landing(planete: planeteSouvenirs))
+
+                    }label : {
+                        BoutonChevron(image: .chevronLeft)
+                    }
                 }
                 ToolbarItem(placement: .principal) {
                     Text("Mes souvenirs")
@@ -91,7 +106,9 @@ struct SouvenirsView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.large)
+            
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

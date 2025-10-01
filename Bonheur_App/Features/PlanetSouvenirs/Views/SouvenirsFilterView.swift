@@ -9,6 +9,9 @@ import SwiftUI
 
 struct SouvenirsFilterView: View {
     
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
+    @Environment(NavigationViewModel.self) private var navigationViewModel
+    
     @State private var selectedMonth : Int?
     @State private var selectedYear : Int?
     
@@ -20,7 +23,7 @@ struct SouvenirsFilterView: View {
     @State var isSelectedDefi : Bool = false
     @State var isSelectedMap : Bool = false
 //    @State var isSelectedTheme : Bool = false
-    @State var selectedTheme : [SouvenirTheme]
+    @State var selectedTheme : [SouvenirTheme] = []
     
     var body: some View {
         
@@ -78,6 +81,7 @@ struct SouvenirsFilterView: View {
                 .padding(5)
                 HStack (spacing : 10) {
                     Spacer()
+                    
                     ForEach(SouvenirTheme.allCases, id: \.self) { theme in
                         
                         Button {
@@ -93,15 +97,22 @@ struct SouvenirsFilterView: View {
                         }label: {
                             
                             if selectedTheme.contains(theme) {
-                                Image(theme.iconName)
-                                    .resizable()
-                                    .frame(width: 65, height: 65)
-                                    .shadow(color : .white, radius: 10)
+                                VStack {
+                                    Image(theme.iconName)
+                                        .resizable()
+                                        .frame(width: 65, height: 65)
+                                        .shadow(color : .white, radius: 10)
+                                    Text(theme.title).font(.custom("Poppins", size: 7))
+                                }
+
                             }else {
-                                Image(theme.iconName)
-                                    .resizable()
-                                    .frame(width: 65, height: 65)
-                                    .opacity(0.3)
+                                VStack {
+                                    Image(theme.iconName)
+                                        .resizable()
+                                        .frame(width: 65, height: 65)
+                                        .opacity(0.3)
+                                    Text(theme.title).font(.custom("Poppins", size: 7))
+                                }
                             }
                         }
                     }
@@ -109,7 +120,11 @@ struct SouvenirsFilterView: View {
                 }
                 HStack {
                     Spacer()
-                    BoutonText(text: "OK", width: 45)
+                    Button {
+                        //
+                    }label:{
+                        BoutonText(text: "OK", width: 45)
+                    }
                     Spacer()
                 }.padding(10)
             }
@@ -122,7 +137,9 @@ struct SouvenirsFilterView: View {
 }
 
 #Preview {
-    SouvenirsFilterView(selectedTheme : [])
+    SouvenirsFilterView()
+        .environment(SouvenirsViewModel())
+        .environment(NavigationViewModel())
 }
 
 

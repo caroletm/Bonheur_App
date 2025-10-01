@@ -52,10 +52,15 @@ class PlaneteSouvenirs : Planete {
 }
 
 //Instanciation de la planete souvenirs
-let planeteSouvenirs = Planete(
+
+let planeteSouvenirs = PlaneteSouvenirs(
     ID: UUID(),
-    nom: "Souvenirs",
-    description: "Ici, le temps se garde précieusement. Memoria est ton journal cosmique, l’endroit où chaque gratitude, chaque victoire et chaque acte de bonheur sont immortalisés. Une planète-album où tu peux revenir puiser de la force dans tes souvenirs heureux.",
+    nom: "Memoria",
+    description: """
+    Ici, le temps se garde précieusement.
+    Memoria est ton journal cosmique, l’endroit où chaque gratitude, chaque victoire et chaque acte de bonheur sont immortalisés.
+    Une planète-album où tu peux revenir puiser de la force dans tes souvenirs heureux.
+    """,
     image: .planetSouvenirs,
     onboarding: "Découvrez les souvenirs de vos voyages passés",
     iconOnboarding: .souvenirPola,
@@ -72,19 +77,24 @@ class PlaneteExplora : Planete {
 }
 
 //Instanciation de la planete explora
-let planeteExplora = Planete(
-    ID: UUID(),
-    nom: "Explora",
-    description: "Ici, tout est découverte. La Planète Explora t’invite à explorer ton univers, à avancer pas à pas et à trouver des trésors de bonheur semés autour de toi. Chaque chemin mène à une surprise, chaque arbre cache une petite lumière.",
-    image: .planetExplora,
-    onboarding: "Parcours la planète et découvre les lieux qui te rendent heureux.",
-    iconOnboarding: .onboardingExplora,
-    backgroundPlanete: .backgroundExplora,
-    isVisited: false,
-    position: CGPoint(x: -100, y: 120),
+
+    let planeteExplora = PlaneteExplora(
+        ID: UUID(),
+        nom: "Explora",
+        description: """
+        Ici, tout est découverte.
+        La Planète Explora t’invite à explorer ton univers, à avancer pas à pas et à trouver des trésors de bonheur semés autour de toi.
+        Chaque chemin mène à une surprise, chaque arbre cache une petite lumière.
+        """, 
+        image: .planetExplora,
+        onboarding: "Parcours la planète et découvre les lieux qui te rendent heureux.",
+        iconOnboarding: .onboardingExplora,
+        backgroundPlanete: .backgroundExplora,
+        isVisited: false
+          position: CGPoint(x: -100, y: 120),
     circleSize: CGSize(width: 138, height: 138),
     circleRelativeOffset: CGPoint(x: 7, y: -5)
-)
+    )
 
 // MARK: - PlaneteMusic = Héritage de la classe Planete
 
@@ -92,10 +102,13 @@ class PlaneteMusic : Planete {
 }
 
 //Instanciation de la planete music
-let planeteMusic = Planete(
+
+let planeteMusic = PlaneteMusic(
     ID: UUID(),
-    nom: "Music",
-    description: "Cette planète vibre au rythme de mélodies infinies. Chaque jour, elle t’offre une musique, une ambiance ou un son qui élève ton humeur. Ici, le bonheur s’écoute, se fredonne et se partage en vibrations.",
+    nom: "Harmonia",
+    description: """
+    Cette planète vibre au rythme de mélodies infinies.\n Chaque jour, elle t’offre une musique, une ambiance ou un son qui élève ton humeur.\n Ici, le bonheur s’écoute, se fredonne et se partage en vibrations.
+    """,
     image: .planetMusic,
     onboarding: "Écoute, fredonne et laisse la musique élever ton humeur.",
     iconOnboarding: .onboardingMusic,
@@ -112,17 +125,22 @@ class PlanetePhilo : Planete {
 }
 
 //Instanciation de la planete philo
-let planetePhilo = Planete(
+
+let planetePhilo = PlanetePhilo(
     ID: UUID(),
-    nom: "Philo",
-    description: "Un lieu de sagesse et d’inspiration. Sur Lumen, les grandes philosophies du bonheur se révèlent en récits et missions. Ici, tu apprends à voir le monde autrement, à cultiver des pensées qui allègent le cœur.",
+    nom: "Lumen",
+    description: """
+    Un lieu de sagesse et d’inspiration.
+    Sur Lumen, les grandes philosophies du bonheur se révèlent en récits et missions. 
+    Ici, tu apprends à voir le monde autrement, à cultiver des pensées qui allègent le cœur.
+    """,
     image: .planetPhilosophie,
-    onboarding: "Profitez des philosophes et découvrez leurs pensées",
+    onboarding: "Découvre des pensées pour cultiver ton bonheur.",
     iconOnboarding: .onboardingPhilo,
     backgroundPlanete: .backgroundPhilo,
-    isVisited: false,
-    position: CGPoint(x: 100, y: 120),
-    circleSize: CGSize(width: 129, height: 129),
+    isVisited: false
+      position: CGPoint(x: 100, y: 120),
+      circleSize: CGSize(width: 129, height: 129),
     circleRelativeOffset: CGPoint(x: 4, y: 2)
 )
 
@@ -132,16 +150,21 @@ class PlaneteMissions : Planete {
 }
 
 //Instanciation de la planete missions
-let planeteMissions = Planete(
-    ID: UUID(),
-    nom: "Missions",
-    description: "Sur cette planète, chaque jour est un défi joyeux ! Ici, le bonheur se construit par l’action et le jeu. Relève des missions quotidiennes, gagne des récompenses et partage tes victoires dans une ambiance festive et pleine d’énergie.",
-    image: .planetMissions,
-    onboarding: "Découvrez la mission de l'application",
-    iconOnboarding: .onboardingMissions,
+
+let planeteMission = PlaneteMissions (
+    ID : UUID(), nom : "Fiestalis",
+    description : """
+    Sur cette planète, chaque jour est un défi joyeux
+    Ici, le bonheur se construit par l’action et le jeu.
+    Relève des missions quotidiennes, gagne des récompenses et partage tes victoires dans une ambiance festive et pleine d’énergie.
+    """,
+    image : .planetMissions,
+    onboarding : "Remémore toi les moments de bonheur que tu as passés.",
+    iconOnboarding : .onboardingMissions,
     backgroundPlanete: .backgroundMissions,
-    isVisited: false,
-    position: CGPoint(x: 120, y: 300),
+    isVisited : false
+      position: CGPoint(x: 120, y: 300),
     circleSize: CGSize(width: 130, height: 130),
     circleRelativeOffset: CGPoint(x: 7, y: 2)
+
 )

@@ -22,81 +22,89 @@ struct LandingPlanet: View {
         
         let currentPlanete = planetViewModel.planetes[currentIndex]
 
-        ZStack {
-            Image(.backgroundDetailPlanet)
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea(.all)
-
-            VStack(spacing: 30) {
-                Text("La planète\n\(currentPlanete.nom)")
-                    .font(.custom("SpaceMono-Bold", size: 20))
-                    .foregroundStyle(.white)
-
-                HStack {
-                    Button {
-                        if currentIndex > 0 {
-                            currentIndex -= 1
-                        } else {
-                            currentIndex = planetViewModel.planetes.count - 1
+        NavigationView {
+            
+            ZStack {
+                Image(.backgroundDetailPlanet)
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea(.all)
+                
+                VStack(alignment : .center, spacing: 30) {
+                    
+                    Text("La planète\n\(currentPlanete.nom)")
+                        .font(.custom("SpaceMono-Bold", size: 20))
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+                    
+                    HStack {
+                        Button {
+                            if currentIndex > 0 {
+                                currentIndex -= 1
+                            } else {
+                                currentIndex = planetViewModel.planetes.count - 1
+                            }
+                        } label: {
+                            BoutonChevron(image: .chevronLeft)
                         }
-                    } label: {
-                        BoutonChevron(image: .chevronLeft)
+                        
+                        Button {
+                            if isOnboardingPresented {
+                                navigationViewModel.path.append(AppRoute.onboarding(planete: currentPlanete))
+                            }else{
+                                navigationViewModel.path.append(AppRoute.pageSouvenirs)
+                            }
+                            
+                        }label:{
+                            
+                            ZStack {
+                                Image(.cercle)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 290, height: 260)
+                                Image(currentPlanete.image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 290, height: 260)
+                                    .offset(x: -15, y: 10)
+                            }
+                        }
+                        
+                        Button {
+                            if currentIndex < planetViewModel.planetes.count - 1 {
+                                currentIndex += 1
+                            }else{
+                                currentIndex = 0
+                            }
+                        } label: {
+                            BoutonChevron(image: .chevronRight)
+                        }
                     }
                     
+                    Text(currentPlanete.description)
+                        .font(.custom("SpaceMono-Bold", size: 12))
+                        .foregroundStyle(.white)
+                        .frame(width : 315, height : 220)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(6)
+                    
                     Button {
-                        if isOnboardingPresented {
-                            navigationViewModel.path.append(AppRoute.onboarding(planete: planete))
-                        }else{
-                            navigationViewModel.path.append(AppRoute.pageSouvenirs)
-                        }
-                        
-                    }label:{
-                        
-                        ZStack {
-                            Image(.cercle)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 290, height: 260)
-                            Image(currentPlanete.image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 290, height: 260)
-                                .offset(x: -15, y: 10)
-                        }
-                    }
-
-                    Button {
-                        if currentIndex < planetViewModel.planetes.count - 1 {
-                            currentIndex += 1
-                        }else{
-                            currentIndex = 0
-                        }
+                        navigationViewModel.path = NavigationPath()
+                        navigationViewModel.path.append(AppRoute.planeteUserTest)
                     } label: {
-                        BoutonChevron(image: .chevronRight)
+                        BoutonRetour()
                     }
                 }
-
-                Text(currentPlanete.description)
-                    .font(.custom("SpaceMono-Bold", size: 12))
-                    .foregroundStyle(.white)
-
-                Button {
-                    navigationViewModel.path = NavigationPath()
-                    navigationViewModel.path.append(AppRoute.planeteUserTest)
-                } label: {
-                    BoutonRetour()
+            }
+            .onAppear {
+                if let index = planetViewModel.planetes.firstIndex(where: { $0.ID == planete.ID }) {
+                    currentIndex = index
                 }
             }
         }
-        .onAppear {
-            if let index = planetViewModel.planetes.firstIndex(where: { $0.ID == planete.ID }) {
-                currentIndex = index
-            }
-        }
+        .navigationBarBackButtonHidden(true)
     }
 }
-
 
 #Preview {
     LandingPlanet(planete : planeteSouvenirs)

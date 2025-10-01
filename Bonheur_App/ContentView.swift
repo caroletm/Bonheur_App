@@ -37,6 +37,9 @@ struct ContentView: View {
                         
                     case .pageSouvenirs:
                         SouvenirsView()
+                        
+                    case .souvenirsFiltre:
+                        SouvenirsFilterView()
                     }
                 }
         }
