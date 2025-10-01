@@ -35,4 +35,8 @@ class SouvenirsViewModel {
         return formatter.string(from: date)
     }
     
+
+    //MARK: - Filters
+    
+    
 }
