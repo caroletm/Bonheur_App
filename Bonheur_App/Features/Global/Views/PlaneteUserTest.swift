@@ -77,6 +77,9 @@ struct PlaneteUserTest: View {
             }) {
                 BoutonFusee(isPressed: rocketPressed)
             }
+            .buttonStyle(PlainButtonStyle())
+            .contentShape(Circle())
+            .frame(width: 100, height: 100)
             .offset(x: 0, y: 650)
             .scaleEffect(rocketPressed ? 1.1 : 1.0)
             
@@ -133,6 +136,7 @@ struct PlanetButton: View {
             // selectedPlanet = planet  // ❌ SUPPRIMÉ - La navigation se fait directement sans stocker
             handlePlanetTap(planet.nom)
             // Navigation directe vers la vue de destination
+            navigationViewModel.path = NavigationPath()
             navigationViewModel.path.append(AppRoute.landing(planete: planet))
 
         }) {
@@ -169,8 +173,11 @@ struct PlanetButton: View {
                     .scaleEffect((isPressed ? 1.05 : 1.0) * breathingScale)
                     .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
             }
+            
         }
         .buttonStyle(PlainButtonStyle())
+        .contentShape(Circle())
+        .frame(width: 150, height: 150)
         .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
             isPressed = pressing
         }, perform: {})
