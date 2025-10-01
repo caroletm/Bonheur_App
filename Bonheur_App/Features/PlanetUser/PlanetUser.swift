@@ -8,7 +8,7 @@ struct Planet {
     let position: CGPoint
     let circleSize: CGSize
     // offset relatif du cercle par rapport au centre de la planète
-    let circleRelativeOffset: CGPointt 
+    let circleRelativeOffset: CGPoint
     // Calculer les offsets originaux pour compatibilité
 //    var circleOffset: CGPoint {
 //        return CGPoint(x: position.x + circleRelativeOffset.x,

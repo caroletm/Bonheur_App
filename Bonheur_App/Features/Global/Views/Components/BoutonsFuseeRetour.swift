@@ -12,24 +12,27 @@ struct  BoutonsFuseeRetour: View {
     var planete: Planete
     
     var body: some View {
-        HStack {
-            Button {
-                navigationViewModel.path = NavigationPath()
-                navigationViewModel.path.append(AppRoute.planeteUserTest)
-            }label:{
-                BoutonFusee(isPressed: false)
-            }
+        
+        VStack {
             Spacer()
-                .frame(width: 100)
-            Button {
-                navigationViewModel.path.append(AppRoute.landing(planete: planete))
-            }label:{
-                BoutonRetour()
+            HStack {
+                Button {
+                    navigationViewModel.path = NavigationPath()
+                    navigationViewModel.path.append(AppRoute.planeteUserTest)
+                }label:{
+                    BoutonFusee(isPressed: false)
+                }
+                Spacer()
+                    .frame(width: 100)
+                Button {
+                    navigationViewModel.path.append(AppRoute.landing(planete: planete))
+                }label:{
+                    BoutonRetour()
+                }
+                Spacer()
             }
-            Spacer()
+            .padding()
         }
-        .padding()
-        .offset(y: 330)
     }
 }
 
