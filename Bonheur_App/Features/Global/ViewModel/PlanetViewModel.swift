@@ -15,6 +15,6 @@ class PlanetViewModel {
     
     //MARK: - Data
     
-    let planetes : [Planete] = [planeteSouvenirs, planeteExplora, planeteMusic, planetePhilo, planeteMission]
+    let planetes : [Planete] = [planeteSouvenirs, planeteExplora, planeteMusic, planetePhilo, planeteMissions]
 
 }
