@@ -59,7 +59,7 @@ struct SouvenirsView: View {
                                         .padding()
                                     Spacer()
                                     Button {
-                                        navigationViewModel.path.append(AppRoute.planeteUserTest)
+                                        navigationViewModel.path.append(AppRoute.souvenirsFiltre)
                                     }label: {
                                         BoutonFiltre()
                                             .padding(.trailing)
