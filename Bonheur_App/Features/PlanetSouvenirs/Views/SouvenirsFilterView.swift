@@ -19,7 +19,6 @@ struct SouvenirsFilterView: View {
                          "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
     
     @State var years = Array(2010...2030)
-    
    
     var body: some View {
         

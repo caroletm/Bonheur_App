@@ -52,4 +52,17 @@ enum SouvenirTheme: CaseIterable {
             return "Les actions qui te motivent, te dynamisent et renforcent ton équilibre."
         }
     }
+    
+    var color: Color {
+        switch self {
+        case .inspiration:
+            return .pinkFluo
+        case .social:
+            return .blueFluo
+        case .apprentissage:
+            return .orangeFluo
+        case .energie:
+            return .greenFluo
+        }
+    }
 }

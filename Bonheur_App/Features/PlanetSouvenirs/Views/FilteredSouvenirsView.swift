@@ -21,9 +21,19 @@ struct FilteredSouvenirsView: View {
         
         VStack (alignment : .leading) {
             
-            Text("\(souvenirsViewModel.filters.month ?? 1)")
-                .font(.custom("SpaceMono-Bold", size: 20))
-                .foregroundStyle(Color.white)
+            if souvenirsViewModel.filters.month != nil && souvenirsViewModel.filters.year != nil {
+                
+                HStack {
+                    
+                    Text("Juillet 2025")
+                        .font(.custom("SpaceMono-Bold", size: 20))
+                        .foregroundStyle(Color.white)
+                    
+                }
+                
+            }else {
+                Spacer()
+            }
             
             LazyVGrid(columns: columns) {
                 ForEach(souvenirsViewModel.filteredSouvenirs, id: \.id) { souvenir in

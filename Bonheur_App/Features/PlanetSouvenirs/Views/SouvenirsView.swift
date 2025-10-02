@@ -17,7 +17,7 @@ struct SouvenirsView: View {
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible())]
-        
+    
     var body: some View {
         
         let groupedSouvenirs = souvenirsViewModel.groupSouvenirsByMonth(souvenirsViewModel.souvenirsData)
@@ -29,7 +29,7 @@ struct SouvenirsView: View {
         souvenirsViewModel.filters.isDefi ||
         souvenirsViewModel.filters.isMap ||
         !souvenirsViewModel.filters.theme.isEmpty
-      
+        
         NavigationView {
             
             ZStack {
@@ -37,29 +37,37 @@ struct SouvenirsView: View {
                     .ignoresSafeArea(.all)
                 
                 if !isFilterOn {
-                    
                     VStack {
                         ScrollView{
                             
                             VStack  (alignment: .leading){
                                 
+                                
+                                ScrollView (.horizontal) {
+                                    HStack {
+                                        ForEach(last5Souvenirs, id: \.id) { souvenir in
+                                            
+                                            NavigationLink {
+                                                SouvenirsDetailsView(souvenir: souvenir)
+                                            }label :{
+                                                CadreVignette(image : souvenir.photo ?? .photoDog, date : souvenir.date, iconTheme: souvenir.theme.iconName)
+                                            }
+                                        }
+                                    }
+                                    .padding()
+                                }
+                                
+                                Divider()
+                                    .frame(width: 320, height: 1)
+                                    .background(Color.white)
+                                    .frame(maxWidth: .infinity)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.top)
+                                
+                                
                                 ForEach(groupedSouvenirs, id: \.key) { month, souvenirsOfMonth in
                                     
-                                    VStack (alignment: .leading) {
-                                        ScrollView (.horizontal) {
-                                            HStack {
-                                                ForEach(last5Souvenirs, id: \.id) { souvenir in
-                                                    CadreVignette(image : souvenir.photo ?? .photoDog, date : Date(), iconTheme: souvenir.theme.iconName)
-                                                }
-                                            }
-                                            .padding()
-                                        }
-                                        Divider()
-                                            .frame(width: 320, height: 1)
-                                            .background(Color.white)
-                                            .frame(maxWidth: .infinity)
-                                            .multilineTextAlignment(.center)
-                                            .padding(.top)
+                                    if month == groupedSouvenirs.first?.key {
                                         
                                         HStack {
                                             Text(month.capitalized)
@@ -74,21 +82,32 @@ struct SouvenirsView: View {
                                                     .padding(.trailing)
                                             }
                                         }
-                                        
-                                        // lazyVgrid : grille verticale de 3 colonnes
-                                        LazyVGrid(columns: columns) {
-                                            ForEach(souvenirsOfMonth, id: \.id) { souvenir in
+                                    } else {
+                                        Text(month.capitalized)
+                                            .font(.custom("SpaceMono-Bold", size: 20))
+                                            .foregroundStyle(.white)
+                                            .padding()
+                                    }
+                                    
+                                    // lazyVgrid : grille verticale de 3 colonnes
+                                    LazyVGrid(columns: columns) {
+                                        ForEach(souvenirsOfMonth, id: \.id) { souvenir in
+                                            NavigationLink {
+                                                SouvenirsDetailsView(souvenir: souvenir)
+                                            }label: {
                                                 CadreMiniVignette(image: souvenir.photo ?? .photoDog)
                                                     .padding(.vertical, 8)
                                             }
                                         }
-                                        .padding(.horizontal)
                                     }
+                                    .padding(.horizontal)
                                 }
                             }
                         }
                     }
                     .padding(.top, 60)
+
+                    
                 }else {
                     
                     VStack {
@@ -108,18 +127,19 @@ struct SouvenirsView: View {
                 }
                 ToolbarItem(placement : .navigationBarLeading) {
                     Button {
-
+                        
                         if !isFilterOn {
                             navigationViewModel.path = NavigationPath()
                             navigationViewModel.path.append(AppRoute.landing(planete: planeteSouvenirs))
                         }else {
                             souvenirsViewModel.resetFilters()
                         }
-
+                        
                     }label : {
                         BoutonChevron(image: .chevronLeft)
                     }
                 }
+                
                 ToolbarItem(placement: .principal) {
                     Text("Mes souvenirs")
                         .font(.custom("SpaceMono-Bold", size: 20))
