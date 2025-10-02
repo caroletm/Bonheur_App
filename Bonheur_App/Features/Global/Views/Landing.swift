@@ -12,7 +12,7 @@ struct LandingPlanet: View {
     @Environment(PlanetViewModel.self) private var planetViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
     
-    var isOnboardingPresented : Bool = true
+    var isOnboardingPresented : Bool = false
 
     var planete: Planete
     
@@ -52,7 +52,7 @@ struct LandingPlanet: View {
                             if isOnboardingPresented {
                                 navigationViewModel.path.append(AppRoute.onboarding(planete: currentPlanete))
                             }else{
-                                navigationViewModel.path.append(AppRoute.pageSouvenirs)
+                                navigationViewModel.path.append(currentPlanete.route)
                             }
                             
                         }label:{

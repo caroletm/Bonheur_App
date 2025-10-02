@@ -20,8 +20,9 @@ class Planete: Hashable, Identifiable  {
     var position: CGPoint
     var circleSize: CGSize
     var circleRelativeOffset: CGPoint
+    var route : AppRoute
     
-    init(ID: UUID, nom: String, description: String, image: ImageResource, onboarding: String, iconOnboarding: ImageResource, backgroundPlanete : ImageResource, isVisited: Bool, position: CGPoint, circleSize: CGSize, circleRelativeOffset: CGPoint) {
+    init(ID: UUID, nom: String, description: String, image: ImageResource, onboarding: String, iconOnboarding: ImageResource, backgroundPlanete : ImageResource, isVisited: Bool, position: CGPoint, circleSize: CGSize, circleRelativeOffset: CGPoint, route : AppRoute) {
         self.ID = ID
         self.nom = nom
         self.description = description
@@ -33,6 +34,7 @@ class Planete: Hashable, Identifiable  {
         self.position = position
         self.circleSize = circleSize
         self.circleRelativeOffset = circleRelativeOffset
+        self.route = route
     }
     
     // MARK: - Hashable
@@ -68,7 +70,8 @@ let planeteSouvenirs = PlaneteSouvenirs(
     isVisited: false,
     position: CGPoint(x: 0, y: 440),
     circleSize: CGSize(width: 140, height: 140),
-    circleRelativeOffset: CGPoint(x: 0, y: 0)
+    circleRelativeOffset: CGPoint(x: 0, y: 0),
+    route : .planeteSouvenirs
 )
 
 // MARK: - PlaneteExplora = Héritage de la classe Planete
@@ -93,7 +96,8 @@ let planeteExplora = PlaneteExplora(
     isVisited: false,
     position: CGPoint(x: -100, y: 120),
     circleSize: CGSize(width: 132, height: 132),
-    circleRelativeOffset: CGPoint(x: 0, y: 0)
+    circleRelativeOffset: CGPoint(x: 0, y: 0),
+    route : .planeteExplo
 )
 
 // MARK: - PlaneteMusic = Héritage de la classe Planete
@@ -116,7 +120,8 @@ let planeteMusic = PlaneteMusic(
     isVisited: false,
     position: CGPoint(x: -100, y: 300),
     circleSize: CGSize(width: 140, height: 140),
-    circleRelativeOffset: CGPoint(x: 0, y: 0)
+    circleRelativeOffset: CGPoint(x: 0, y: 0),
+    route : .planeteMusic
 )
 
 // MARK: -  PlanetePhilo = Héritage de la classe Planete
@@ -141,7 +146,8 @@ let planetePhilo = PlanetePhilo(
     isVisited: false,
     position: CGPoint(x: 100, y: 120),
     circleSize: CGSize(width: 140, height: 140),
-    circleRelativeOffset: CGPoint(x: 0, y: 0)
+    circleRelativeOffset: CGPoint(x: 0, y: 0),
+    route : .planetePhilo
 )
 
 // MARK: -  PlaneteMissions = Héritage de la classe Planete
@@ -166,5 +172,6 @@ let planeteMission = PlaneteMissions (
     isVisited : false,
     position: CGPoint(x: 120, y: 300),
     circleSize: CGSize(width: 130, height: 130),
-    circleRelativeOffset: CGPoint(x: -2, y: 0)
+    circleRelativeOffset: CGPoint(x: -2, y: 0),
+    route : .planeteMission
 )

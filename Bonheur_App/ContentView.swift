@@ -12,12 +12,13 @@ struct ContentView: View {
     @State private var navigationViewModel = NavigationViewModel()
     @Environment(PlanetViewModel.self) private var planetViewModel
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
+    @Environment(ChallengeViewModel.self) private var challengeViewModel
     
     var body: some View {
         
         NavigationStack(path: $navigationViewModel.path) {
             
-            PageCitation()
+            PlaneteUser()
             
                 .navigationDestination(for: AppRoute.self) { route in
                     
@@ -35,18 +36,32 @@ struct ContentView: View {
                     case .onboarding(let planete):
                         OnboardingPlanete(planete: planete)
                         
-                    case .pageSouvenirs:
+                    case .planeteSouvenirs:
                         SouvenirsView()
                         
                     case .souvenirsFiltre:
                         SouvenirsFilterView()
+                        
+                    case .planeteExplo:
+                        PlaneteExploView()
+                        
+                    case .planeteMusic:
+                        MusicPlayerView()
+                    
+                    case .planetePhilo:
+                        PlanetePhiloView()
+                        
+                    case .planeteMission:
+                        MissionView()
+                        
+                        
                     }
                 }
         }
         .environment(navigationViewModel)
         .environment(planetViewModel)
         .environment(souvenirsViewModel)
-        
+        .environment(challengeViewModel)
     }
 }
 
@@ -55,4 +70,5 @@ struct ContentView: View {
         .environment(NavigationViewModel())
         .environment(PlanetViewModel())
         .environment(SouvenirsViewModel())
+        .environment(ChallengeViewModel())
 }
