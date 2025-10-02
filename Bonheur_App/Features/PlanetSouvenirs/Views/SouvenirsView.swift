@@ -18,7 +18,7 @@ struct SouvenirsView: View {
         GridItem(.flexible()),
         GridItem(.flexible())]
     
-    @State var filteredSouvenirs : [any Souvenir] = [souvenirs[0]]
+    @State var filteredSouvenirs : [any Souvenir] = []
     
     var body: some View {
         

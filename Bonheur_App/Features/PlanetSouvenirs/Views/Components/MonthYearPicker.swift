@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MonthYearPicker: View {
     
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
+    
     @State private var selectedMonth : Int?
     @State private var selectedYear : Int?
     
@@ -20,12 +22,16 @@ struct MonthYearPicker: View {
     var body: some View {
         HStack {
             MonthPicker(selectedMonth: $selectedMonth, months: $months)
+                .environment(souvenirsViewModel)
             YearPicker(selectedYear: $selectedYear, years: $years)
+                .environment(souvenirsViewModel)
         }
     }
 }
 
 struct MonthPicker: View {
+    
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
     @Binding var selectedMonth: Int?
     @Binding var months: [String]
@@ -33,7 +39,12 @@ struct MonthPicker: View {
     var body: some View {
         Menu {
             ForEach(0..<months.count, id: \.self) { index in
-                Button(action: {selectedMonth = index + 1}) {
+                
+                Button {
+                    selectedMonth = index + 1
+                    souvenirsViewModel.filters.month = index + 1
+                    print(souvenirsViewModel.filters.month as Any)
+                }label : {
                     Text(months[index])
                 }
             }
@@ -45,6 +56,7 @@ struct MonthPicker: View {
 }
 
 struct YearPicker: View {
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
     @Binding var selectedYear: Int?
     @Binding var years: [Int]
@@ -53,8 +65,12 @@ struct YearPicker: View {
         
         Menu {
             ForEach(years, id: \.self) { year in
-                Button(action: {selectedYear = year})
-                {
+                
+                Button {
+                    selectedYear = year
+                    souvenirsViewModel.filters.year = year
+                    print(souvenirsViewModel.filters.year as Any)
+                }label : {
                     Text("\(year)")
                 }
             }
@@ -71,4 +87,5 @@ struct YearPicker: View {
         Color.blueDark.ignoresSafeArea(edges: .all)
         MonthYearPicker()
     }
+    .environment(SouvenirsViewModel())
 }

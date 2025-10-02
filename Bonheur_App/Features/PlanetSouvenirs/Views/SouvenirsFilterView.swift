@@ -52,9 +52,11 @@ struct SouvenirsFilterView: View {
                     Text("Défi : ")
                     Spacer()
                     Button {
-                        isSelectedDefi.toggle()
+                        souvenirsViewModel.filters.isDefi.toggle()
+
                     }label: {
-                        if isSelectedDefi {
+                        
+                        if souvenirsViewModel.filters.isDefi {
                             BoutonSwitch(isOn: true)
                         }else {
                             BoutonSwitch(isOn: false)
@@ -65,9 +67,10 @@ struct SouvenirsFilterView: View {
                     Text("Map :")
                     Spacer()
                     Button {
-                        isSelectedMap.toggle()
+                        souvenirsViewModel.filters.isMap.toggle()
+
                     }label: {
-                        if isSelectedMap {
+                        if souvenirsViewModel.filters.isMap {
                             BoutonSwitch(isOn: true)
                         }else {
                             BoutonSwitch(isOn: false)
@@ -86,17 +89,17 @@ struct SouvenirsFilterView: View {
                         
                         Button {
                             
-                            if selectedTheme.contains(theme) {
-                                selectedTheme.removeAll { $0 == theme}
+                            if souvenirsViewModel.filters.theme.contains(theme) {
+                                souvenirsViewModel.filters.theme.removeAll { $0 == theme}
                                 
                             }else {
-                                selectedTheme.append(theme)
+                                souvenirsViewModel.filters.theme.append(theme)
                             }
-                            print(selectedTheme)
+                            print(souvenirsViewModel.filters.theme)
                             
                         }label: {
                             
-                            if selectedTheme.contains(theme) {
+                            if souvenirsViewModel.filters.theme.contains(theme) {
                                 VStack {
                                     Image(theme.iconName)
                                         .resizable()
