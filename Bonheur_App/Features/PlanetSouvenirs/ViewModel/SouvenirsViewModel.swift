@@ -15,7 +15,7 @@ class SouvenirsViewModel {
     
     //MARK: - Data
     
-    let souvenirsData = souvenirs
+    let souvenirsData : [any Souvenir] = souvenirs
     
     func groupSouvenirsByMonth(_ souvenirs: [any Souvenir]) -> [(key: String, value: [any Souvenir])] {
         let formatter = DateFormatter()
@@ -35,8 +35,41 @@ class SouvenirsViewModel {
         return formatter.string(from: date)
     }
     
-
+    
     //MARK: - Filters
     
+    var filters = SouvenirFilter()
+    
+    var filteredSouvenirs : [any Souvenir] {
+        souvenirsData.filter { souvenir in
+            
+            if let month = filters.month,
+               Calendar.current.component(.month, from: souvenir.date) != month {
+                return false
+            }
+            
+            if let year = filters.year,
+               Calendar.current.component(.year, from: souvenir.date) != year {
+                return false
+            }
+            
+            if filters.isDefi && souvenir.type != .mission  {
+                return false
+            }
+            
+            if filters.isMap && souvenir.type != .mapInsert  {
+                return false
+            }
+            
+            if !filters.theme.isEmpty && !filters.theme.contains(souvenir.theme) {
+                return false
+            }
+            return true
+        }
+    }
+    
+    func resetFilters() {
+        filters = SouvenirFilter()
+    }
     
 }

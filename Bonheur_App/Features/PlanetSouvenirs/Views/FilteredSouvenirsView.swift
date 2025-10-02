@@ -9,23 +9,36 @@ import SwiftUI
 
 struct FilteredSouvenirsView: View {
     
-    @Binding var filteredSouvenirs: [any Souvenir]
-    
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
+        
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible())]
     
+    
     var body: some View {
         
         VStack (alignment : .leading) {
             
-            Text("Filtered Souvenirs View")
-                .font(.custom("SpaceMono-Bold", size: 20))
-                .foregroundStyle(Color.white)
+            if souvenirsViewModel.filters.month != nil && souvenirsViewModel.filters.year != nil {
+                
+                HStack {
+                    
+                    Text("Juillet 2025")
+                        .font(.custom("SpaceMono-Bold", size: 20))
+                        .foregroundStyle(Color.white)
+                    
+                }
+                
+            }else {
+                Spacer()
+            }
             
-            ForEach(filteredSouvenirs, id: \.id) { souvenir in
-                CadreMiniVignette(image: souvenir.photo ?? .photoDog)
+            LazyVGrid(columns: columns) {
+                ForEach(souvenirsViewModel.filteredSouvenirs, id: \.id) { souvenir in
+                    CadreMiniVignette(image: souvenir.photo ?? .photoDog)
+                }
             }
             Spacer()
         }
@@ -37,7 +50,8 @@ struct FilteredSouvenirsView: View {
     ZStack {
         Image(.backgroundSouvenirs)
             .ignoresSafeArea(edges: .all)
-        FilteredSouvenirsView(filteredSouvenirs: .constant([souvenirs[0]]))
+        FilteredSouvenirsView()
+            .environment(SouvenirsViewModel())
     }
 }
 
