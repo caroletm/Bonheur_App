@@ -64,9 +64,12 @@ class SouvenirsViewModel {
             if !filters.theme.isEmpty && !filters.theme.contains(souvenir.theme) {
                 return false
             }
-            
             return true
         }
+    }
+    
+    func resetFilters() {
+        filters = SouvenirFilter()
     }
     
 }

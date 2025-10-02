@@ -42,15 +42,22 @@ struct MonthPicker: View {
                 
                 Button {
                     selectedMonth = index + 1
-                    souvenirsViewModel.filters.month = index + 1
+                    souvenirsViewModel.filters.month = selectedMonth
                     print(souvenirsViewModel.filters.month as Any)
                 }label : {
                     Text(months[index])
                 }
             }
         } label: {
-            Text(months[(selectedMonth ?? 1) - 1])
-                .foregroundColor(.white)
+            
+            if selectedMonth != nil {
+                Text(months[(selectedMonth ?? 1) - 1])
+                    .foregroundColor(.white)
+            } else {
+                Text((months[(selectedMonth ?? 1) - 1]))
+                    .foregroundStyle(.white)
+                    .opacity(0.3)
+            }
         }
     }
 }
@@ -68,15 +75,22 @@ struct YearPicker: View {
                 
                 Button {
                     selectedYear = year
-                    souvenirsViewModel.filters.year = year
+                    souvenirsViewModel.filters.year = selectedYear
                     print(souvenirsViewModel.filters.year as Any)
                 }label : {
                     Text("\(year)")
                 }
             }
         } label: {
-            Text("\(selectedYear ?? 2020)")
-                .foregroundColor(.white)
+            
+            if selectedYear != nil {
+                Text("\(selectedYear ?? 2020)")
+                    .foregroundColor(.white)
+            } else {
+                Text("\(selectedYear ?? 2020)")
+                    .foregroundColor(.white)
+                    .opacity(0.3)
+            }
         }
     }
 }

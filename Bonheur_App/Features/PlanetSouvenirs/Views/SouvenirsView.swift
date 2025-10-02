@@ -11,20 +11,24 @@ struct SouvenirsView: View {
     
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
-
+    
     //3 gridItems car 3 colonnes
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible())]
-    
-    @State var filteredSouvenirs : [any Souvenir] = []
-    
+        
     var body: some View {
         
         let groupedSouvenirs = souvenirsViewModel.groupSouvenirsByMonth(souvenirsViewModel.souvenirsData)
         let sortedSouvenirs = souvenirsViewModel.souvenirsData.sorted { $0.date > $1.date }
         let last5Souvenirs = Array(sortedSouvenirs.prefix(5))
+        let isFilterOn : Bool =
+        souvenirsViewModel.filters.month != nil ||
+        souvenirsViewModel.filters.year != nil ||
+        souvenirsViewModel.filters.isDefi ||
+        souvenirsViewModel.filters.isMap ||
+        !souvenirsViewModel.filters.theme.isEmpty
       
         NavigationView {
             
@@ -32,7 +36,8 @@ struct SouvenirsView: View {
                 Image(.backgroundSouvenirs)
                     .ignoresSafeArea(.all)
                 
-                if filteredSouvenirs.isEmpty {
+                if !isFilterOn {
+                    
                     VStack {
                         ScrollView{
                             
@@ -87,7 +92,7 @@ struct SouvenirsView: View {
                 }else {
                     
                     VStack {
-                        FilteredSouvenirsView(filteredSouvenirs: $filteredSouvenirs)
+                        FilteredSouvenirsView()
                     }
                     .padding(.top, 60)
                 }
@@ -97,15 +102,19 @@ struct SouvenirsView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         navigationViewModel.path = NavigationPath()
-                        navigationViewModel.path.append(AppRoute.planeteUserTest)
                     }label:{
                         BoutonFusee(isPressed: false)
                     }
                 }
                 ToolbarItem(placement : .navigationBarLeading) {
                     Button {
-                        navigationViewModel.path = NavigationPath()
-                        navigationViewModel.path.append(AppRoute.landing(planete: planeteSouvenirs))
+
+                        if !isFilterOn {
+                            navigationViewModel.path = NavigationPath()
+                            navigationViewModel.path.append(AppRoute.landing(planete: planeteSouvenirs))
+                        }else {
+                            souvenirsViewModel.resetFilters()
+                        }
 
                     }label : {
                         BoutonChevron(image: .chevronLeft)
