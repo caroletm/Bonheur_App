@@ -4,6 +4,7 @@ struct PlaneteUser: View {
     
     @Environment(PlanetViewModel.self) private var planetViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
+    @Environment(SouvenirsViewModel.self) private var souvenirViewModel
     
     @State private var selectedPlanet: Planete? = nil
     @State private var planetsVisible: Bool = false
@@ -35,13 +36,15 @@ struct PlaneteUser: View {
             
             //bouton Polaroid souvenir du jour (apparaît seulement si les planètes sont visibles)
             if planetsVisible {
-                Image("SouvenirPola.")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 85, height: 85)
-                    .offset(x: 145, y: 530)
-                    .opacity(planetsVisible ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 0.8).delay(1.0), value: planetsVisible)
+                NavigationLink(destination: SouvenirsDetailsView(souvenir: souvenirViewModel.souvenirsData.randomElement()!)) { // Point d'exclamation attention au crash au secousse ATTENTION
+                    Image("SouvenirPola.")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 85, height: 85)
+                }
+                .offset(x: 145, y: 530)
+                .opacity(planetsVisible ? 1.0 : 0.0)
+                .animation(.easeInOut(duration: 0.8).delay(1.0), value: planetsVisible)
             }
             
             //Bouton Fusée
@@ -183,5 +186,6 @@ struct PlanetButton: View {
     PlaneteUser()
         .environment(PlanetViewModel())
         .environment(NavigationViewModel())
+        .environment(SouvenirsViewModel())
 }
 
