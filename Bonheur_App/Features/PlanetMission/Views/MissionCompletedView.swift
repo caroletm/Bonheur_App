@@ -67,25 +67,43 @@ struct MissionCompletedView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 20)
                 ZStack{
-                    Rectangle()
-                        .fill(Color.blueGrey)
-                        .frame(width:271,height: 198)
-                        .cornerRadius(25)
-                        .onTapGesture {
-                            showCamera = true
-                        }
-                    VStack{
-                        Image(systemName: "camera")
+                    if let selectedImage = memoryViewModel.image {
+                        
+                        Image(uiImage: selectedImage)
                             .resizable()
-                            .frame(width: 36, height: 29)
-                        Text("Photo optionnelle")
-                            .font(.custom("Poppins-Light", size: 10))
+                            .scaledToFill()
+                            .frame(width: 271, height: 198)
+                            .clipped()
+                            .cornerRadius(25)
+                            .onTapGesture {
+                                showCamera = true
+                            }
+                    } else {
+                        Rectangle()
+                            .fill(Color.blueGrey)
+                            .frame(width:271,height: 198)
+                            .cornerRadius(25)
+                            .onTapGesture {
+                                showCamera = true
+                            }
+                        VStack{
+                            Image(systemName: "camera")
+                                .resizable()
+                                .frame(width: 36, height: 29)
+                            Text("Photo optionnelle")
+                                .font(.custom("Poppins-Light", size: 10))
+                        }
+                        
                     }
-                    
                 }
                 .padding(.vertical)
                 .sheet(isPresented: $showCamera) {
-                    ImagePicker(sourceType: .camera, selectedImage: $memoryViewModel.image)
+                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                            ImagePicker(sourceType: .camera, selectedImage: $memoryViewModel.image)
+                        } else {
+                            
+                            ImagePicker(sourceType: .photoLibrary, selectedImage: $memoryViewModel.image)
+                        }
                 }
                 ZStack{
                     HStack() {
