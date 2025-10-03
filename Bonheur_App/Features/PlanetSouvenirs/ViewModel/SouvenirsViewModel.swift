@@ -15,9 +15,9 @@ class SouvenirsViewModel {
     
     //MARK: - Data
     
-    let souvenirsData : [any Souvenir] = souvenirs
+    let souvenirsData : [Souvenir] = souvenirs
     
-    func groupSouvenirsByMonth(_ souvenirs: [any Souvenir]) -> [(key: String, value: [any Souvenir])] {
+    func groupSouvenirsByMonth(_ souvenirs: [Souvenir]) -> [(key: String, value: [Souvenir])] {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "fr_FR")
         formatter.dateFormat = "MMMM yyyy"
@@ -40,7 +40,7 @@ class SouvenirsViewModel {
     
     var filters = SouvenirFilter()
     
-    var filteredSouvenirs : [any Souvenir] {
+    var filteredSouvenirs : [Souvenir] {
         
         souvenirsData.filter { souvenir in
             

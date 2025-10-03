@@ -12,7 +12,7 @@ struct SouvenirsDetailsView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
     
-    var souvenir : any Souvenir
+    var souvenir : Souvenir
     
     var body: some View {
         
@@ -95,6 +95,11 @@ struct SouvenirsDetailsView: View {
                 }
                 .padding(.bottom, 100)
                 
+                Image(.missionValide)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80, height: 80)
+                    .offset(x: 0, y: 260)
             }
         }
         .navigationBarBackButtonHidden(true)

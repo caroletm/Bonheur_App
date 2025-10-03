@@ -42,13 +42,12 @@ struct SouvenirsView: View {
                             
                             VStack  (alignment: .leading){
                                 
-                                
                                 ScrollView (.horizontal) {
                                     HStack {
                                         ForEach(last5Souvenirs, id: \.id) { souvenir in
                                             
-                                            NavigationLink {
-                                                SouvenirsDetailsView(souvenir: souvenir)
+                                            Button {
+                                                navigationViewModel.path.append(AppRoute.detailSouvenir(souvenir : souvenir))
                                             }label :{
                                                 CadreVignette(image : souvenir.photo ?? .photoDog, date : souvenir.date, iconTheme: souvenir.theme.iconName)
                                             }
@@ -92,8 +91,8 @@ struct SouvenirsView: View {
                                     // lazyVgrid : grille verticale de 3 colonnes
                                     LazyVGrid(columns: columns) {
                                         ForEach(souvenirsOfMonth, id: \.id) { souvenir in
-                                            NavigationLink {
-                                                SouvenirsDetailsView(souvenir: souvenir)
+                                            Button {
+                                                navigationViewModel.path.append(AppRoute.detailSouvenir(souvenir : souvenir))
                                             }label: {
                                                 CadreMiniVignette(image: souvenir.photo ?? .photoDog)
                                                     .padding(.vertical, 8)
