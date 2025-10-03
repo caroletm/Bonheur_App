@@ -10,35 +10,35 @@ import SwiftUI
 struct FilteredSouvenirsView: View {
     
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
-        
+    
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible())]
     
-    
     var body: some View {
         
         VStack (alignment : .leading) {
             
-            if souvenirsViewModel.filters.month != nil && souvenirsViewModel.filters.year != nil {
-                
-                HStack {
-                    
-                    Text("Juillet 2025")
-                        .font(.custom("SpaceMono-Bold", size: 20))
-                        .foregroundStyle(Color.white)
-                    
-                }
-                
-            }else {
-                Text("\(souvenirsViewModel.filters.month ?? 1) \(souvenirsViewModel.filters.year ?? 0)")
-            }
+            Text(souvenirsViewModel.dateEnString())
+                .font(.custom("SpaceMono-Bold", size: 20))
+                .foregroundStyle(.white)
+                .padding()
             
-            LazyVGrid(columns: columns) {
-                ForEach(souvenirsViewModel.filteredSouvenirs, id: \.id) { souvenir in
-                    CadreMiniVignette(image: souvenir.photo ?? .photoDog)
+            if !souvenirsViewModel.filteredSouvenirs.isEmpty {
+
+                LazyVGrid(columns: columns) {
+                    ForEach(souvenirsViewModel.filteredSouvenirs, id: \.id) { souvenir in
+                        CadreMiniVignette(image: souvenir.photo ?? .photoDog)
+                    }
                 }
+            } else {
+                Text("Vous n'avez pas de souvenirs correspondant à vos critères")
+                    .font(.custom("Poppins-Regular", size: 16))
+                    .frame (width : 340)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.white)
+                    .padding()
             }
             Spacer()
         }

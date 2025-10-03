@@ -41,6 +41,7 @@ class SouvenirsViewModel {
     var filters = SouvenirFilter()
     
     var filteredSouvenirs : [any Souvenir] {
+        
         souvenirsData.filter { souvenir in
             
             if let month = filters.month,
@@ -68,8 +69,24 @@ class SouvenirsViewModel {
         }
     }
     
+    func dateEnString() -> String {
+        
+        let months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+                             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+        
+        var result : [String] = []
+        
+        if let month = filters.month {
+            result.append(months[month-1])
+        }
+        
+        if let year = filters.year {
+            result.append("\(year)")
+        }
+        return result.joined(separator : " ")
+    }
+    
     func resetFilters() {
         filters = SouvenirFilter()
     }
-    
 }

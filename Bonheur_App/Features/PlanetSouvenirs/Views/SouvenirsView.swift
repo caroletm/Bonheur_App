@@ -113,7 +113,7 @@ struct SouvenirsView: View {
                     VStack {
                         FilteredSouvenirsView()
                     }
-                    .padding(.top, 60)
+//                    .padding(.top, 60)
                 }
             }
             

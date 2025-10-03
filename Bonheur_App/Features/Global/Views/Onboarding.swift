@@ -53,7 +53,7 @@ struct OnboardingPlanete: View  {
                     }
                     .offset(y: 10)
                     BoutonsFuseeRetour(planete: planete)
-                        .padding(.bottom, 10)
+                        .offset(y:-20)
                         
                 }
              
