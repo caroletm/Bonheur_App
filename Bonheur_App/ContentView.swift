@@ -10,9 +10,9 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var navigationViewModel = NavigationViewModel()
-    @Environment(PlanetViewModel.self) private var planetViewModel
-    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
-    @Environment(ChallengeViewModel.self) private var challengeViewModel
+    @State private var planetViewModel = PlanetViewModel()
+    @State private var souvenirsViewModel = SouvenirsViewModel()
+    @State private var challengeViewModel = ChallengeViewModel()
     
     var body: some View {
         
