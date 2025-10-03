@@ -101,7 +101,7 @@ struct SouvenirsFilterView: View {
                                         Image(theme.iconName)
                                             .resizable()
                                             .frame(width: 65, height: 65)
-                                            .shadow(color : .white, radius: 10)
+                                            .shadow(color : theme.color, radius: 10)
                                         Text(theme.title).font(.custom("Poppins", size: 7))
                                     }
                                     

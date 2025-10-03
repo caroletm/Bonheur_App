@@ -32,7 +32,7 @@ struct FilteredSouvenirsView: View {
                 }
                 
             }else {
-                Spacer()
+                Text("\(souvenirsViewModel.filters.month ?? 1) \(souvenirsViewModel.filters.year ?? 0)")
             }
             
             LazyVGrid(columns: columns) {

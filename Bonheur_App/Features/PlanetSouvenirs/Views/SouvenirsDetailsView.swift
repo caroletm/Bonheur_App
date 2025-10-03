@@ -67,7 +67,7 @@ struct SouvenirsDetailsView: View {
                                 .opacity(0.7)
                                 .padding(.bottom, 10)
                             
-                        }else {
+                        }else if souvenir.type == .mission {
                             Text("\(souvenir.nom)")
                                 .font(.custom("SpaceMono-Regular", size: 14))
                                 .opacity(0.7)
