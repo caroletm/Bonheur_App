@@ -12,7 +12,7 @@ struct LandingPlanet: View {
     @Environment(PlanetViewModel.self) private var planetViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
     
-    var isOnboardingPresented : Bool = true
+    var isOnboardingPresented : Bool = false
 
     var planete: Planete
     
@@ -52,7 +52,7 @@ struct LandingPlanet: View {
                             if isOnboardingPresented {
                                 navigationViewModel.path.append(AppRoute.onboarding(planete: currentPlanete))
                             }else{
-                                navigationViewModel.path.append(AppRoute.pageSouvenirs)
+                                navigationViewModel.path.append(currentPlanete.route)
                             }
                             
                         }label:{
@@ -65,8 +65,8 @@ struct LandingPlanet: View {
                                 Image(currentPlanete.image)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 290, height: 260)
-                                    .offset(x: -15, y: 10)
+                                    .frame(width: 260, height: 240)
+                                    .offset(x: 2)
                             }
                         }
                         

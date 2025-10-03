@@ -42,7 +42,9 @@ struct OnboardingPlanete: View  {
                             .multilineTextAlignment(.center)
                         
                         Button {
-                            navigationViewModel.path.append(AppRoute.pageSouvenirs)
+                
+                            navigationViewModel.path.append(planete.route)
+                                
                         }label : {
                             BoutonText(text: "OK", width: 45)
                         }
@@ -51,6 +53,7 @@ struct OnboardingPlanete: View  {
                     }
                     .offset(y: 10)
                     BoutonsFuseeRetour(planete: planete)
+                        .padding(.bottom, 10)
                         
                 }
              

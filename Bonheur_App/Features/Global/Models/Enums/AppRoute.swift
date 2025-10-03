@@ -8,10 +8,16 @@
 import Foundation
 
 enum AppRoute: Hashable {
+    
     case pageCitation
     case planeteUserTest
     case landing(planete : Planete)
     case onboarding(planete : Planete)
-    case pageSouvenirs
+    case planeteSouvenirs
     case souvenirsFiltre
+    case planeteExplo
+    case planeteMusic
+    case planetePhilo
+    case planeteMission
+    
 }
