@@ -14,7 +14,7 @@ struct MemoryChallenge :  Identifiable {
     var descriptionMemory : String
     var imageMemory : String?
     var themeMemory : ThemeType
-    var creationDate : Date = Date()
+    var creationDate : String
 }
 
 enum ThemeType: String, CaseIterable{
