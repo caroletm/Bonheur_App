@@ -9,7 +9,10 @@ import SwiftUI
 
 struct CadreMiniVignette: View {
     
-    var image: ImageResource
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
+    
+    var souvenir : Souvenir
+    var hasPhoto : Bool
     
     var body: some View {
         
@@ -20,12 +23,23 @@ struct CadreMiniVignette: View {
             .cornerRadius(20)
             .overlay(
                 ZStack {
-          
-                    Image(image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 114, height: 134)
-                        .cornerRadius(20)
+                    if hasPhoto {
+                        Image(souvenir.photo ?? .photoDog)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 114, height: 134)
+                            .cornerRadius(20)
+                    }else{
+                        Text(souvenir.description)
+                            .padding(5)
+                            .lineLimit(5)
+                            .lineSpacing(5)
+                            .multilineTextAlignment(.center)
+                            .font(.custom("Poppins-Regular", size: 12))
+                            .foregroundStyle(.white)
+                            .frame(width: 114, height: 134)
+
+                    }
                     Circle()
                         .fill(Color.white)
                         .frame(width: 17, height: 17)
@@ -43,6 +57,7 @@ struct CadreMiniVignette: View {
 #Preview {
     ZStack {
         Color.blueDark.edgesIgnoringSafeArea(.all)
-        CadreMiniVignette(image :.photoVoiture)
+        CadreMiniVignette(souvenir: souvenirs[0], hasPhoto: false)
+            .environment(SouvenirsViewModel())
     }
 }

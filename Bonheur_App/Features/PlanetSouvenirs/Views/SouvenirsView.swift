@@ -29,6 +29,8 @@ struct SouvenirsView: View {
         souvenirsViewModel.filters.isDefi ||
         souvenirsViewModel.filters.isMap ||
         !souvenirsViewModel.filters.theme.isEmpty
+       
+
         
         NavigationView {
             
@@ -43,13 +45,17 @@ struct SouvenirsView: View {
                             VStack  (alignment: .leading){
                                 
                                 ScrollView (.horizontal) {
+                                    
                                     HStack {
+                                        
                                         ForEach(last5Souvenirs, id: \.id) { souvenir in
+                                            
+                                            let hasPhoto : Bool = souvenir.photo != nil
                                             
                                             Button {
                                                 navigationViewModel.path.append(AppRoute.detailSouvenir(souvenir : souvenir))
                                             }label :{
-                                                CadreVignette(image : souvenir.photo ?? .photoDog, date : souvenir.date, iconTheme: souvenir.theme.iconName)
+                                                CadreVignette(souvenir : souvenir, hasPhoto : hasPhoto )
                                             }
                                         }
                                     }
@@ -64,7 +70,7 @@ struct SouvenirsView: View {
                                     .padding(.top)
                                 
                                 
-                                ForEach(groupedSouvenirs, id: \.key) { month, souvenirsOfMonth in
+                                ForEach(groupedSouvenirs.sorted(by: {$0.key > $1.key}), id: \.key) { month, souvenirsOfMonth in
                                     
                                     if month == groupedSouvenirs.first?.key {
                                         
@@ -90,11 +96,14 @@ struct SouvenirsView: View {
                                     
                                     // lazyVgrid : grille verticale de 3 colonnes
                                     LazyVGrid(columns: columns) {
+                                        
                                         ForEach(souvenirsOfMonth, id: \.id) { souvenir in
+                                            let hasPhoto : Bool = souvenir.photo != nil
+                                            
                                             Button {
                                                 navigationViewModel.path.append(AppRoute.detailSouvenir(souvenir : souvenir))
                                             }label: {
-                                                CadreMiniVignette(image: souvenir.photo ?? .photoDog)
+                                                CadreMiniVignette(souvenir : souvenir, hasPhoto: hasPhoto)
                                                     .padding(.vertical, 8)
                                             }
                                         }

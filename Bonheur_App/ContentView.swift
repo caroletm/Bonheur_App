@@ -56,7 +56,6 @@ struct ContentView: View {
                         
                     case .detailSouvenir(souvenir: let souvenir):
                         SouvenirsDetailsView(souvenir: souvenir)
-                        
                     }
                 }
         }

@@ -29,7 +29,9 @@ struct FilteredSouvenirsView: View {
 
                 LazyVGrid(columns: columns) {
                     ForEach(souvenirsViewModel.filteredSouvenirs, id: \.id) { souvenir in
-                        CadreMiniVignette(image: souvenir.photo ?? .photoDog)
+                        let hasPhoto = souvenir.photo != nil
+                        
+                        CadreMiniVignette(souvenir : souvenir, hasPhoto: hasPhoto)
                     }
                 }
             } else {
