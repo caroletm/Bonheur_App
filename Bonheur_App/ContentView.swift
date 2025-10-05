@@ -54,6 +54,8 @@ struct ContentView: View {
                     case .planeteMission:
                         MissionView()
                         
+                    case .detailSouvenir(souvenir: let souvenir):
+                        SouvenirsDetailsView(souvenir: souvenir)
                     }
                 }
         }

@@ -12,7 +12,7 @@ struct SouvenirsDetailsView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
     
-    var souvenir : any Souvenir
+    var souvenir : Souvenir
     
     var body: some View {
         
@@ -78,6 +78,19 @@ struct SouvenirsDetailsView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 218, height: 284)
+                        }else{
+                            if souvenir.type == .mapInsert {
+                                Image(.pointGps)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                            }
+                            if souvenir.type == .mission {
+                                Image(.missionValide)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 60, height: 60)
+                            }
                         }
                         
                         if souvenir.type == .mapInsert {
@@ -86,15 +99,36 @@ struct SouvenirsDetailsView: View {
                                 .opacity(0.7)
                         }
                         
-                        Text("\(souvenir.description)")
-                            .font(.custom("SpaceMono-Regular", size: 12))
-                            .opacity(0.7)
-                            .frame(width : 285, height: 90)
-                            .multilineTextAlignment(.center)
+                        ScrollView {
+                            if souvenir.photo != nil {
+                                Text("\(souvenir.description)")
+                                    .font(.custom("SpaceMono-Regular", size: 12))
+                                    .opacity(0.7)
+                                    .frame(width : 285, height: 90)
+                                    .multilineTextAlignment(.center)
+                            }else{
+                                Text("\(souvenir.description)")
+                                    .font(.custom("SpaceMono-Regular", size: 12))
+                                    .opacity(0.7)
+                                    .frame(maxWidth : 285, maxHeight: .infinity)
+                                    .multilineTextAlignment(.center)
+                            }
+          
+                        }
+                        .frame(width : 285, height: 120)
                     }
                 }
                 .padding(.bottom, 100)
                 
+                if souvenir.photo != nil {
+                    if souvenir.type == .mission {
+                        Image(.missionValide)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80, height: 80)
+                            .offset(x: 0, y: 260)
+                    }
+                }
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -102,7 +136,7 @@ struct SouvenirsDetailsView: View {
 }
 
 #Preview {
-    SouvenirsDetailsView(souvenir: souvenirs[0])
+    SouvenirsDetailsView(souvenir: souvenirs[1])
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
 }

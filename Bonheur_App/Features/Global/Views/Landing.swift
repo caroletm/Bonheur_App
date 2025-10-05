@@ -8,20 +8,20 @@
 import SwiftUI
 
 struct LandingPlanet: View {
-
+    
     @Environment(PlanetViewModel.self) private var planetViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
     
     var isOnboardingPresented : Bool = false
-
+    
     var planete: Planete
     
     @State private var currentIndex: Int = 0
-
+    
     var body: some View {
         
         let currentPlanete = planetViewModel.planetes[currentIndex]
-
+        
         NavigationView {
             
             ZStack {
@@ -46,7 +46,10 @@ struct LandingPlanet: View {
                             }
                         } label: {
                             BoutonChevron(image: .chevronLeft)
+                            
                         }
+                        .offset(x: 10)
+                        
                         
                         Button {
                             if isOnboardingPresented {
@@ -79,8 +82,8 @@ struct LandingPlanet: View {
                         } label: {
                             BoutonChevron(image: .chevronRight)
                         }
+                        .offset(x: -10)
                     }
-                    
                     Text(currentPlanete.description)
                         .font(.custom("SpaceMono-Bold", size: 12))
                         .foregroundStyle(.white)
@@ -101,6 +104,7 @@ struct LandingPlanet: View {
                     currentIndex = index
                 }
             }
+            .padding(.vertical, 20)
         }
         .navigationBarBackButtonHidden(true)
     }

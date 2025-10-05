@@ -11,9 +11,8 @@ struct CadreVignette: View {
     
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
-    var image: ImageResource
-    var date : Date
-    var iconTheme : ImageResource
+    var souvenir : Souvenir
+    var hasPhoto : Bool
     
     var body: some View {
         
@@ -24,11 +23,24 @@ struct CadreVignette: View {
             .cornerRadius(20)
             .overlay(
                 ZStack {
-                    Image(image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 170, height: 200)
-                        .cornerRadius(20)
+                    if hasPhoto {
+                        Image(souvenir.photo ?? .photoDog)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 170, height: 200)
+                            .cornerRadius(20)
+                    }else{
+                        Text(souvenir.description)
+                            .padding(5)
+                            .lineLimit(5)
+                            .lineSpacing(5)
+                            .multilineTextAlignment(.center)
+                            .font(.custom("Poppins-Regular", size: 12))
+                            .foregroundStyle(.white)
+                            .frame(width: 170, height: 200)
+                         
+                    }
+
                     Circle()
                         .fill(Color.white)
                         .frame(width: 17, height: 17)
@@ -43,7 +55,7 @@ struct CadreVignette: View {
                         .blur(radius: 0)
                     VStack {
                         HStack {
-                            Image(iconTheme)
+                            Image(souvenir.theme.iconName)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 50, height: 50)
@@ -52,7 +64,7 @@ struct CadreVignette: View {
                             Spacer()
                         }
                         Spacer()
-                        Text(souvenirsViewModel.dateFormatter(date))
+                        Text(souvenirsViewModel.dateFormatter(souvenir.date))
                             .foregroundStyle(.white)
                             .font(.custom("SpaceMono-Bold", size: 13))
                             .padding()
@@ -66,7 +78,7 @@ struct CadreVignette: View {
 #Preview {
     ZStack {
         Color.blueDark.edgesIgnoringSafeArea(.all)
-        CadreVignette(image :.photoVoiture, date : Date(), iconTheme: .logoJaune)
+        CadreVignette(souvenir: souvenirs[0], hasPhoto: false)
             .environment(SouvenirsViewModel())
     }
 }

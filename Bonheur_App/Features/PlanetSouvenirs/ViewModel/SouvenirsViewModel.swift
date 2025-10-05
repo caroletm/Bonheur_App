@@ -15,9 +15,9 @@ class SouvenirsViewModel {
     
     //MARK: - Data
     
-    let souvenirsData : [any Souvenir] = souvenirs
+    let souvenirsData : [Souvenir] = souvenirs
     
-    func groupSouvenirsByMonth(_ souvenirs: [any Souvenir]) -> [(key: String, value: [any Souvenir])] {
+    func groupSouvenirsByMonth(_ souvenirs: [Souvenir]) -> [(key: String, value: [Souvenir])] {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "fr_FR")
         formatter.dateFormat = "MMMM yyyy"
@@ -40,7 +40,8 @@ class SouvenirsViewModel {
     
     var filters = SouvenirFilter()
     
-    var filteredSouvenirs : [any Souvenir] {
+    var filteredSouvenirs : [Souvenir] {
+        
         souvenirsData.filter { souvenir in
             
             if let month = filters.month,
@@ -68,8 +69,24 @@ class SouvenirsViewModel {
         }
     }
     
+    func dateEnString() -> String {
+        
+        let months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+                             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+        
+        var result : [String] = []
+        
+        if let month = filters.month {
+            result.append(months[month-1])
+        }
+        
+        if let year = filters.year {
+            result.append("\(year)")
+        }
+        return result.joined(separator : " ")
+    }
+    
     func resetFilters() {
         filters = SouvenirFilter()
     }
-    
 }
