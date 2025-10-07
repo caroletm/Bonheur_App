@@ -54,15 +54,12 @@ struct ContentView: View {
                     case .planeteMission:
                         MissionView()
                         
-<<<<<<< HEAD
                     case .missionAccepter(let challenge):
                         MissionCompletedView(challenge: challenge)
                         
-                        
-=======
                     case .detailSouvenir(souvenir: let souvenir):
                         SouvenirsDetailsView(souvenir: souvenir)
->>>>>>> 628b9014aa2ad9b7cbe7c760bbfbe0c22bd49ffb
+                        
                     }
                 }
         }

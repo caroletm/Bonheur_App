@@ -83,13 +83,21 @@ struct MissionView: View {
                 
                 Spacer()
                 HStack(spacing:70){
-                    BoutonFusee(isPressed: false)
-                        .padding(.leading,40)
+                    Button {
+                        navigationViewModel.path = NavigationPath()
+                    }label:{
+                        BoutonFusee(isPressed: false)
+                    }.padding(.leading,40)
                    
-                    BoutonRetour()
+                    Button {
+                        navigationViewModel.path = NavigationPath()
+                        navigationViewModel.path.append(AppRoute.landing(planete: planeteMission))
+                    } label: {
+                        BoutonRetour()
+                    }
                     Spacer()
                 }
-                .padding(.bottom,30)
+                .padding(.bottom,50)
                 
                 
             }
