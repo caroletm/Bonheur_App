@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MissionCompletedView: View {
+    
+    @Environment(NavigationViewModel.self) private var navigationViewModel
     let challenge : Challenge
     @Bindable private var memoryViewModel = MemoryChallengeViewModel()
     @State private var showCamera = false
@@ -25,20 +27,12 @@ struct MissionCompletedView: View {
         ZStack{
             Image(.backgroundMissions)
                 .ignoresSafeArea()
-            Rectangle()
-                .fill(
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color.white, Color.blueGrey, Color.blueDark]),
-                        startPoint: UnitPoint(x: 0.42, y: -0.17),
-                        endPoint: UnitPoint(x: 0.46, y: 1.08)
-                    )
-                )
-                .opacity(0.7)
-                .frame(width: 363, height: 703)
-                .cornerRadius(25)
+            RectangleFond()
+                .opacity(0.6)
             VStack{
                 Text(challenge.challengeName)
                     .font(.custom("SpaceMono-Bold", size: 20))
+                    .padding(.top)
                 HStack(spacing:18){
                     ForEach(ThemeType.allCases,id: \.self){theme in
                         VStack{
@@ -65,7 +59,7 @@ struct MissionCompletedView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, 20)
+                .padding( 15)
                 ZStack{
                     if let selectedImage = memoryViewModel.image {
                         
@@ -96,7 +90,7 @@ struct MissionCompletedView: View {
                         
                     }
                 }
-                .padding(.vertical)
+                
                 .sheet(isPresented: $showCamera) {
                     if UIImagePickerController.isSourceTypeAvailable(.camera) {
                             ImagePicker(sourceType: .camera, selectedImage: $memoryViewModel.image)
@@ -129,7 +123,7 @@ struct MissionCompletedView: View {
                     } label: {
                         ZStack(alignment: .topLeading) {
                             // Les lignes pointillées
-                            VStack(spacing: 30) {
+                            VStack(spacing: 25) {
                                 LigneTiretView()
                                 LigneTiretView()
                                 LigneTiretView()
@@ -140,7 +134,7 @@ struct MissionCompletedView: View {
                                     .foregroundColor(.black)
                                     .multilineTextAlignment(.leading)
                                     .padding(.horizontal)
-                                    .padding(.top, -30)
+                                    .padding(.top, -22)
                             }
                         }
                     }
@@ -190,14 +184,21 @@ struct MissionCompletedView: View {
             }
             .frame(width: 350, height: 680)
             .padding()
-            BoutonRetour()
-                .offset(x:0,y:385)
+            Button {
+//                routes
+            } label: {
+                BoutonRetour()
+                    .offset(x:0,y:385)
+            }
+
+           
         }
+        
     }
 }
 
 #Preview {
-    MissionCompletedView(challenge: Challenge(challengeName: "boire de l'eau", challengeDay: false))
+    MissionCompletedView(challenge: Challenge(challengeName: "boire de l'eau", challengeDay: false)).environment(NavigationViewModel())
     
 }
 

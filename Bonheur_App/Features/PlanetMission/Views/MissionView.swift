@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct MissionView: View {
-    
+    @Environment(NavigationViewModel.self) private var navigationViewModel
     @State private var viewmissionmodel = ChallengeViewModel()
-    @State var showMission = false
+  
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
@@ -35,7 +35,14 @@ struct MissionView: View {
                             .padding(.top,90)
                     }
                     Button(action: {
-                        showMission = true
+                        
+                        if let challenge = viewmissionmodel.currentChalenge {
+                            navigationViewModel.path.append(AppRoute.missionAccepter(challenge: challenge))
+                        }
+
+                        
+//                        ajouter la data de la mission a la transmission
+                        
                     }){
                         ZStack {
                             Rectangle()
@@ -52,13 +59,7 @@ struct MissionView: View {
                                 .foregroundStyle(Color.greyDarkText)
                         }
                     }.padding(.top, 70)
-                        .fullScreenCover(isPresented: $showMission) {
-                            if let challenge = viewmissionmodel.currentChalenge {
-                                MissionCompletedView(challenge: challenge)
-                            }
-                        }
-                    
-                    
+
                     Button {
                         viewmissionmodel.nextChallenge()
                     } label: {
@@ -99,4 +100,5 @@ struct MissionView: View {
 
 #Preview {
     MissionView()
+        .environment(NavigationViewModel())
 }

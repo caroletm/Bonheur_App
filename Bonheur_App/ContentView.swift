@@ -54,6 +54,10 @@ struct ContentView: View {
                     case .planeteMission:
                         MissionView()
                         
+                    case .missionAccepter(let challenge):
+                        MissionCompletedView(challenge: challenge)
+                        
+                        
                     }
                 }
         }
@@ -61,6 +65,7 @@ struct ContentView: View {
         .environment(planetViewModel)
         .environment(souvenirsViewModel)
         .environment(challengeViewModel)
+        
     }
 }
 
