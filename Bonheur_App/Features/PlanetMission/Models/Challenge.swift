@@ -7,7 +7,9 @@
 
 import Foundation
 
-class Challenge : Identifiable{
+class Challenge : Identifiable, Hashable{
+    
+    
     var id = UUID()
     var challengeName : String
     var challengeDay : Bool
@@ -17,5 +19,14 @@ class Challenge : Identifiable{
         self.challengeName = challengeName
         self.challengeDay = challengeDay
     }
+    // MARK: - Equatable
+        static func == (lhs: Challenge, rhs: Challenge) -> Bool {
+            return lhs.id == rhs.id
+        }
+        
+        // MARK: - Hashable
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
     
 }

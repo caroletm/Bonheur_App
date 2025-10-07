@@ -7,8 +7,11 @@
 
 import Foundation
 @Observable
+    /// `ChallengeViewModel` est une classe observable utilisée pour gérer une liste de défis quotidiens.
+    /// Elle fournit la logique nécessaire pour afficher le défi du jour, naviguer entre les défis,
+    /// et suivre l’état actuel de la progression.
 class ChallengeViewModel{
-    
+    // MARK: - Propriétés
     var challenges: [Challenge] = [
         Challenge(challengeName: "boires deux litres D'eau", challengeDay: false),
         Challenge(challengeName: "Faire 10 pompes", challengeDay: false),
@@ -18,6 +21,10 @@ class ChallengeViewModel{
     var currentIndex : Int? = nil
     var previousIndex : Int? = nil
     
+    // MARK: - Initialisation
+        
+        /// Initialise le `ViewModel` et sélectionne le défi du jour s’il existe.
+        /// Sinon, sélectionne le premier défi de la liste.
     init(){
         if let dayIndex = challenges.firstIndex(where: {$0.challengeDay}){
             currentIndex = dayIndex
@@ -25,12 +32,18 @@ class ChallengeViewModel{
             currentIndex = 0
         }
     }
+    // MARK: - Accès au défi courant
     
+        /// Retourne le défi actuellement sélectionné.
+        /// - Returns: Le `Challenge` correspondant à `currentIndex`, ou `nil` si aucun n’est défini.
     var currentChalenge : Challenge? {
         guard let index = currentIndex else {return nil}
         return challenges[index]
     }
+    // MARK: - Navigation entre les défis
     
+        /// Passe au défi suivant dans la liste.
+        /// Si on est au dernier défi, on revient au premier (rotation circulaire).
     func nextChallenge() {
         guard let current = currentIndex else {return}
         let nextIndex = (current + 1) % challenges.count

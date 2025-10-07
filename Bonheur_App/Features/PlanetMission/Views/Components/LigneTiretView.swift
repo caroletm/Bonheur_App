@@ -9,14 +9,11 @@ import SwiftUI
 
 struct LigneTiretView: View {
     var body: some View {
-        Rectangle()
+
+        Line()
+            .stroke(style: StrokeStyle(lineWidth: 2, dash: [8]))
+            .foregroundColor(.blueDark)
             .frame(height: 1)
-            .foregroundColor(.clear)
-            .overlay(
-                Rectangle()
-                    .stroke(style: StrokeStyle(lineWidth: 3, dash: [8]))
-                    .foregroundColor(.blueDark)
-            )
             .padding(.horizontal)
             
     }
@@ -24,4 +21,13 @@ struct LigneTiretView: View {
 
 #Preview {
     LigneTiretView()
+}
+
+struct Line: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x: rect.width, y: 0))
+        return path
+    }
 }
