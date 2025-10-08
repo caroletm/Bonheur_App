@@ -36,7 +36,7 @@ struct PlaneteUser: View {
             
             //bouton Polaroid souvenir du jour (apparaît seulement si les planètes sont visibles)
             if planetsVisible {
-                NavigationLink(destination: SouvenirsDetailsView(souvenir: souvenirViewModel.souvenirsData.randomElement()!)) { // Point d'exclamation attention au crash au secousse ATTENTION
+                NavigationLink(destination: SouvenirsDetailsView(souvenir: souvenirViewModel.souvenirsData.randomElement()!)) { // Point d'exclamation attention, si rien dans souvenir ATTENTION!
                     Image("SouvenirPola.")
                         .resizable()
                         .scaledToFit()
@@ -75,7 +75,7 @@ struct PlaneteUser: View {
             .offset(x: 0, y: 650)
             .scaleEffect(rocketPressed ? 1.1 : 1.0)
             
-            // Contenu au premier plan
+            // Contenu au premier plan contenant le texte avant et aprés avoir appuyé sur le bouton fusée
             VStack {
                 Spacer()
                 
@@ -84,7 +84,7 @@ struct PlaneteUser: View {
                     .foregroundStyle(.white)
                     .padding(.top, -380)
                     .animation(.easeInOut(duration: 0.5), value: planetsVisible)
-                // Pour que le texte ne bloque pas les clics
+                // Pour que la hitbox du texte ne bloque pas les clics
                     .allowsHitTesting(false)
                 
                 Spacer()
@@ -93,94 +93,7 @@ struct PlaneteUser: View {
     }
 }
 
-// Composant réutilisable pour chaque planète-bouton avec animation
-struct PlanetButton: View {
-    @Environment(NavigationViewModel.self) private var navigationViewModel
 
-    let planet: Planete
-    @State private var isPressed = false
-    @State private var rotationAngle = 0.0
-    @State private var currentPosition: CGPoint
-    @State private var breathingScale = 1.0
-    
-    let rocketPosition: CGPoint
-    let animationDelay: Double
-    let breathingPhaseOffset: Double
-    
-    init(planet: Planete, rocketPosition: CGPoint, animationDelay: Double, breathingPhaseOffset: Double) {
-        self.planet = planet
-        self.rocketPosition = rocketPosition
-        self.animationDelay = animationDelay
-        self.breathingPhaseOffset = breathingPhaseOffset
-        self._currentPosition = State(initialValue: rocketPosition)
-    }
-    
-    var body: some View {
-        Button(action: {
-            navigationViewModel.path = NavigationPath()
-            navigationViewModel.path.append(AppRoute.landing(planete: planet))
-        }) {
-            ZStack {
-                // Cercle d'animation rotatif - avec bounce synchronisé + respiration
-                Image("cercle")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: planet.circleSize.width,
-                           height: planet.circleSize.height)
-                    .rotationEffect(.degrees(rotationAngle))
-                    .offset(x: planet.circleRelativeOffset.x,
-                            y: planet.circleRelativeOffset.y)
-                    .scaleEffect((isPressed ? 1.05 : 1.0) * breathingScale)
-                    .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
-                    .allowsHitTesting(false)
-                
-                // Image de la planète - avec bounce synchronisé + respiration
-                Image(planet.image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 130, height: 130)
-                    .scaleEffect((isPressed ? 1.05 : 1.0) * breathingScale)
-                    .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
-                
-                // Titre de la planète - avec bounce synchronisé + respiration
-                Text(planet.nom)
-                    .font(.custom("SpaceMono-Regular", size: 14))
-                    .foregroundStyle(.white)
-                    .fontWeight(.bold)
-                    .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
-                    .offset(x: 0,
-                            y:max(planet.circleSize.height/2, 75) + 15)
-                    .scaleEffect((isPressed ? 1.05 : 1.0) * breathingScale)
-                    .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
-                    .allowsHitTesting(false)
-            }
-        }
-        .buttonStyle(PlainButtonStyle())
-        .contentShape(Circle())
-        .frame(width: 150, height: 150)
-        .offset(x: currentPosition.x, y: currentPosition.y)
-        .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
-            isPressed = pressing
-        }, perform: {})
-        .onAppear {
-            currentPosition = rocketPosition
-            // Animation de voyage de la fusée vers la position finale
-            withAnimation(.easeOut(duration: 1.0).delay(animationDelay)) {
-                currentPosition = planet.position
-            }
-            
-            // Animation de rotation continue du cercle
-            withAnimation(.linear(duration: 9.0).repeatForever(autoreverses: false).delay(animationDelay + 0.5)) {
-                rotationAngle = 360.0
-            }
-            
-            // Animation de respiration légère et lente - désynchronisée
-            withAnimation(.easeInOut(duration: 2.5).repeatForever(autoreverses: true).delay(animationDelay + 1.0 + breathingPhaseOffset)) {
-                breathingScale = 1.03
-            }
-        }
-    }
-}
 
 #Preview {
     PlaneteUser()
@@ -188,4 +101,3 @@ struct PlanetButton: View {
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
 }
-
