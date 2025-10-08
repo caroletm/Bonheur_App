@@ -17,6 +17,11 @@ struct LandingPlanet: View {
     var planete: Planete
     
     @State private var currentIndex: Int = 0
+    @State private var rotationAngle = 0.0
+    @State private var breathingScale = 1.0
+//    @State private var isAnimated = false
+    @State private var pulse = false
+
     
     var body: some View {
         
@@ -61,15 +66,23 @@ struct LandingPlanet: View {
                         }label:{
                             
                             ZStack {
+                                
                                 Image(.cercle)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 290, height: 260)
+                                    .rotationEffect(.degrees(rotationAngle))
+
                                 Image(currentPlanete.image)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 260, height: 240)
                                     .offset(x: 2)
+                                    .shadow(
+                                        color: Color.white.opacity(pulse ? 0.9 : 0),
+                                        radius: pulse ? 30 : 6
+                                    )
+                                    .scaleEffect(pulse ? 1.02 : 1.0)
                             }
                         }
                         
@@ -102,6 +115,17 @@ struct LandingPlanet: View {
             .onAppear {
                 if let index = planetViewModel.planetes.firstIndex(where: { $0.ID == planete.ID }) {
                     currentIndex = index
+                            // Animation de rotation continue du cercle
+                    withAnimation(.linear(duration: 9.0).repeatForever(autoreverses: false).delay(0.0 + 0.5)) {
+                        rotationAngle = 360.0
+                    }
+                    // Animation de respiration
+                    withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                        breathingScale = 11
+                    }
+                    withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                        pulse.toggle()
+                    }
                 }
             }
             .padding(.vertical, 20)
