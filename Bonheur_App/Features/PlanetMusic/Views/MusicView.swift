@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MusicPlayerView: View {
+    @Environment(NavigationViewModel.self) private var navigationViewModel
+    
     var body: some View {
         ZStack(alignment: .top){
             // Image de fond d'ecran
@@ -18,11 +20,13 @@ struct MusicPlayerView: View {
            
             CadreBlanc()
                 .padding(.top, 120)
-            MusicSelectorView()
+            
+            MusicSelectorView(planeteMusic: planeteMusic)
                 .padding(.top, 200)
-            // Contenu au premier plan
+
+            // Contenu au premier plann
             VStack {
-                Spacer() 
+                Spacer()
                 
                 Text("Choisis ton ambiance :")
                     .font(.custom("SpaceMono-Bold", size: 20))
@@ -31,11 +35,16 @@ struct MusicPlayerView: View {
                 
                 Spacer()
             }
+            
+            BoutonsFuseeRetour(planete: planeteMusic)
+                .padding(.bottom, 50)
+               
         }
     }
 }
 
 #Preview {
     MusicPlayerView()
+        .environment(NavigationViewModel())
 }
 
