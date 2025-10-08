@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var planetViewModel = PlanetViewModel()
     @State private var souvenirsViewModel = SouvenirsViewModel()
     @State private var challengeViewModel = ChallengeViewModel()
+    @State private var mapViewModel = MapViewModel()
     
     var body: some View {
         
@@ -43,7 +44,7 @@ struct ContentView: View {
                         SouvenirsFilterView()
                         
                     case .planeteExplo:
-                        PlaneteExploView()
+                        ExploView()
                         
                     case .planeteMusic:
                         MusicPlayerView()
@@ -67,6 +68,7 @@ struct ContentView: View {
         .environment(planetViewModel)
         .environment(souvenirsViewModel)
         .environment(challengeViewModel)
+        .environment(mapViewModel)
         
     }
 }
@@ -77,4 +79,5 @@ struct ContentView: View {
         .environment(PlanetViewModel())
         .environment(SouvenirsViewModel())
         .environment(ChallengeViewModel())
+        .environment(MapViewModel())
 }

@@ -1,0 +1,83 @@
+//
+//  MapViewModel.swift
+//  Bonheur_App
+//
+//  Created by caroletm on 08/10/2025.
+//
+
+import Foundation
+import MapKit
+import CoreLocation
+import Observation
+import SwiftUI
+
+@Observable
+
+class MapViewModel: NSObject, CLLocationManagerDelegate {
+    
+    //MARK: -  Map Data
+    
+    let manager = CLLocationManager()
+    var userLocation : CLLocationCoordinate2D? = nil
+    
+    override init() {
+        super.init()
+        manager.delegate = self
+        manager.startUpdatingLocation() // récupere les positions et met à jour la localisation
+    }
+    
+    //MARK: - Geolocalisation
+    
+    func requestLocationAuthorization() {
+        manager.desiredAccuracy = kCLLocationAccuracyBest // pour que ça soit précis
+        manager.requestWhenInUseAuthorization() // demande l'autorisation de la localisation
+    }
+    
+    // Crée une région centrée sur la position utilisateur (avec un span par défaut)
+    func regionForUserLocation(span: CLLocationDegrees = 0.01) -> MKCoordinateRegion? {
+        guard let loc = userLocation else { return nil }
+        return MKCoordinateRegion(
+            center: loc,
+            span: MKCoordinateSpan(latitudeDelta: span, longitudeDelta: span)
+        )
+    }
+    
+    // Fonction utilitaire pour comparer deux coordonnées (optionnelles)
+    func didLocationChange(from old: CLLocationCoordinate2D?, to new: CLLocationCoordinate2D?) -> Bool {
+        guard let old = old, let new = new else { return true }
+        return old.latitude != new.latitude || old.longitude != new.longitude
+    }
+    
+    // Delegate appelé quand une nouvelle position est détectée
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let lastLocation = locations.last else { return }
+        print("Position utilisateur : \(lastLocation.coordinate.latitude), \(lastLocation.coordinate.longitude)")
+        DispatchQueue.main.async {
+            self.userLocation = lastLocation.coordinate
+        }
+    }
+    
+    // Affiche erreur si localisation échoue
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Erreur localisation: \(error.localizedDescription)")
+    }
+    
+    //MARK: - Rendre CLLocationCoordinate 2D Equatable
+
+    // Wrapper pour rendre CLLocationCoordinate2D équatable facilement
+    struct EquatableCoordinate: Equatable {
+        let coordinate: CLLocationCoordinate2D
+        init(_ coordinate: CLLocationCoordinate2D) {
+            self.coordinate = coordinate
+        }
+        
+        // Compare latitudelongitude ET  pour éviter les faux déclenchements
+        static func == (lhs: EquatableCoordinate, rhs: EquatableCoordinate) -> Bool {
+            lhs.coordinate.latitude == rhs.coordinate.latitude &&
+            lhs.coordinate.longitude == rhs.coordinate.longitude
+        }
+
+    }
+    
+}
+
