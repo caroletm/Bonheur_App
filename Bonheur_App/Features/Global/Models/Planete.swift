@@ -102,10 +102,43 @@ let planeteExplora = PlaneteExplora(
 
 // MARK: - PlaneteMusic = Héritage de la classe Planete
 
-class PlaneteMusic : Planete {
+class PlaneteMusic: Planete {
+    
+    var themes: [ThemeMusic]  // tableau de thèmes disponibles
+    
+    init(ID: UUID = UUID(),
+         nom: String,
+         description: String,
+         image: ImageResource,
+         onboarding: String,
+         iconOnboarding: ImageResource,
+         backgroundPlanete: ImageResource,
+         isVisited: Bool = false,
+         position: CGPoint,
+         circleSize: CGSize,
+         circleRelativeOffset: CGPoint,
+         themes: [ThemeMusic]) {
+        
+        self.themes = themes
+        
+        super.init(ID: ID,
+                   nom: nom,
+                   description: description,
+                   image: image,
+                   onboarding: onboarding,
+                   iconOnboarding: iconOnboarding,
+                   backgroundPlanete: backgroundPlanete,
+                   isVisited: isVisited,
+                   position: position,
+                   circleSize: circleSize,
+                   circleRelativeOffset: CGPoint(x: 0, y: 0),
+                   route : .planeteMusic)
+    }
 }
 
+
 //Instanciation de la planete music
+//let planeteMusic = PlaneteMusic(ID: UUID(), nom: "Music", description: "Cette planète vibre au rythme de mélodies infinies.Chaque jour, elle t’offre une musique, une ambiance ou un son qui élève ton humeur. Ici, le bonheur s’écoute, se fredonne et se partage en vibrations.", image: .planetMusic, onboarding: "Écoute, fredonne et laisse la musique élever ton humeur.", iconOnboarding: .onboardingMusic, backgroundPlanete: .backgroundMusic, isVisited: false)
 
 let planeteMusic = PlaneteMusic(
     ID: UUID(),
@@ -120,9 +153,17 @@ let planeteMusic = PlaneteMusic(
     isVisited: false,
     position: CGPoint(x: -100, y: 300),
     circleSize: CGSize(width: 140, height: 140),
-    circleRelativeOffset: CGPoint(x: 0, y: 0),
-    route : .planeteMusic
+    circleRelativeOffset: CGPoint(x: 7.5, y: -6),
+    themes: [
+        ThemeMusic(nom: "Montagne", musique: "mountain.mp3", logo: .montagneLogo),
+        ThemeMusic(nom: "Forêt", musique: "forest.mp3", logo: .foret),
+        ThemeMusic(nom: "Océan", musique: "ocean.mp3", logo: .oceanLogo),
+        ThemeMusic(nom: "Jungle", musique: "jungle.mp3", logo: .jungleLogo),
+        ThemeMusic(nom: "FeuDeCamp", musique: "fire.mp3", logo: .feudecampLogo),
+        ThemeMusic(nom: "Nuage", musique: "cloud.mp3", logo: .nuageLogo)
+    ]
 )
+
 
 // MARK: -  PlanetePhilo = Héritage de la classe Planete
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct Octagon: Shape {
     func path(in rect: CGRect) -> Path {
@@ -28,47 +29,52 @@ struct Octagon: Shape {
         return path
     }
 }
+import SwiftUI
+import AVFoundation
+
 struct PlayButtonOctagon: View {
     @Binding var isPlaying: Bool
     @Binding var selectedSegment: Int?
     
     var body: some View {
         Button {
+            let audioManager = AudioPlayerManager.shared
+
             withAnimation(.easeInOut(duration: 0.2)) {
                 if isPlaying {
-                    // Arrêt → désélection et pause musique
                     isPlaying = false
-                    selectedSegment = nil
-                    // stopMusic()
+                    audioManager.stop()
                 } else {
-                    // Lecture → si aucun segment choisi, sélectionner le premier
                     isPlaying = true
                     if selectedSegment == nil {
                         selectedSegment = 0
-                        // playMusic(for: 0)
+                    }
+                    if let selected = selectedSegment {
+                        let theme = planeteMusic.themes[selected]
+                        audioManager.play(theme.musique)
                     }
                 }
             }
+
         } label: {
             ZStack {
-                Octagon()
-                    .fill(isPlaying ? Color.greyDarkButton : Color.greyLightButton)
-                    .frame(width: 120, height: 120)
-                    .overlay(Octagon().stroke(Color.white, lineWidth: 3))
+                // Cercle rose au lieu d'octogone
+                Circle()
+                    .fill(Color.pinkMusic)
+                    .frame(width: 80, height: 80)
+                    .overlay(Circle().stroke(Color.white, lineWidth: 3))
                 
                 Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 35, height: 35)
-                    .foregroundColor(.pinkMusic)
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.white)
+                    .offset(x: isPlaying ? 0 : 2)
             }
         }
         .buttonStyle(.plain)
     }
 }
-
-
-
 #Preview {
     ZStack {
         PlayButtonOctagon(
