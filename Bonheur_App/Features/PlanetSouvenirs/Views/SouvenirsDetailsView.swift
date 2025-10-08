@@ -55,7 +55,7 @@ struct SouvenirsDetailsView: View {
                     }
                     .offset(y: -315)
                     
-                    VStack {
+                    VStack (spacing : 15) {
                         Text(souvenirsViewModel.dateFormatter(souvenir.date))
                             .font(.custom("SpaceMono-Bold", size: 20))
                             .opacity(0.7)
@@ -84,12 +84,14 @@ struct SouvenirsDetailsView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 30, height: 30)
+                                
                             }
                             if souvenir.type == .mission {
                                 Image(.missionValide)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 60, height: 60)
+                                
                             }
                         }
                         
@@ -100,25 +102,30 @@ struct SouvenirsDetailsView: View {
                         }
                         
                         ScrollView {
+                            
+                            
                             if souvenir.photo != nil {
                                 Text("\(souvenir.description)")
                                     .font(.custom("SpaceMono-Regular", size: 12))
                                     .opacity(0.7)
-                                    .frame(width : 285, height: 90)
+                                    .frame(width : 285, height: .infinity)
                                     .multilineTextAlignment(.center)
+                                
                             }else{
                                 Text("\(souvenir.description)")
                                     .font(.custom("SpaceMono-Regular", size: 12))
                                     .opacity(0.7)
                                     .frame(maxWidth : 285, maxHeight: .infinity)
                                     .multilineTextAlignment(.center)
+                                
                             }
-          
+                            
                         }
-                        .frame(width : 285, height: 120)
+                        .frame(width : 285, height: 250)
                     }
+                    .offset(y: souvenir.photo != nil ? 90 : 0)
                 }
-                .padding(.bottom, 100)
+                .padding()
                 
                 if souvenir.photo != nil {
                     if souvenir.type == .mission {
@@ -136,7 +143,7 @@ struct SouvenirsDetailsView: View {
 }
 
 #Preview {
-    SouvenirsDetailsView(souvenir: souvenirs[1])
+    SouvenirsDetailsView(souvenir: souvenirs[2])
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
 }
