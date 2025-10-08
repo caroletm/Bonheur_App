@@ -13,6 +13,7 @@ import Foundation
 class ChallengeViewModel{
     // MARK: - Propriétés
     var challenges: [Challenge] = [
+        Challenge(challengeName: "promene toi dans un parc en pleine ete a l'ombre", challengeDay: false),
         Challenge(challengeName: "boires deux litres D'eau", challengeDay: false),
         Challenge(challengeName: "Faire 10 pompes", challengeDay: false),
         Challenge(challengeName: "Lire 10 pages", challengeDay: true),
