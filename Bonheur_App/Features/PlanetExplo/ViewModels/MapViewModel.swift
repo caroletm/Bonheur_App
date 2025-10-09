@@ -62,22 +62,22 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         print("Erreur localisation: \(error.localizedDescription)")
     }
     
-    //MARK: - Rendre CLLocationCoordinate 2D Equatable
+}
 
-    // Wrapper pour rendre CLLocationCoordinate2D équatable facilement
-    struct EquatableCoordinate: Equatable {
-        let coordinate: CLLocationCoordinate2D
-        init(_ coordinate: CLLocationCoordinate2D) {
-            self.coordinate = coordinate
-        }
-        
-        // Compare latitudelongitude ET  pour éviter les faux déclenchements
-        static func == (lhs: EquatableCoordinate, rhs: EquatableCoordinate) -> Bool {
-            lhs.coordinate.latitude == rhs.coordinate.latitude &&
-            lhs.coordinate.longitude == rhs.coordinate.longitude
-        }
+//MARK: - Rendre CLLocationCoordinate 2D Equatable
 
+// Wrapper pour rendre CLLocationCoordinate2D équatable facilement
+struct EquatableCoordinate: Equatable {
+    let coordinate: CLLocationCoordinate2D
+    init(_ coordinate: CLLocationCoordinate2D) {
+        self.coordinate = coordinate
     }
     
+    // Compare latitudelongitude ET  pour éviter les faux déclenchements
+    static func == (lhs: EquatableCoordinate, rhs: EquatableCoordinate) -> Bool {
+        lhs.coordinate.latitude == rhs.coordinate.latitude &&
+        lhs.coordinate.longitude == rhs.coordinate.longitude
+    }
+
 }
 
