@@ -15,10 +15,31 @@ import SwiftUI
 
 class MapViewModel: NSObject, CLLocationManagerDelegate {
     
+//    CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522)
+    
     //MARK: -  Map Data
     
+    let places : [MapPoint] = mapPoints
     let manager = CLLocationManager()
     var userLocation : CLLocationCoordinate2D? = nil
+    var cameraPosition: MapCameraPosition {
+        if let loc = userLocation {
+            return .region(
+                MKCoordinateRegion(
+                    center: loc,
+                    span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
+                )
+            )
+        } else {
+            return .region(
+                MKCoordinateRegion(
+                    center: CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522),
+                    span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                )
+            )
+        }
+    }
+
     
     override init() {
         super.init()
@@ -62,6 +83,23 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         print("Erreur localisation: \(error.localizedDescription)")
     }
     
+    
+    //MARK: - Ajouter des points sur la carte
+    
+ func centerMap(on coordinate: CLLocationCoordinate2D) {
+        let region = MKCoordinateRegion(
+            center: coordinate,
+            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        )
+//        withAnimation(.easeInOut(duration: 0.5)) {
+//            cameraPosition = .region(region)
+//        }
+    }
+    
+    func centerOnUser() {
+         guard let userLoc = userLocation else { return }
+         centerMap(on: userLoc)
+     }
 }
 
 //MARK: - Rendre CLLocationCoordinate 2D Equatable

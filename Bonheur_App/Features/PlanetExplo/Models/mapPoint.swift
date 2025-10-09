@@ -7,14 +7,19 @@
 
 import SwiftUI
 import Foundation
+import CoreLocation
 
-class MapPoint: Identifiable {
-    var id: UUID = UUID()
-    var latitude: Double
-    var longitude: Double
+class MapPoint : Identifiable {
+    let id = UUID()
+    let nom : String
+    let theme : SouvenirTheme
+    let coordinate : CLLocationCoordinate2D
     
-    init(latitude: Double, longitude: Double) {
-        self.latitude = latitude
-        self.longitude = longitude
+    init(nom: String, theme: SouvenirTheme, coordinate: CLLocationCoordinate2D) {
+        self.nom = nom
+        self.theme = theme
+        self.coordinate = coordinate
     }
 }
+
+let mapPoints: [MapPoint] = [MapPoint(nom: "Simplon", theme: .apprentissage, coordinate: CLLocationCoordinate2D(latitude: 48.854699219973625, longitude: 2.435966996632539))]

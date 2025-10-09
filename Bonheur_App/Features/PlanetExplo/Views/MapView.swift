@@ -12,16 +12,37 @@ import CoreLocation
 struct MapView: View {
     
     @Environment(MapViewModel.self) private var mapViewModel
+    @Environment(NavigationViewModel.self) private var navigationViewModel
     
-    @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var lastUserLocation: EquatableCoordinate?
-
+    
     var body: some View {
         
         
         MapReader { proxy in
             
-            Map(initialPosition: cameraPosition)
+            Map(initialPosition: mapViewModel.cameraPosition) {
+                ForEach(mapViewModel.places) { place in
+                    Annotation(place.nom, coordinate: place.coordinate) {
+                        Button {
+                            //
+                        }label:{
+                            Image(place.theme.iconName)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 70, height: 70)
+                        }
+                    }
+                }
+                if let userLoc = mapViewModel.userLocation {
+                    Annotation("Moi", coordinate: userLoc) {
+                        Image(.pointGps)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
+                    }
+                }
+            }
             .mapControls {
                 MapUserLocationButton() //pour le bouton de geolocalisation
                 MapCompass() // pour la boussole
@@ -31,20 +52,10 @@ struct MapView: View {
             
             .onAppear {
                 mapViewModel.requestLocationAuthorization()
+                mapViewModel.centerOnUser()
             }
-            .onChange(of: mapViewModel.userLocation.map { EquatableCoordinate($0) }) { oldValue, newValue in
-                guard let new = newValue else { return }
-                
-                if lastUserLocation != new {
-                    lastUserLocation = new
-                    
-                    // Mise à jour de la caméra
-                    if let region = mapViewModel.regionForUserLocation() {
-                        withAnimation {
-                            cameraPosition = .region(region)
-                        }
-                    }
-                }
+            .onChange(of: mapViewModel.userLocation.map { EquatableCoordinate($0) }) {
+                mapViewModel.centerOnUser()
             }
         }
     }
@@ -53,4 +64,5 @@ struct MapView: View {
 #Preview {
     MapView()
         .environment(MapViewModel())
+        .environment(NavigationViewModel())
 }
