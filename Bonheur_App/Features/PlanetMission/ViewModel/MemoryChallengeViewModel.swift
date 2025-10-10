@@ -29,6 +29,8 @@ class MemoryChallengeViewModel{
         var imagePath: String? = nil
         if let image = image {
             imagePath = saveImageToDocuments(image:image)
+        }else{
+            imagePath = nil
         }
         return MemoryChallenge(
             nameMemory: name,

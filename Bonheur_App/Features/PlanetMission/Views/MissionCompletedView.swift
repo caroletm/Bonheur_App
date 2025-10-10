@@ -14,14 +14,13 @@ struct MissionCompletedView: View {
     @Bindable private var memoryViewModel = MemoryChallengeViewModel()
     @State private var showCamera = false
     
-    @State private var  navigateToRecap = false
-    @State private var challengeMemoryCreated : MemoryChallenge? = nil
-
-    @State private var selected : UIImage? = nil
+//    @State private var  navigateToRecap = false
+//    @State private var challengeMemoryCreated : MemoryChallenge? = nil
+//    @State private var selected : UIImage? = nil
+    //    @State private var descriptionText = ""
     @State private var showModalDescription = false
     @State private var fitsInOneLine = true
-    
-    @State private var descriptionText = ""
+    @State private var memoryChallengeForRecap: MemoryChallenge? = nil
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
@@ -193,9 +192,14 @@ struct MissionCompletedView: View {
                     }
                 }
                 .padding(.vertical,10)
-                Button
-                {
-//                    print(memoryViewModel.isValid)
+                Button{
+                    if memoryViewModel.isValid {
+                            
+                        if let memoryChallenge = memoryViewModel.buildChallenge(name: challenge.challengeName) {
+                                memoryChallengeForRecap = memoryChallenge
+                                        
+                            }
+                        }
                 }label :{
                     
                     if memoryViewModel.isValid {
@@ -211,9 +215,12 @@ struct MissionCompletedView: View {
             } label: {
                 BoutonRetour()
                     .offset(x:0,y:385)
-            }
+            }.padding(.bottom,20)
+        }.navigationBarBackButtonHidden(true)
+        .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
+            MissionRecapValidationView(memoryChallenge: memoryChallenge)
         }
-        
+   
     }
 }
 

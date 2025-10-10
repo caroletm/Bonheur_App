@@ -107,7 +107,7 @@ struct MissionView: View {
                 
             }
             .padding(.top,170)
-        }
+        }.navigationBarBackButtonHidden(true)
     }
 }
 
