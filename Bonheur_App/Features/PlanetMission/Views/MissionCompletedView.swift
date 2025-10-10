@@ -8,31 +8,44 @@
 import SwiftUI
 
 struct MissionCompletedView: View {
-    
+
     @Environment(NavigationViewModel.self) private var navigationViewModel
     let challenge : Challenge
     @Bindable private var memoryViewModel = MemoryChallengeViewModel()
     @State private var showCamera = false
     
-    @State private var  navigateToRecap = false
-    @State private var challengeMemoryCreated : MemoryChallenge? = nil
-    
-    
-    
-    @State private var selected : UIImage? = nil
+//    @State private var  navigateToRecap = false
+//    @State private var challengeMemoryCreated : MemoryChallenge? = nil
+//    @State private var selected : UIImage? = nil
+    //    @State private var descriptionText = ""
     @State private var showModalDescription = false
-    
-    @State private var descriptionText = ""
+    @State private var fitsInOneLine = true
+    @State private var memoryChallengeForRecap: MemoryChallenge? = nil
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
                 .ignoresSafeArea()
             RectangleFond()
-                .opacity(0.6)
+            
             VStack{
                 Text(challenge.challengeName)
-                    .font(.custom("SpaceMono-Bold", size: 20))
-                    .padding(.top)
+                    .font(.custom("SpaceMono-Bold", size: fitsInOneLine ? 20 : 16))
+                    .opacity(0.8)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal,16)
+                    .multilineTextAlignment(.center)
+                    .padding(.top,16)
+                    .background(
+                        GeometryReader { proxy in
+                            Color.clear.onAppear {
+                                
+                                let lineHeight = UIFont(name: "SpaceMono-Bold", size: 20)?.lineHeight ?? 20
+                                let numberOfLines = proxy.size.height / lineHeight
+                                fitsInOneLine = numberOfLines <= 1.5
+                            }
+                        }
+                    )
                 HStack(spacing:18){
                     ForEach(ThemeType.allCases,id: \.self){theme in
                         VStack{
@@ -59,7 +72,7 @@ struct MissionCompletedView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .padding( 15)
+                .padding(.bottom, 15)
                 ZStack{
                     if let selectedImage = memoryViewModel.image {
                         
@@ -75,7 +88,7 @@ struct MissionCompletedView: View {
                     } else {
                         Rectangle()
                             .fill(Color.blueGrey)
-                            .frame(width:271,height: 198)
+                            .frame(width:271,height: 178)
                             .cornerRadius(25)
                             .onTapGesture {
                                 showCamera = true
@@ -87,25 +100,26 @@ struct MissionCompletedView: View {
                             Text("Photo optionnelle")
                                 .font(.custom("Poppins-Light", size: 10))
                         }
-                        
                     }
                 }
                 
                 .sheet(isPresented: $showCamera) {
                     if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                            ImagePicker(sourceType: .camera, selectedImage: $memoryViewModel.image)
-                        } else {
-                            
-                            ImagePicker(sourceType: .photoLibrary, selectedImage: $memoryViewModel.image)
-                        }
+                        ImagePicker(sourceType: .camera, selectedImage: $memoryViewModel.image)
+                    } else {
+                        
+                        ImagePicker(sourceType: .photoLibrary, selectedImage: $memoryViewModel.image)
+                    }
                 }
                 ZStack{
                     HStack() {
                         Text("Date")
                             .font(.custom("SpaceMono-Bold", size: 14))
                             .padding(.leading)
+                            .opacity(0.8)
                         VStack(alignment: .leading,spacing: 0){
                             Text(": \(memoryViewModel.formattedDate())")
+                                .opacity(0.8)
                                 .font(.custom("SpaceMono-Bold", size: 20))
                             LigneTiretView()
                         }
@@ -117,26 +131,30 @@ struct MissionCompletedView: View {
                     Text("Details :")
                         .font(.custom("SpaceMono-Bold", size: 14))
                         .padding(.leading)
-                        .padding(.bottom,20)
+                        .padding(.bottom,10)
+                        .opacity(0.8)
+                    
                     Button {
                         showModalDescription = true
                     } label: {
-                        ZStack(alignment: .topLeading) {
-                            // Les lignes pointillées
-                            VStack(spacing: 25) {
-                                LigneTiretView()
-                                LigneTiretView()
-                                LigneTiretView()
+                       
+                            ZStack(alignment: .topLeading) {
+                                // Les lignes pointillées
+                                VStack(spacing: 24) {
+                                    LigneTiretView()
+                                    LigneTiretView()
+                                    LigneTiretView()
+                                }
+                                if !memoryViewModel.descriptionText.isEmpty{
+                                    Text(memoryViewModel.descriptionText)
+                                        .font(.custom("SpaceMono-Bold", size: 16))
+                                        .foregroundColor(.black)
+                                        .lineLimit(3)
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.horizontal)
+                                        .padding(.top, -24)
+                                }
                             }
-                            if !memoryViewModel.descriptionText.isEmpty{
-                                Text(memoryViewModel.descriptionText)
-                                    .font(.custom("SpaceMono-Bold", size: 16))
-                                    .foregroundColor(.black)
-                                    .multilineTextAlignment(.leading)
-                                    .padding(.horizontal)
-                                    .padding(.top, -22)
-                            }
-                        }
                     }
                     .sheet(isPresented: $showModalDescription){
                         VStack(alignment: .leading, spacing: 10) {
@@ -172,33 +190,42 @@ struct MissionCompletedView: View {
                         .padding()
                         .frame(alignment: .center)
                     }
-    
                 }
                 .padding(.vertical,10)
-                Button(action:{
-//                    redirection et affichage souvenir
-                }){
-                    BoutonValider(isValid: false)
-                        .padding()
+                Button{
+                    if memoryViewModel.isValid {
+                            
+                        if let memoryChallenge = memoryViewModel.buildChallenge(name: challenge.challengeName) {
+                                memoryChallengeForRecap = memoryChallenge
+                                        
+                            }
+                        }
+                }label :{
+                    
+                    if memoryViewModel.isValid {
+                        BoutonValider(isValid: true)
+                    }else{
+                        BoutonValider(isValid: false)
+                    }
                 }
             }
-            .frame(width: 350, height: 680)
-            .padding()
+            .frame(width: 350,height: 680)
             Button {
-//                routes
+                //                routes
             } label: {
                 BoutonRetour()
                     .offset(x:0,y:385)
-            }
-
-           
+            }.padding(.bottom,20)
+        }.navigationBarBackButtonHidden(true)
+        .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
+            MissionRecapValidationView(memoryChallenge: memoryChallenge)
         }
-        
+   
     }
 }
 
 #Preview {
-    MissionCompletedView(challenge: Challenge(challengeName: "boire de l'eau", challengeDay: false)).environment(NavigationViewModel())
+    MissionCompletedView(challenge: Challenge(challengeName: "promene toi dans un parc en plein été à l'ombre", challengeDay: false)).environment(NavigationViewModel())
     
 }
 

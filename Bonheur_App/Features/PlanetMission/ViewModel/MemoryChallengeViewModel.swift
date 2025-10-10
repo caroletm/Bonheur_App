@@ -15,6 +15,10 @@ class MemoryChallengeViewModel{
     var selectedTheme: ThemeType? = nil
     var image: UIImage? = nil
     var creationDate: Date = Date()
+    var isValid: Bool {
+        return selectedTheme != nil &&
+               !descriptionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
     
     // MARK: - Construction du modèle
     /// Construit un objet `MemoryChallenge` prêt à être enregistré ou affiché.
@@ -25,6 +29,8 @@ class MemoryChallengeViewModel{
         var imagePath: String? = nil
         if let image = image {
             imagePath = saveImageToDocuments(image:image)
+        }else{
+            imagePath = nil
         }
         return MemoryChallenge(
             nameMemory: name,
@@ -77,4 +83,5 @@ class MemoryChallengeViewModel{
         formatter.dateFormat = "dd/MMMM/yyyy"
         return formatter.string(from: creationDate)
     }
+   
 }

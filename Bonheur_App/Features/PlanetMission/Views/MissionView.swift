@@ -15,6 +15,13 @@ struct MissionView: View {
         ZStack{
             Image(.backgroundMissions)
                 .ignoresSafeArea()
+                
+            Image(.cadreOnboarding)
+                .resizable()
+                .scaledToFit()
+                .frame(width:333, height: 440)
+                .padding(.bottom,130)
+ 
             VStack{
                 
                 VStack(alignment:.center){
@@ -26,8 +33,12 @@ struct MissionView: View {
                     if let challenge = viewmissionmodel.currentChalenge {
                         Text(challenge.challengeName)
                             .font(.custom("Poppins-Regular", size: 16))
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
                             .foregroundStyle(.white)
-                            .padding(.top,90)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal,16)
+                            .padding(.top,70)
                     } else {
                         Text( "aucun challenge aujourd'hui")
                             .font(.custom("Poppins-Regular", size: 16))
@@ -71,14 +82,8 @@ struct MissionView: View {
                     
                     
                 }
-                .background(
-                    Image(.cadreOnboarding)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width:333, height: 440)
-                    
-                )
-                .padding(.top,110)
+                .frame(width: 300, height: 380)
+                
                 
                 
                 Spacer()
@@ -101,7 +106,8 @@ struct MissionView: View {
                 
                 
             }
-        }
+            .padding(.top,170)
+        }.navigationBarBackButtonHidden(true)
     }
 }
 
