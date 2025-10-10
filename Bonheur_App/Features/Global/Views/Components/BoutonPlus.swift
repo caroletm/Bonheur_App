@@ -9,6 +9,8 @@ import SwiftUI
 
 struct BoutonPlus: View {
     
+    @State private var pulse = true
+    
     struct Octagon: Shape {
         func path(in rect: CGRect) -> Path {
             let w = rect.width
@@ -38,11 +40,30 @@ struct BoutonPlus: View {
                 .fill(Color.greyLightButton)
                 .frame(width: width-12, height: height-12)
                 .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)
-            Image(.plus)
-                .shadow(color: .greenFluo, radius: 5)
+                .shadow(
+                    color: Color.greenSwitch.opacity(pulse ? 0.9 : 0),
+                    radius: pulse ? 1 : 0
+                )
+                .scaleEffect(pulse ? 1.02 : 1.0)
+            Image(systemName: "plus")
+                .resizable()
+                .frame(width: 20, height: 20)
+                .foregroundColor(pulse ? Color.greenSwitch : .greyDarkText)
+                .shadow(
+                    color: Color.greenSwitch.opacity(pulse ? 1 : 0),
+                    radius: pulse ? 6 : 0
+                )
+                .scaleEffect(pulse ? 1.02 : 1.0)
+        }
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                pulse.toggle()
+            }
         }
     }
-    
+
+     
+            
     var body: some View {
     
         boutonPlus(width: 62, height: 62)
@@ -51,5 +72,10 @@ struct BoutonPlus: View {
 }
 
 #Preview {
-    BoutonPlus()
+    ZStack {
+        Color.blueDark.edgesIgnoringSafeArea(.all)
+        BoutonPlus()
+    }
+
+    
 }
