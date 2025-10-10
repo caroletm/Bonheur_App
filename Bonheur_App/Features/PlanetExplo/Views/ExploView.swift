@@ -39,6 +39,7 @@ struct ExploView : View {
                 BoutonPlus()
                     .offset(y : 270)
                 BoutonsRetoursFusee()
+                    .padding()
             }
         }
         .navigationBarBackButtonHidden(true)

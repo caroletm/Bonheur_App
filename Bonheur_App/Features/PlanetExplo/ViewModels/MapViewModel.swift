@@ -87,7 +87,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     //MARK: - Ajouter des points sur la carte
     
  func centerMap(on coordinate: CLLocationCoordinate2D) {
-        let region = MKCoordinateRegion(
+     _ = MKCoordinateRegion(
             center: coordinate,
             span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         )
