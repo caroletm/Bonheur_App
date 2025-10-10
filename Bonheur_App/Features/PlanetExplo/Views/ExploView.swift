@@ -13,6 +13,8 @@ struct ExploView : View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
     
+    @State var isPresented: Bool = false
+    
     var body: some View {
         
         NavigationView {
@@ -21,23 +23,28 @@ struct ExploView : View {
                 Image(.backgroundExplora)
                     .ignoresSafeArea(.all)
                 
-                ZStack {
-                    MapView()
-                    Rectangle()
-                        .fill(Color.clear)
-                        .overlay(
-                            Rectangle()
-                                .stroke(Color.white, lineWidth: 5)
-                                .frame(width: 363, height: 623)
-                                .cornerRadius(20)
-                        )
-                    
-                }
-                .frame(width: 363, height: 623)
-                .cornerRadius(20)
-                .offset(y : -40)
-                BoutonPlus()
+                    ZStack {
+                        MapView()
+                        Rectangle()
+                            .fill(Color.clear)
+                            .overlay(
+                                Rectangle()
+                                    .stroke(Color.white, lineWidth: 5)
+                                    .frame(width: 363, height: 623)
+                                    .cornerRadius(20)
+                            )
+                        
+                    }
+                    .frame(width: 363, height: 623)
+                    .cornerRadius(20)
+                    .offset(y : -40)
+                    Button {
+                        isPresented = true
+                    }label:{
+                        BoutonPlus()
+                    }
                     .offset(y : 270)
+                    
                 BoutonsRetoursFusee()
                     .padding()
             }

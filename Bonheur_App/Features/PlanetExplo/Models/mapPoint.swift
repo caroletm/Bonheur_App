@@ -25,7 +25,14 @@ class MapPoint : Identifiable {
 let mapPoints: [MapPoint] = [
     MapPoint(nom: "Simplon", theme: .apprentissage, coordinate: CLLocationCoordinate2D(latitude: 48.854699219973625, longitude: 2.435966996632539)),
     MapPoint(nom: "Métro", theme: .social, coordinate: CLLocationCoordinate2D(latitude: 48.85772153332712, longitude: 2.4357114297413385)),
-    MapPoint(nom: "Maison de l'art", theme: .inspiration, coordinate: CLLocationCoordinate2D(latitude: 48.861780219087784, longitude: 2.4413059667895727)),
-    MapPoint(nom: "Café de potes", theme: .energie, coordinate: CLLocationCoordinate2D(latitude: 48.8622179008456, longitude: 2.4364069667699884))
-
+    MapPoint(nom: "Maison de l'art", theme: .energie, coordinate: CLLocationCoordinate2D(latitude: 48.861780219087784, longitude: 2.4413059667895727)),
+    MapPoint(nom: "Café de potes", theme: .energie, coordinate: CLLocationCoordinate2D(latitude: 48.8622179008456, longitude: 2.4364069667699884)),
+    MapPoint(nom: "Parc des idées", theme: .apprentissage, coordinate: CLLocationCoordinate2D(latitude: 48.865321, longitude: 2.440112)),
+    MapPoint(nom: "Studio Zen", theme: .inspiration, coordinate: CLLocationCoordinate2D(latitude: 48.864102, longitude: 2.438255)),
+    MapPoint(nom: "Librairie du Bonheur", theme: .apprentissage, coordinate: CLLocationCoordinate2D(latitude: 48.863589, longitude: 2.441856)),
+    MapPoint(nom: "Boulangerie du Sourire", theme: .social, coordinate: CLLocationCoordinate2D(latitude: 48.865780, longitude: 2.437918)),
+    MapPoint(nom: "Jardin des Rêves", theme: .social, coordinate: CLLocationCoordinate2D(latitude: 48.866230, longitude: 2.439670)),
+    MapPoint(nom: "Atelier du Soleil", theme: .energie, coordinate: CLLocationCoordinate2D(latitude: 48.863412, longitude: 2.437502)),
+    MapPoint(nom: "Terrasse des Copains", theme: .inspiration, coordinate: CLLocationCoordinate2D(latitude: 48.864930, longitude: 2.436980))
+    
 ]

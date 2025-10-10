@@ -27,14 +27,14 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
             return .region(
                 MKCoordinateRegion(
                     center: loc,
-                    span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
+                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                 )
             )
         } else {
             return .region(
                 MKCoordinateRegion(
                     center: CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522),
-                    span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                 )
             )
         }
