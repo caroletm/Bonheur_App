@@ -71,7 +71,7 @@ struct PlanetButton: View {
             }
             
             // Animation de rotation continue du cercle
-            withAnimation(.linear(duration: 9.0).repeatForever(autoreverses: false).delay(animationDelay + 0.5)) {
+            withAnimation(.linear(duration: 15.0).repeatForever(autoreverses: false).delay(animationDelay + 0.5)) {
                 rotationAngle = 360.0
             }
             
