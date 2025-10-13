@@ -12,7 +12,7 @@ struct CreateMapInsert: View {
     
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
-    @Environment(MemoryChallengeViewModel.self) private var memoryViewModel
+    @Environment(SouvenirsViewModel.self) private var souvenirViewModel
     
     @State var nomDuLieu : String = ""
     @State private var showCamera = false
@@ -77,7 +77,7 @@ struct CreateMapInsert: View {
                             }
                         }
                         ZStack{
-                            if let selectedImage = memoryViewModel.image {
+                            if let selectedImage = souvenirViewModel.image {
                                 
                                 Image(uiImage: selectedImage)
                                     .resizable()
@@ -171,8 +171,8 @@ struct CreateMapInsert: View {
                                         }
                                     }
                                     .frame(width: 300)
-                                    if !memoryViewModel.descriptionText.isEmpty{
-                                        Text(memoryViewModel.descriptionText)
+                                    if !souvenirViewModel.descriptionText.isEmpty{
+                                        Text(souvenirViewModel.descriptionText)
                                             .font(.custom("SpaceMono-Bold", size: 16))
                                             .foregroundColor(.greyDarkText)
                                             .lineLimit(3)
@@ -190,6 +190,7 @@ struct CreateMapInsert: View {
                                     mapViewModel.addMapPoint(from: nomDuLieu, theme: mapViewModel.mapThemeSelected ?? .inspiration) { success in
                                         if success {
                                             print("Nouveau point ajouté sur la carte !")
+                                            dismissModal = false
                                             dismissModal = false
                                         } else {
                                             print("Erreur : impossible d’ajouter ce lieu.")
@@ -241,5 +242,5 @@ struct CreateMapInsert: View {
         CreateMapInsert(dismissModal: .constant(false))
             .environment(NavigationViewModel())
             .environment(MapViewModel())
-            .environment(MemoryChallengeViewModel())
+            .environment(SouvenirsViewModel())
     }

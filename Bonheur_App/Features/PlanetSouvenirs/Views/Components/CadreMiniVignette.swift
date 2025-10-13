@@ -24,7 +24,7 @@ struct CadreMiniVignette: View {
             .overlay(
                 ZStack {
                     if hasPhoto {
-                        Image(souvenir.photo ?? .photoDog)
+                        Image(souvenir.photo ?? "photoDog")
                             .resizable()
                             .scaledToFill()
                             .frame(width: 114, height: 134)

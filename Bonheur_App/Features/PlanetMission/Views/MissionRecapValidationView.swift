@@ -9,8 +9,10 @@ import SwiftUI
 
 struct MissionRecapValidationView: View {
     
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
+
     
-    let memoryChallenge: MemoryChallenge
+    let memoryChallenge: SouvenirDefi
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
@@ -19,8 +21,9 @@ struct MissionRecapValidationView: View {
             VStack{
                 Text("bravo tu a accompli ta mission du :")
                     .padding(.vertical,15)
-                Text(memoryChallenge.creationDate)
+                Text("mission")
                     .padding(.bottom,30)
+                    
                 
                 ZStack{
                     
@@ -29,13 +32,13 @@ struct MissionRecapValidationView: View {
                         .cornerRadius(12)
                         .opacity(0.8)
                         .frame(width: 341, height: 223)
-                    Image(memoryChallenge.themeMemory.iconName)
+                    Image(memoryChallenge.theme.iconName)
                         .offset(x:0,y:-190)
                     VStack{
-                        Text("\"\(memoryChallenge.nameMemory)\"")
+                        Text("\"\(memoryChallenge.nom)\"")
                         HStack{
                             
-                                Image(memoryChallenge.imageMemory ?? "photoSmile")
+                                Image(memoryChallenge.photo ?? "photoSmile")
                                     .resizable()
                                     .frame(width: 106, height: 138)
                                     .scaledToFit()
@@ -44,7 +47,7 @@ struct MissionRecapValidationView: View {
                             
                             VStack{
                                 
-                                Text(memoryChallenge.descriptionMemory)
+                                Text(memoryChallenge.description)
                             }
                         }.padding(.vertical,10)
                     }
@@ -80,11 +83,7 @@ struct MissionRecapValidationView: View {
 
 #Preview {
     MissionRecapValidationView(
-        memoryChallenge:MemoryChallenge(
-            nameMemory: "me ballader"
-            , descriptionMemory: "cetait cool"
-            , imageMemory: nil, themeMemory: .energie
-            , creationDate: "09/Octobre/2025"
-         
-        ))
+        memoryChallenge:  SouvenirDefi(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/09/2025"), theme: .inspiration, type : .mission, isValidated: true)
+        )
+    .environment(SouvenirsViewModel())
 }

@@ -11,11 +11,11 @@ struct MissionCompletedView: View {
 
     @Environment(NavigationViewModel.self) private var navigationViewModel
     let challenge : Challenge
-    @Bindable private var memoryViewModel = MemoryChallengeViewModel()
+    @Bindable private var souvenirViewModel = SouvenirsViewModel()
     @State private var showCamera = false
     @State private var showModalDescription = false
     @State private var fitsInOneLine = true
-    @State private var memoryChallengeForRecap: MemoryChallenge? = nil
+    @State private var memoryChallengeForRecap: SouvenirDefi? = nil
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
@@ -42,34 +42,47 @@ struct MissionCompletedView: View {
                         }
                     )
                 HStack(spacing:18){
-                    ForEach(ThemeType.allCases,id: \.self){theme in
-                        VStack{
-                            if memoryViewModel.selectedTheme == theme {
-                                Image(theme.iconName)
-                                    .resizable()
-                                    .frame(width: 55, height: 55)
-                                    .shadow(color: .white, radius: 10)
-                                    .onTapGesture {
-                                        memoryViewModel.selectedTheme = theme
-                                    }
-                            } else {
-                                Image(theme.iconName)
-                                    .resizable()
-                                    .frame(width: 55, height: 55)
-                                    .opacity(0.3)
-                                    .onTapGesture {
-                                        memoryViewModel.selectedTheme = theme
-                                    }
+                    
+                    ForEach(SouvenirTheme.allCases, id: \.self) { theme in
+                        
+                        Button {
+                            
+                            if souvenirViewModel.selectedTheme == theme {
+                                souvenirViewModel.selectedTheme = nil
+                            }else {
+                                souvenirViewModel.selectedTheme = theme
                             }
-                            Text(theme.rawValue)
-                                .font(.custom("Poppins-Medium", size: 10))
+                            print(souvenirViewModel.selectedTheme as Any)
+                            
+                        }label: {
+                            
+                            if souvenirViewModel.selectedTheme == theme {
+                                VStack {
+                                    Image(theme.iconName)
+                                        .resizable()
+                                        .frame(width: 65, height: 65)
+                                        .shadow(color : theme.color, radius: 10)
+                                    Text(theme.title).font(.custom("Poppins", size: 9))
+                                        .foregroundStyle(.black)
+                                }
+                            }else{
+                                VStack {
+                                    Image(theme.iconName)
+                                        .resizable()
+                                        .frame(width: 65, height: 65)
+                                        .shadow(color : theme.color, radius: 10)
+                                        .opacity(0.3)
+                                    Text(theme.title).font(.custom("Poppins", size: 9))
+                                        .foregroundStyle(.black)
+                                }
+                            }
                         }
                     }
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 15)
                 ZStack{
-                    if let selectedImage = memoryViewModel.image {
+                    if let selectedImage = souvenirViewModel.image {
                         
                         Image(uiImage: selectedImage)
                             .resizable()
@@ -100,10 +113,10 @@ struct MissionCompletedView: View {
                 
                 .sheet(isPresented: $showCamera) {
                     if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                        ImagePicker(sourceType: .camera, selectedImage: $memoryViewModel.image)
+                        ImagePicker(sourceType: .camera, selectedImage: $souvenirViewModel.image)
                     } else {
                         
-                        ImagePicker(sourceType: .photoLibrary, selectedImage: $memoryViewModel.image)
+                        ImagePicker(sourceType: .photoLibrary, selectedImage: $souvenirViewModel.image)
                     }
                 }
                 ZStack{
@@ -113,7 +126,7 @@ struct MissionCompletedView: View {
                             .padding(.leading)
                             .opacity(0.8)
                         VStack(alignment: .leading,spacing: 0){
-                            Text(": \(memoryViewModel.formattedDate())")
+                            Text(": \(souvenirViewModel.formattedDate())")
                                 .opacity(0.8)
                                 .font(.custom("SpaceMono-Bold", size: 20))
                             LigneTiretView()
@@ -140,8 +153,8 @@ struct MissionCompletedView: View {
                                     LigneTiretView()
                                     LigneTiretView()
                                 }
-                                if !memoryViewModel.descriptionText.isEmpty{
-                                    Text(memoryViewModel.descriptionText)
+                                if !souvenirViewModel.descriptionText.isEmpty{
+                                    Text(souvenirViewModel.descriptionText)
                                         .font(.custom("SpaceMono-Bold", size: 16))
                                         .foregroundColor(.black)
                                         .lineLimit(3)
@@ -156,7 +169,7 @@ struct MissionCompletedView: View {
                             Text("Details :")
                                 .font(.custom("SpaceMono-Bold", size: 16))
                                 .padding(.top)
-                            TextField("Décris ton expérience", text: $memoryViewModel.descriptionText, axis: .vertical)
+                            TextField("Décris ton expérience", text: $souvenirViewModel.descriptionText, axis: .vertical)
                                 .padding()
                                 .background(Color(.systemGray6))
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -188,16 +201,16 @@ struct MissionCompletedView: View {
                 }
                 .padding(.vertical,10)
                 Button{
-                    if memoryViewModel.isValid {
+                    if souvenirViewModel.isValid {
                             
-                        if let memoryChallenge = memoryViewModel.buildChallenge(name: challenge.challengeName) {
+                        if let memoryChallenge = souvenirViewModel.buildSouvenirChallenge(name: challenge.challengeName) {
                                 memoryChallengeForRecap = memoryChallenge
                                         
                             }
                         }
                 }label :{
                     
-                    if memoryViewModel.isValid {
+                    if souvenirViewModel.isValid {
                         BoutonValider(isValid: true)
                     }else{
                         BoutonValider(isValid: false)
