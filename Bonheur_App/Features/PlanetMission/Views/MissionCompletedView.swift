@@ -13,11 +13,6 @@ struct MissionCompletedView: View {
     let challenge : Challenge
     @Bindable private var memoryViewModel = MemoryChallengeViewModel()
     @State private var showCamera = false
-    
-//    @State private var  navigateToRecap = false
-//    @State private var challengeMemoryCreated : MemoryChallenge? = nil
-//    @State private var selected : UIImage? = nil
-    //    @State private var descriptionText = ""
     @State private var showModalDescription = false
     @State private var fitsInOneLine = true
     @State private var memoryChallengeForRecap: MemoryChallenge? = nil
@@ -211,7 +206,7 @@ struct MissionCompletedView: View {
             }
             .frame(width: 350,height: 680)
             Button {
-                //                routes
+                //                routes a ajouter
             } label: {
                 BoutonRetour()
                     .offset(x:0,y:385)

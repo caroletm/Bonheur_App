@@ -19,16 +19,17 @@ class ChallengeViewModel{
         Challenge(challengeName: "Lire 10 pages", challengeDay: true),
         Challenge(challengeName: "Marcher 5000 pas", challengeDay: false)
     ]
-    var currentIndex : Int? = nil
-    var previousIndex : Int? = nil
+    var currentIndex : Int?
+    var dayIndex : Int?
     
     // MARK: - Initialisation
         
         /// Initialise le `ViewModel` et sélectionne le défi du jour s’il existe.
         /// Sinon, sélectionne le premier défi de la liste.
     init(){
-        if let dayIndex = challenges.firstIndex(where: {$0.challengeDay}){
-            currentIndex = dayIndex
+        if let index = challenges.firstIndex(where: {$0.challengeDay}){
+            currentIndex = index
+            dayIndex = index
         }else{
             currentIndex = 0
         }
@@ -41,16 +42,19 @@ class ChallengeViewModel{
         guard let index = currentIndex else {return nil}
         return challenges[index]
     }
-    // MARK: - Navigation entre les défis
     
-        /// Passe au défi suivant dans la liste.
-        /// Si on est au dernier défi, on revient au premier (rotation circulaire).
-    func nextChallenge() {
-        guard let current = currentIndex else {return}
-        let nextIndex = (current + 1) % challenges.count
-        previousIndex = current
-        currentIndex = nextIndex
+    func ToggleChallenge(){
+        if let dayIndex = dayIndex , currentIndex == dayIndex {
+            var randomIndex: Int
+            repeat{
+                randomIndex = Int.random(in: 0..<challenges.count)
+            } while randomIndex == dayIndex
+            currentIndex = randomIndex
+        } else if let dayIndex = dayIndex {
+            
+        }
     }
+    
     
     
     
