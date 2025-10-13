@@ -19,7 +19,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     
     //MARK: -  Map Data
     
-    let places : [MapPoint] = mapPoints
+    var places : [MapPoint] = mapPoints
     let manager = CLLocationManager()
     var userLocation : CLLocationCoordinate2D? = nil
     var cameraPosition: MapCameraPosition {
@@ -83,23 +83,78 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         print("Erreur localisation: \(error.localizedDescription)")
     }
     
+    func centerMap(on coordinate: CLLocationCoordinate2D) {
+        _ = MKCoordinateRegion(
+               center: coordinate,
+               span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+           )
+   //        withAnimation(.easeInOut(duration: 0.5)) {
+   //            cameraPosition = .region(region)
+   //        }
+       }
+       
+       func centerOnUser() {
+            guard let userLoc = userLocation else { return }
+            centerMap(on: userLoc)
+        }
+    
+    //MARK: - Convertir une adresse en mapInsert
+    
+    func addMapPoint(from address: String, theme: SouvenirTheme, completion: @escaping (Bool) -> Void) {
+           let geocoder = CLGeocoder()
+           
+           geocoder.geocodeAddressString(address) { placemarks, error in
+               if let error = error {
+                   print("Erreur de géocodage : \(error.localizedDescription)")
+                   completion(false)
+                   return
+               }
+               
+               guard let location = placemarks?.first?.location else {
+                   print("Adresse introuvable")
+                   completion(false)
+                   return
+               }
+               
+               let coordinate = location.coordinate
+               let newPoint = MapPoint(nom: address, theme: theme, coordinate: coordinate)
+               
+               DispatchQueue.main.async {
+                   self.places.append(newPoint)
+                   completion(true)
+               }
+           }
+       }
+    
+    //MARK: - Convertir des coordonnées en adresse String
+    
+    func getAddress(from coordinate: CLLocationCoordinate2D, completion: @escaping (String?) -> Void) {
+        let geocoder = CLGeocoder()
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let error = error {
+                print("Erreur reverse geocoding : \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            if let placemark = placemarks?.first {
+                // Exemple : on combine le nom de la rue + la ville
+                let street = placemark.thoroughfare ?? ""
+                let city = placemark.locality ?? ""
+                completion("\(street), \(city)")
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
     
     //MARK: - Ajouter des points sur la carte
     
- func centerMap(on coordinate: CLLocationCoordinate2D) {
-     _ = MKCoordinateRegion(
-            center: coordinate,
-            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-        )
-//        withAnimation(.easeInOut(duration: 0.5)) {
-//            cameraPosition = .region(region)
-//        }
-    }
+    var mapThemeSelected : SouvenirTheme? = nil
     
-    func centerOnUser() {
-         guard let userLoc = userLocation else { return }
-         centerMap(on: userLoc)
-     }
 }
 
 //MARK: - Rendre CLLocationCoordinate 2D Equatable
