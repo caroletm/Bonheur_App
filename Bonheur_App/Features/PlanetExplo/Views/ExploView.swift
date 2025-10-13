@@ -12,14 +12,15 @@ struct ExploView : View {
 
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
+    @Environment(MemoryChallengeViewModel.self) private var memoryViewModel
     
-    @State var isPresented: Bool = false
-    
+    @State var showModal: Bool = false
+
+        
     var body: some View {
         
         NavigationView {
             ZStack {
-                
                 Image(.backgroundExplora)
                     .ignoresSafeArea(.all)
                 
@@ -33,20 +34,25 @@ struct ExploView : View {
                                     .frame(width: 363, height: 623)
                                     .cornerRadius(20)
                             )
-                        
                     }
                     .frame(width: 363, height: 623)
                     .cornerRadius(20)
-                    .offset(y : -40)
+                    .offset(y : -30)
                     Button {
-                        isPresented = true
+                        showModal = true
                     }label:{
                         BoutonPlus()
                     }
-                    .offset(y : 270)
+                    .offset(y : 280)
                     
                 BoutonsRetoursFusee()
                     .padding()
+                    .padding(.bottom, 20)
+            }
+            .sheet(isPresented: $showModal) {
+                CreateMapInsert(dismissModal: $showModal)
+                    .presentationDragIndicator(.visible)
+                
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -57,4 +63,5 @@ struct ExploView : View {
     ExploView()
         .environment(NavigationViewModel())
         .environment(MapViewModel())
+        .environment(MemoryChallengeViewModel())
 }

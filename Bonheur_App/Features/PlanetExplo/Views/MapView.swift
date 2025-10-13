@@ -13,6 +13,7 @@ struct MapView: View {
     
     @Environment(MapViewModel.self) private var mapViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
+    @Environment(MemoryChallengeViewModel.self) private var memoryViewModel
     
     @State private var lastUserLocation: EquatableCoordinate?
     
@@ -25,7 +26,7 @@ struct MapView: View {
                 ForEach(mapViewModel.places) { place in
                     Annotation(place.nom, coordinate: place.coordinate) {
                         Button {
-                            //
+                            navigationViewModel.path.append(AppRoute.planeteUserTest)
                         }label:{
                             Image(place.theme.iconName)
                                 .resizable()
@@ -35,6 +36,7 @@ struct MapView: View {
                     }
                 }
                 if let userLoc = mapViewModel.userLocation {
+        
                     Annotation("Moi", coordinate: userLoc) {
                         Image(.pointGps)
                             .resizable()
@@ -65,4 +67,5 @@ struct MapView: View {
     MapView()
         .environment(MapViewModel())
         .environment(NavigationViewModel())
+        .environment(MemoryChallengeViewModel())
 }

@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var souvenirsViewModel = SouvenirsViewModel()
     @State private var challengeViewModel = ChallengeViewModel()
     @State private var mapViewModel = MapViewModel()
+    @State private var memoryViewModel = MemoryChallengeViewModel()
     
     var body: some View {
         
@@ -61,6 +62,9 @@ struct ContentView: View {
                     case .detailSouvenir(souvenir: let souvenir):
                         SouvenirsDetailsView(souvenir: souvenir)
                         
+                    case .createMapInsert:
+                        CreateMapInsert(dismissModal : .constant(false))
+                        
                     }
                 }
         }
@@ -69,6 +73,7 @@ struct ContentView: View {
         .environment(souvenirsViewModel)
         .environment(challengeViewModel)
         .environment(mapViewModel)
+        .environment(memoryViewModel)
         
     }
 }
@@ -80,4 +85,5 @@ struct ContentView: View {
         .environment(SouvenirsViewModel())
         .environment(ChallengeViewModel())
         .environment(MapViewModel())
+        .environment(MemoryChallengeViewModel())
 }

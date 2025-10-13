@@ -80,7 +80,7 @@ class MemoryChallengeViewModel{
     func formattedDate() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "fr_FR")
-        formatter.dateFormat = "dd/MMMM/yyyy"
+        formatter.dateFormat = "dd/MM/yyyy"
         return formatter.string(from: creationDate)
     }
    

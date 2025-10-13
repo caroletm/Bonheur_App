@@ -24,13 +24,11 @@ struct BoutonsRetoursFusee: View {
                     BoutonFusee(isPressed: false)
                 }
                 Spacer()
-                    .frame(width: 90)
                 Button {
                     navigationViewModel.path.removeLast()
                 }label:{
                     BoutonRetour()
                 }
-                Spacer()
             }
             .padding()
         }

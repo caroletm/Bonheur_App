@@ -102,7 +102,7 @@ struct SouvenirsFilterView: View {
                                             .resizable()
                                             .frame(width: 65, height: 65)
                                             .shadow(color : theme.color, radius: 10)
-                                        Text(theme.title).font(.custom("Poppins", size: 7))
+                                        Text(theme.title).font(.custom("Poppins", size: 8))
                                     }
                                     
                                 }else {

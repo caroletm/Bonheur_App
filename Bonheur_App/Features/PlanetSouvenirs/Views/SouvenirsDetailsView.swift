@@ -22,29 +22,9 @@ struct SouvenirsDetailsView: View {
                 Image(.backgroundSouvenirs)
                     .ignoresSafeArea(.all)
                 
-                VStack {
-                    Spacer()
-                    HStack {
-                        Button {
-                            navigationViewModel.path = NavigationPath()
-                        }label :{
-                            BoutonFusee(isPressed: false)
-                        }
-                        Spacer()
-                            .frame(width: 100)
-                        Button {
-                            navigationViewModel.path.append(AppRoute.planeteSouvenirs)
-                        } label: {
-                            BoutonRetour()
-                        }
-                        Spacer()
-                    }
-                    .padding()
-                }
-                .padding(.bottom, 10)
-                
                 ZStack {
                     RectangleFond()
+                    
                     VStack {
                         Image(souvenir.theme.iconName)
                             .resizable()
@@ -59,19 +39,11 @@ struct SouvenirsDetailsView: View {
                         Text(souvenirsViewModel.dateFormatter(souvenir.date))
                             .font(.custom("SpaceMono-Bold", size: 20))
                             .opacity(0.7)
-                            .padding(.bottom, 10)
+                            .padding(10)
                         
-                        if souvenir.type == .mapInsert {
-                            Text( "Tu as ajouté ce lieu")
-                                .font(.custom("SpaceMono-Regular", size: 14))
-                                .opacity(0.7)
-                                .padding(.bottom, 10)
-                            
-                        }else if souvenir.type == .mission {
-                            Text("\(souvenir.nom)")
-                                .font(.custom("SpaceMono-Regular", size: 14))
-                                .opacity(0.7)
-                        }
+                        Text( souvenir.type == .mapInsert ?  "Tu as ajouté ce lieu" : "Tu as relevé ce défi")
+                            .font(.custom("SpaceMono-Regular", size: 14))
+                            .opacity(0.7)
                         
                         if souvenir.photo != nil {
                             Image(souvenir.photo ?? .photoDog)
@@ -79,53 +51,61 @@ struct SouvenirsDetailsView: View {
                                 .scaledToFit()
                                 .frame(width: 218, height: 284)
                         }else{
-                            if souvenir.type == .mapInsert {
-                                Image(.pointGps)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 30, height: 30)
-                                
-                            }
-                            if souvenir.type == .mission {
-                                Image(.missionValide)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 60, height: 60)
-                                
-                            }
+                            souvenir.type == .mapInsert ?
+                            Image(.pointGps)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                                .padding()
+                            :
+                            Image(.missionValide)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 80, height: 80)
+                                .padding()
                         }
                         
-                        if souvenir.type == .mapInsert {
-                            Text("\(souvenir.nom)")
-                                .font(.custom("SpaceMono-Bold", size: 16))
+                        Text("\(souvenir.nom)")
+                            .font(.custom("SpaceMono-Bold", size: 16))
+                            .opacity(0.7)
+                            .padding(.bottom, 10)
+                        
+                        
+                        ScrollView(.vertical, showsIndicators: true) {
+                            Text(souvenir.description)
+                                .font(.custom("SpaceMono-Regular", size: 12))
                                 .opacity(0.7)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 10)
+                                .frame(maxWidth: .infinity)
                         }
-                        
-                        ScrollView {
-                            
-                            
-                            if souvenir.photo != nil {
-                                Text("\(souvenir.description)")
-                                    .font(.custom("SpaceMono-Regular", size: 12))
-                                    .opacity(0.7)
-                                    .frame(width : 285, height: .infinity)
-                                    .multilineTextAlignment(.center)
-                                
-                            }else{
-                                Text("\(souvenir.description)")
-                                    .font(.custom("SpaceMono-Regular", size: 12))
-                                    .opacity(0.7)
-                                    .frame(maxWidth : 285, maxHeight: .infinity)
-                                    .multilineTextAlignment(.center)
-                                
-                            }
-                            
-                        }
-                        .frame(width : 285, height: 250)
+                        .frame(width: 285, height: 250)
+                        .clipped()
                     }
                     .offset(y: souvenir.photo != nil ? 90 : 0)
                 }
                 .padding()
+                
+                VStack {
+                    Spacer()
+                    HStack {
+                        Button {
+                            navigationViewModel.path = NavigationPath()
+                        }label :{
+                            BoutonFusee(isPressed: false)
+                        }
+                        Spacer()
+                            .frame(width: 100)
+                        Button {
+                            navigationViewModel.path.removeLast()
+                        } label: {
+                            BoutonRetour()
+                        }
+                        Spacer()
+                    }
+                    .padding()
+                }
+                .padding(.bottom, 10)
                 
                 if souvenir.photo != nil {
                     if souvenir.type == .mission {
@@ -143,7 +123,7 @@ struct SouvenirsDetailsView: View {
 }
 
 #Preview {
-    SouvenirsDetailsView(souvenir: souvenirs[2])
+    SouvenirsDetailsView(souvenir: souvenirs[1])
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
 }
