@@ -46,7 +46,7 @@ struct SouvenirsDetailsView: View {
                             .opacity(0.7)
                         
                         if souvenir.photo != nil {
-                            Image(souvenir.photo ?? .photoDog)
+                            Image(souvenir.photo ?? "photoDog")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 218, height: 284)
