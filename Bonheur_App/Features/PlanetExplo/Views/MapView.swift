@@ -13,7 +13,7 @@ struct MapView: View {
     
     @Environment(MapViewModel.self) private var mapViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
-    @Environment(MemoryChallengeViewModel.self) private var memoryViewModel
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
     @State private var lastUserLocation: EquatableCoordinate?
     
@@ -67,5 +67,5 @@ struct MapView: View {
     MapView()
         .environment(MapViewModel())
         .environment(NavigationViewModel())
-        .environment(MemoryChallengeViewModel())
+        .environment(SouvenirsViewModel())
 }

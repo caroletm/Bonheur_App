@@ -33,10 +33,14 @@ struct CreateMapInsert: View {
                     RectangleCreate()
                     
                     VStack {
+                        
+                        @Bindable var vm = mapViewModel
+                        
                         TextField("Nom du lieu", text: $nomDuLieu)
                             .font(.custom("SpaceMono-Bold", size: 20))
                             .multilineTextAlignment(.center)
                             .padding()
+                            .padding(.top, 25)
                         
                         HStack {
                             
@@ -44,16 +48,16 @@ struct CreateMapInsert: View {
                                 
                                 Button {
                                     
-                                    if mapViewModel.mapThemeSelected == theme {
-                                        mapViewModel.mapThemeSelected = nil
+                                    if souvenirViewModel.selectedTheme == theme {
+                                        souvenirViewModel.selectedTheme = nil
                                     }else {
-                                        mapViewModel.mapThemeSelected = theme
+                                        souvenirViewModel.selectedTheme = theme
                                     }
-                                    print(mapViewModel.mapThemeSelected as Any)
+                                    print(souvenirViewModel.selectedTheme as Any)
                                     
                                 }label: {
                                     
-                                    if mapViewModel.mapThemeSelected == theme {
+                                    if souvenirViewModel.selectedTheme == theme {
                                         VStack {
                                             Image(theme.iconName)
                                                 .resizable()
@@ -110,9 +114,6 @@ struct CreateMapInsert: View {
                             }
                         }
                         .padding()
-                        
-                        
-                        
                         
                         HStack{
                             Text("Adresse :")
@@ -186,18 +187,33 @@ struct CreateMapInsert: View {
                                 .frame(height: 10)
                             HStack {
                                 Spacer()
+                                
                                 Button {
-                                    mapViewModel.addMapPoint(from: nomDuLieu, theme: mapViewModel.mapThemeSelected ?? .inspiration) { success in
-                                        if success {
-                                            print("Nouveau point ajouté sur la carte !")
-                                            dismissModal = false
-                                            dismissModal = false
-                                        } else {
-                                            print("Erreur : impossible d’ajouter ce lieu.")
+                                    guard souvenirViewModel.isValid else {
+                                            print("❌ Informations incomplètes.")
+                                            return
                                         }
-                                    }
+                                        
+                                        guard let userLocation = mapViewModel.userLocation else {
+                                            print("❌ Localisation inconnue.")
+                                            return
+                                        }
+                                        
+                                        let latitude = userLocation.latitude
+                                        let longitude = userLocation.longitude
+                                        let nom = nomDuLieu.isEmpty ? "Lieu sans nom" : nomDuLieu
+                                        
+                                        souvenirViewModel.createSouvenirCarte(name: nom, latitude: latitude, longitude: longitude)
+                                        
+                                        // Fermer la vue après création
+                                        dismissModal = false
+                                    
                                 }label:{
-                                    BoutonValider(isValid: false)
+                                    if souvenirViewModel.isValid {
+                                        BoutonValider(isValid: true)
+                                    }else{
+                                        BoutonValider(isValid: false)
+                                    }
                                 }
                                 .padding()
                                 Spacer()
@@ -220,6 +236,7 @@ struct CreateMapInsert: View {
                             .presentationDetents([.fraction(0.5)])
                     }
                     .padding(.vertical,10)
+                    .padding(.top, 20)
                     
                     
                     
@@ -237,10 +254,10 @@ struct CreateMapInsert: View {
         }
     }
 }
-    
-    #Preview {
-        CreateMapInsert(dismissModal: .constant(false))
-            .environment(NavigationViewModel())
-            .environment(MapViewModel())
-            .environment(SouvenirsViewModel())
-    }
+
+#Preview {
+    CreateMapInsert(dismissModal: .constant(false))
+        .environment(NavigationViewModel())
+        .environment(MapViewModel())
+        .environment(SouvenirsViewModel())
+}

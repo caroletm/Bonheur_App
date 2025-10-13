@@ -15,7 +15,7 @@ class SouvenirsViewModel {
     
     //MARK: - Data
     
-    let souvenirsData : [Souvenir] = souvenirs
+    var souvenirsData : [Souvenir] = souvenirs
     
     func groupSouvenirsByMonth(_ souvenirs: [Souvenir]) -> [(key: String, value: [Souvenir])] {
         let formatter = DateFormatter()
@@ -90,7 +90,8 @@ class SouvenirsViewModel {
         filters = SouvenirFilter()
     }
     
-    // MARK: - Propriétés
+    // MARK: - Création des souvenirs
+    
     var descriptionText: String = ""
     var selectedTheme: SouvenirTheme? = nil
     var image: UIImage? = nil
@@ -100,20 +101,21 @@ class SouvenirsViewModel {
                !descriptionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
-    // MARK: - Construction du modèle
+    // MARK: - Création du SouvenirDefi
     /// Construit un objet `MemoryChallenge` prêt à être enregistré ou affiché.
     /// - Parameter name: Nom du défi mémoire.
     /// - Returns: Un objet `MemoryChallenge` si toutes les données sont valides, sinon `nil`.
     ///
-    func buildSouvenirChallenge(name: String)-> SouvenirDefi?{
-        guard let theme = selectedTheme else {return nil}
+    func buildSouvenirChallenge(name: String) {
+        guard let theme = selectedTheme else {return }
         var imagePath: String? = nil
         if let image = image {
             imagePath = saveImageToDocuments(image:image)
         }else{
             imagePath = nil
         }
-        return SouvenirDefi(
+        
+        let souvenir = SouvenirDefi(
             id: UUID(),
             nom: name,
             photo: imagePath,
@@ -123,7 +125,52 @@ class SouvenirsViewModel {
             type: .mission,
             isValidated: true
         )
+        souvenirsData.append(souvenir)
     }
+    
+    //MARK: - Création du SouvenirCarte
+    
+    func createSouvenirCarte(name: String, latitude : CGFloat, longitude : CGFloat) {
+        guard let theme = selectedTheme else { return }
+        var imagePath: String? = nil
+        
+        if let image = image {
+            imagePath = saveImageToDocuments(image: image)
+        }
+       let souvenir = SouvenirCarte(
+            id : UUID(),
+            nom: name,
+            photo: imagePath,
+            description: descriptionText,
+            date: creationDate,
+            theme: theme,
+            type : .mapInsert,
+            latitude: latitude,
+            longitude: longitude
+        )
+        souvenirsData.append(souvenir)
+    }
+    
+//
+//    private func createPost(imageName: String) {
+//        let nouveauPost = Post(
+//            creatorId: baseViewModel.user.id,
+//            title: challenge.name,
+//            image: imageName,
+//            date: Date(),
+//            level: challenge.level,
+//            likes: 0,
+//            durationHours: 0,
+//            durationMinutes: 0,
+//            isChallenge: true,
+//            challengeId: challenge.id
+//        )
+//
+//        baseViewModel.postsVM.insert(nouveauPost, at: 0)
+//    }
+//    func buildSouvenirCarte(nom: String)-> SouvenirCarte? {
+//        
+//    }
     
     // MARK: - Gestion des images
     

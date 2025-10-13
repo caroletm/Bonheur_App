@@ -11,7 +11,7 @@ struct ModalAdresse: View {
     
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
-    @Environment(MemoryChallengeViewModel.self) private var memoryViewModel
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
     @State var text: String = ""
     @Binding var closeAdressModal : Bool
@@ -46,5 +46,5 @@ struct ModalAdresse: View {
     ModalAdresse(closeAdressModal: .constant(false))
         .environment(NavigationViewModel())
         .environment(MapViewModel())
-        .environment(MemoryChallengeViewModel())
+        .environment(SouvenirsViewModel())
 }

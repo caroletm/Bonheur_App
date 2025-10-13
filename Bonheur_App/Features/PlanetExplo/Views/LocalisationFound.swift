@@ -11,7 +11,7 @@ struct LocalisationFound : View {
     
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
-    @Environment(MemoryChallengeViewModel.self) private var memoryViewModel
+    @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
     @State var address : String? = nil
     @Binding var closePopup : Bool
@@ -72,5 +72,5 @@ struct LocalisationFound : View {
     }
     .environment(NavigationViewModel())
     .environment(MapViewModel())
-    .environment(MemoryChallengeViewModel())
+    .environment(SouvenirsViewModel())
 }

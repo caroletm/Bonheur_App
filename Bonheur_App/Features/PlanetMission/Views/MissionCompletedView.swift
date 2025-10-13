@@ -203,11 +203,9 @@ struct MissionCompletedView: View {
                 Button{
                     if souvenirViewModel.isValid {
                             
-                        if let memoryChallenge = souvenirViewModel.buildSouvenirChallenge(name: challenge.challengeName) {
-                                memoryChallengeForRecap = memoryChallenge
-                                        
+                    souvenirViewModel.buildSouvenirChallenge(name: challenge.challengeName)
                             }
-                        }
+                        
                 }label :{
                     
                     if souvenirViewModel.isValid {
