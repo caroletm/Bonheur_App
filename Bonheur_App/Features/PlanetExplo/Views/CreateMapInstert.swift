@@ -23,12 +23,12 @@ struct CreateMapInsert: View {
     
     var body: some View {
         
-            ZStack {
-                
-                Image(.backgroundExplora)
-                    .ignoresSafeArea(.all)
-                
-                ScrollView {
+        ZStack {
+            
+            Image(.backgroundExplora)
+                .ignoresSafeArea(.all)
+            
+            ScrollView {
                 ZStack {
                     RectangleCreate()
                     
@@ -111,8 +111,8 @@ struct CreateMapInsert: View {
                         }
                         .padding()
                         
-                  
-
+                        
+                        
                         
                         HStack{
                             Text("Adresse :")
@@ -190,7 +190,7 @@ struct CreateMapInsert: View {
                                     mapViewModel.addMapPoint(from: nomDuLieu, theme: mapViewModel.mapThemeSelected ?? .inspiration) { success in
                                         if success {
                                             print("Nouveau point ajouté sur la carte !")
-                                           dismissModal = false
+                                            dismissModal = false
                                         } else {
                                             print("Erreur : impossible d’ajouter ce lieu.")
                                         }
@@ -198,7 +198,7 @@ struct CreateMapInsert: View {
                                 }label:{
                                     BoutonValider(isValid: false)
                                 }
-                                    .padding()
+                                .padding()
                                 Spacer()
                             }
                         }
@@ -206,13 +206,13 @@ struct CreateMapInsert: View {
                         
                         .frame(width: 285, height: 250)
                         .clipped()
-                     
+                        
                         
                     }
                     .sheet(isPresented: $showModalDescription){
                         ModalDescription()
                             .presentationDetents([.fraction(0.5)])
-
+                        
                     }
                     .sheet(isPresented: $showAdressModal) {
                         ModalAdresse(closeAdressModal: $showAdressModal)
@@ -220,27 +220,26 @@ struct CreateMapInsert: View {
                     }
                     .padding(.vertical,10)
                     
-          
-
+                    
+                    
                 }
                 
                 .padding()
             }
-                if showLocalisationPopup {
-                    ZStack{
-                        Color.black.opacity(0.5)
-                            .ignoresSafeArea(.all)
-                        LocalisationFound(closePopup: $showLocalisationPopup)
-                    }
+            if showLocalisationPopup {
+                ZStack{
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea(.all)
+                    LocalisationFound(closePopup: $showLocalisationPopup)
                 }
-            
+            }
         }
     }
 }
-
-#Preview {
-    CreateMapInsert(dismissModal: .constant(false))
-        .environment(NavigationViewModel())
-        .environment(MapViewModel())
-        .environment(MemoryChallengeViewModel())
-}
+    
+    #Preview {
+        CreateMapInsert(dismissModal: .constant(false))
+            .environment(NavigationViewModel())
+            .environment(MapViewModel())
+            .environment(MemoryChallengeViewModel())
+    }
