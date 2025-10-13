@@ -48,6 +48,7 @@ struct ExploView : View {
                 BoutonsRetoursFusee()
                     .padding()
                     .padding(.bottom, 20)
+
             }
             .sheet(isPresented: $showModal) {
                 CreateMapInsert(dismissModal: $showModal)

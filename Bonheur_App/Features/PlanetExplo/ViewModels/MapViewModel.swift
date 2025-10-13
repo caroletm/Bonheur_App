@@ -128,28 +128,49 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     
     //MARK: - Convertir des coordonnées en adresse String
     
-    func getAddress(from coordinate: CLLocationCoordinate2D, completion: @escaping (String?) -> Void) {
+//    func getAddress(from coordinate: CLLocationCoordinate2D, completion: @escaping (String?) -> Void) {
+//        let geocoder = CLGeocoder()
+//        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+//        
+//        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+//            if let error = error {
+//                print("Erreur reverse geocoding : \(error.localizedDescription)")
+//                completion(nil)
+//                return
+//            }
+//            
+//            if let placemark = placemarks?.first {
+//                // Exemple : on combine le nom de la rue + la ville
+//                let street = placemark.thoroughfare ?? ""
+//                let city = placemark.locality ?? ""
+//                completion("\(street), \(city)")
+//            } else {
+//                completion(nil)
+//            }
+//        }
+//    }
+    
+    func getAddress(from coordinate: CLLocationCoordinate2D) async -> String? {
         let geocoder = CLGeocoder()
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         
-        geocoder.reverseGeocodeLocation(location) { placemarks, error in
-            if let error = error {
-                print("Erreur reverse geocoding : \(error.localizedDescription)")
-                completion(nil)
-                return
-            }
-            
-            if let placemark = placemarks?.first {
-                // Exemple : on combine le nom de la rue + la ville
+        do {
+            let placemarks = try await geocoder.reverseGeocodeLocation(location)
+            if let placemark = placemarks.first {
                 let street = placemark.thoroughfare ?? ""
                 let city = placemark.locality ?? ""
-                completion("\(street), \(city)")
-            } else {
-                completion(nil)
+                let postalCode = placemark.postalCode ?? ""
+                
+                return "\(street), \(postalCode) \(city)"
             }
+        } catch {
+            print("Erreur reverse geocoding : \(error.localizedDescription)")
         }
+        return nil
     }
     
+    var addressFound : String? = nil
+    var adressRentree : String = ""
     
     //MARK: - Ajouter des points sur la carte
     
