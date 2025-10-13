@@ -25,7 +25,7 @@ struct MissionView: View {
             VStack{
                 
                 VStack(alignment:.center){
-                    Text("mission")
+                    Text("Mission du jour")
                         .font(.custom("SpaceMono-Bold", size: 20))
                         .foregroundStyle(.white)
                         .padding(.top)
@@ -50,10 +50,6 @@ struct MissionView: View {
                         if let challenge = viewmissionmodel.currentChalenge {
                             navigationViewModel.path.append(AppRoute.missionAccepter(challenge: challenge))
                         }
-
-                        
-//                        ajouter la data de la mission a la transmission
-                        
                     }){
                         ZStack {
                             Rectangle()
@@ -70,22 +66,16 @@ struct MissionView: View {
                                 .foregroundStyle(Color.greyDarkText)
                         }
                     }.padding(.top, 70)
-
                     Button {
-                        viewmissionmodel.nextChallenge()
+                        viewmissionmodel.ToggleChallenge()
                     } label: {
                         Text("donner une autre mission")
                             .font(.custom("Poppins-Medium", size: 10))
                             .foregroundStyle(.white)
                             .underline()
                     }.padding(.vertical,20)
-                    
-                    
                 }
                 .frame(width: 300, height: 380)
-                
-                
-                
                 Spacer()
                 HStack(spacing:70){
                     Button {

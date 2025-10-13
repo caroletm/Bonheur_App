@@ -17,34 +17,49 @@ struct MissionRecapValidationView: View {
                 .resizable()
                 .ignoresSafeArea()
             VStack{
-                Text("bravo tu a accompli la mission")
-                    .padding(.top,15)
-                Image(.clapHands)
-                    .padding(.vertical,50)
-                HStack{
-                    VStack{
-                        Image(memoryChallenge.imageMemory ?? "photoSmile")
-                            .resizable()
-                            .frame(width: 106, height: 138)
-                            .scaledToFit()
-
-                        Image(.missionValide)
-                            .resizable()
-                            .frame(width: 56, height: 56)
-                            .offset(x:0,y:-25)
-                    }
-                    VStack{
-                        Text(memoryChallenge.creationDate)
-                        Text(memoryChallenge.descriptionMemory)
-                    }
-                }.padding(.vertical,30)
-                Button {
+                Text("bravo tu a accompli ta mission du :")
+                    .padding(.vertical,15)
+                Text(memoryChallenge.creationDate)
+                    .padding(.bottom,30)
+                
+                ZStack{
                     
+                    Rectangle()
+                        .foregroundStyle(Color.white)
+                        .cornerRadius(12)
+                        .opacity(0.8)
+                        .frame(width: 341, height: 223)
+                    Image(memoryChallenge.themeMemory.iconName)
+                        .offset(x:0,y:-190)
+                    VStack{
+                        Text("\"\(memoryChallenge.nameMemory)\"")
+                        HStack{
+                            
+                                Image(memoryChallenge.imageMemory ?? "photoSmile")
+                                    .resizable()
+                                    .frame(width: 106, height: 138)
+                                    .scaledToFit()
+                                
+                                
+                            
+                            VStack{
+                                
+                                Text(memoryChallenge.descriptionMemory)
+                            }
+                        }.padding(.vertical,10)
+                    }
+                }
+                Image(.missionValide)
+                    .resizable()
+                    .frame(width: 56, height: 56)
+                    .offset(x:0,y:-25)
+                Button {
+//                    redirection a voir
                 } label: {
                     Image(.boutonOK)
                 }.padding(.vertical,15)
 
-            }.padding(30)
+            }.padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 25)
                     .fill(
