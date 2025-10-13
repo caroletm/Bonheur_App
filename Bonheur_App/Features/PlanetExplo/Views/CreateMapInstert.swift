@@ -18,11 +18,11 @@ struct CreateMapInsert: View {
     @State private var showCamera = false
     @State private var showModalDescription = false
     @Binding var dismissModal : Bool
+    @State private var showLocalisationPopup : Bool = true
+    @State private var showAdressModal = false
     
     var body: some View {
         
-      
-            
             ZStack {
                 
                 Image(.backgroundExplora)
@@ -119,12 +119,33 @@ struct CreateMapInsert: View {
                                 .font(.custom("SpaceMono-Bold", size: 14))
                                 .padding(.leading)
                             
-                            VStack(alignment: .center,spacing: 0){
-                                Text("adresse")
-                                    .font(.custom("SpaceMono-Bold", size: 20))
-                                LigneTiretView()
+                            Button {
+                                
+                                if mapViewModel.adressRentree.isEmpty && mapViewModel.addressFound == nil {
+                                    showAdressModal = true
+                                }
+                            }label : {
+                                VStack(alignment: .center,spacing: 0){
+                                    
+                                    ZStack{
+                                        if mapViewModel.addressFound != nil {
+                                            Text("\(mapViewModel.addressFound ?? "Adresse introuvable")")
+                                                .font(.custom("SpaceMono-Bold", size: 16))
+                                                .foregroundStyle(Color.black)
+                                        }else{
+                                            Text("")
+                                        }
+                                        if !mapViewModel.adressRentree.isEmpty {
+                                            Text("\(mapViewModel.adressRentree)")
+                                                .font(.custom("SpaceMono-Bold", size: 16))
+                                                .foregroundStyle(Color.black)
+                                                .lineLimit(2)
+                                        }
+                                        LigneTiretView()
+                                    }
+                                    .offset(y: 5)
+                                }
                             }
-                            
                         }
                         .frame(width: 300)
                         .opacity(0.7)
@@ -193,6 +214,10 @@ struct CreateMapInsert: View {
                             .presentationDetents([.fraction(0.5)])
 
                     }
+                    .sheet(isPresented: $showAdressModal) {
+                        ModalAdresse(closeAdressModal: $showAdressModal)
+                            .presentationDetents([.fraction(0.5)])
+                    }
                     .padding(.vertical,10)
                     
           
@@ -201,6 +226,13 @@ struct CreateMapInsert: View {
                 
                 .padding()
             }
+                if showLocalisationPopup {
+                    ZStack{
+                        Color.black.opacity(0.5)
+                            .ignoresSafeArea(.all)
+                        LocalisationFound(closePopup: $showLocalisationPopup)
+                    }
+                }
             
         }
     }

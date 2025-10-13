@@ -29,7 +29,6 @@ struct SouvenirsView: View {
         souvenirsViewModel.filters.isDefi ||
         souvenirsViewModel.filters.isMap ||
         !souvenirsViewModel.filters.theme.isEmpty
-       
 
         
         NavigationView {
