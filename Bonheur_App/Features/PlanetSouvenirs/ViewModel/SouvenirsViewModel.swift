@@ -151,27 +151,6 @@ class SouvenirsViewModel {
         souvenirsData.append(souvenir)
     }
     
-//
-//    private func createPost(imageName: String) {
-//        let nouveauPost = Post(
-//            creatorId: baseViewModel.user.id,
-//            title: challenge.name,
-//            image: imageName,
-//            date: Date(),
-//            level: challenge.level,
-//            likes: 0,
-//            durationHours: 0,
-//            durationMinutes: 0,
-//            isChallenge: true,
-//            challengeId: challenge.id
-//        )
-//
-//        baseViewModel.postsVM.insert(nouveauPost, at: 0)
-//    }
-//    func buildSouvenirCarte(nom: String)-> SouvenirCarte? {
-//        
-//    }
-    
     // MARK: - Gestion des images
     
     /// Sauvegarde une image dans le répertoire Documents de l’application.

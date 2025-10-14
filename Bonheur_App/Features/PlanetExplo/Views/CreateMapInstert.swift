@@ -57,26 +57,15 @@ struct CreateMapInsert: View {
                                     
                                 }label: {
                                     
-                                    if souvenirViewModel.selectedTheme == theme {
-                                        VStack {
-                                            Image(theme.iconName)
-                                                .resizable()
-                                                .frame(width: 65, height: 65)
-                                                .shadow(color : theme.color, radius: 10)
-                                            Text(theme.title).font(.custom("Poppins", size: 9))
-                                                .foregroundStyle(.black)
-                                        }
-                                    }else{
-                                        VStack {
-                                            Image(theme.iconName)
-                                                .resizable()
-                                                .frame(width: 65, height: 65)
-                                                .shadow(color : theme.color, radius: 10)
-                                                .opacity(0.3)
-                                            Text(theme.title).font(.custom("Poppins", size: 9))
-                                                .foregroundStyle(.black)
-                                        }
+                                    VStack {
+                                        Image(theme.iconName)
+                                            .resizable()
+                                            .frame(width: 65, height: 65)
+                                            .shadow(color : theme.color, radius: 10)
+                                        Text(theme.title).font(.custom("Poppins-Regular", size: 9))
+                                            .foregroundStyle(.black)
                                     }
+                                    .opacity( souvenirViewModel.selectedTheme == theme ? 1 : 0.3)
                                 }
                             }
                         }
@@ -190,22 +179,22 @@ struct CreateMapInsert: View {
                                 
                                 Button {
                                     guard souvenirViewModel.isValid else {
-                                            print("❌ Informations incomplètes.")
+                                            print("Informations incomplètes.")
                                             return
                                         }
                                         
                                         guard let userLocation = mapViewModel.userLocation else {
-                                            print("❌ Localisation inconnue.")
+                                            print("Localisation inconnue.")
                                             return
                                         }
                                         
                                         let latitude = userLocation.latitude
                                         let longitude = userLocation.longitude
+                                 
                                         let nom = nomDuLieu.isEmpty ? "Lieu sans nom" : nomDuLieu
                                         
                                         souvenirViewModel.createSouvenirCarte(name: nom, latitude: latitude, longitude: longitude)
-                                        
-                                        // Fermer la vue après création
+                                
                                         dismissModal = false
                                     
                                 }label:{
