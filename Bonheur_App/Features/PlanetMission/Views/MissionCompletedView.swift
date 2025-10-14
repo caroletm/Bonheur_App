@@ -56,26 +56,15 @@ struct MissionCompletedView: View {
                             
                         }label: {
                             
-                            if souvenirViewModel.selectedTheme == theme {
-                                VStack {
-                                    Image(theme.iconName)
-                                        .resizable()
-                                        .frame(width: 65, height: 65)
-                                        .shadow(color : theme.color, radius: 10)
-                                    Text(theme.title).font(.custom("Poppins", size: 9))
-                                        .foregroundStyle(.black)
-                                }
-                            }else{
-                                VStack {
-                                    Image(theme.iconName)
-                                        .resizable()
-                                        .frame(width: 65, height: 65)
-                                        .shadow(color : theme.color, radius: 10)
-                                        .opacity(0.3)
-                                    Text(theme.title).font(.custom("Poppins", size: 9))
-                                        .foregroundStyle(.black)
-                                }
+                            VStack {
+                                Image(theme.iconName)
+                                    .resizable()
+                                    .frame(width: 65, height: 65)
+                                    .shadow(color : theme.color, radius: 10)
+                                Text(theme.title).font(.custom("Poppins-Regular", size: 9))
+                                    .foregroundStyle(.black)
                             }
+                            .opacity( souvenirViewModel.selectedTheme == theme ? 1 : 0.3)
                         }
                     }
                 }
@@ -203,11 +192,9 @@ struct MissionCompletedView: View {
                 Button{
                     if souvenirViewModel.isValid {
                             
-                        if let memoryChallenge = souvenirViewModel.buildSouvenirChallenge(name: challenge.challengeName) {
-                                memoryChallengeForRecap = memoryChallenge
-                                        
+                    souvenirViewModel.buildSouvenirChallenge(name: challenge.challengeName)
                             }
-                        }
+                        
                 }label :{
                     
                     if souvenirViewModel.isValid {

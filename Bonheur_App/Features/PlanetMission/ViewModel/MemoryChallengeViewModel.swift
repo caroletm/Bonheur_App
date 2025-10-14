@@ -5,10 +5,10 @@
 //  Created by cyrilH on 01/10/2025.
 //
 
-import Foundation
-import SwiftUI
-@Observable
-class MemoryChallengeViewModel{
+//import Foundation
+//import SwiftUI
+//@Observable
+//class MemoryChallengeViewModel{
     
 //    // MARK: - Propriétés
 //    var descriptionText: String = ""
@@ -84,4 +84,4 @@ class MemoryChallengeViewModel{
 //        return formatter.string(from: creationDate)
 //    }
 //   
-}
+//}

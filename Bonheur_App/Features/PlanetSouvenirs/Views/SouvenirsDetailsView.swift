@@ -39,7 +39,7 @@ struct SouvenirsDetailsView: View {
                         Text(souvenirsViewModel.dateFormatter(souvenir.date))
                             .font(.custom("SpaceMono-Bold", size: 20))
                             .opacity(0.7)
-                            .padding(10)
+                         
                         
                         Text( souvenir.type == .mapInsert ?  "Tu as ajouté ce lieu" : "Tu as relevé ce défi")
                             .font(.custom("SpaceMono-Regular", size: 14))
@@ -49,16 +49,16 @@ struct SouvenirsDetailsView: View {
                             Image(souvenir.photo ?? "photoDog")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 218, height: 284)
+                                .frame(width: 200, height: 260)
                         }else{
                             souvenir.type == .mapInsert ?
                             Image(.pointGps)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 30, height: 30)
+                                .frame(width: 50, height: 50)
                                 .padding()
                             :
-                            Image(.missionValide)
+                            Image(.defiValidate)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 80, height: 80)
@@ -82,7 +82,7 @@ struct SouvenirsDetailsView: View {
                         .frame(width: 285, height: 250)
                         .clipped()
                     }
-                    .offset(y: souvenir.photo != nil ? 90 : 0)
+                    .offset(y: souvenir.photo != nil ? 70 : 0)
                 }
                 .padding()
                 
@@ -97,7 +97,13 @@ struct SouvenirsDetailsView: View {
                         Spacer()
                             .frame(width: 100)
                         Button {
-                            navigationViewModel.path.removeLast()
+                            if navigationViewModel.path.isEmpty {
+                                navigationViewModel.path = NavigationPath()
+                            }else{
+                                navigationViewModel.path.removeLast()
+                            }
+                            
+                        
                         } label: {
                             BoutonRetour()
                         }
@@ -109,11 +115,11 @@ struct SouvenirsDetailsView: View {
                 
                 if souvenir.photo != nil {
                     if souvenir.type == .mission {
-                        Image(.missionValide)
+                        Image(.defiValidate)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 80, height: 80)
-                            .offset(x: 0, y: 260)
+                            .offset(x: 0, y: 310)
                     }
                 }
             }
@@ -123,7 +129,7 @@ struct SouvenirsDetailsView: View {
 }
 
 #Preview {
-    SouvenirsDetailsView(souvenir: souvenirs[1])
+    SouvenirsDetailsView(souvenir: souvenirs[2])
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
 }

@@ -174,7 +174,10 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     
     //MARK: - Ajouter des points sur la carte
     
+//    var nomDuLieu : String? = nil
     var mapThemeSelected : SouvenirTheme? = nil
+    var latitudeSelected : CGFloat? = nil
+    var longitudeSelected : CGFloat? = nil
     
 }
 
