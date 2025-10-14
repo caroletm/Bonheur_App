@@ -9,7 +9,7 @@ struct PlanetButton: View {
     @State private var isPressed = false
     @State private var rotationAngle = 0.0
     @State private var currentPosition: CGPoint = .zero
-    @State private var breathingScale = 1.0
+    @State private var breathingScale = 1.06
     
     let rocketPosition: CGPoint
     let animationDelay: Double
@@ -54,6 +54,7 @@ struct PlanetButton: View {
                     .scaleEffect((isPressed ? 1.05 : 1.0) * breathingScale)
                     .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
                     .allowsHitTesting(false)
+                
             }
         }
         .buttonStyle(PlainButtonStyle())
