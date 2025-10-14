@@ -10,6 +10,9 @@ struct PlaneteUser: View {
     @State private var planetsVisible: Bool = false
     @State private var rocketPressed: Bool = false
     
+    // FUMÉE: État pour contrôler l'affichage de la fumée
+    @State private var showSmoke: Bool = false
+    
     // MODAL: État pour contrôler l'affichage de la modal du souvenir
     @State private var showSouvenirPopup: Bool = false
     
@@ -64,7 +67,9 @@ struct PlaneteUser: View {
             
             // Bouton Fusée
             Button(action: {
+                // Afficher la fumée
                 withAnimation(.easeInOut(duration: 0.3)) {
+                    showSmoke = true
                     rocketPressed = true
                 }
                 
@@ -74,10 +79,14 @@ struct PlaneteUser: View {
                         planetsVisible.toggle()
                     }
                     
-                    // Reset de l'état de la fusée
+                    // Reset de l'état de la fusée et masquer la fumée
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             rocketPressed = false
+                        }
+                        // Faire disparaître la fumée progressivement
+                        withAnimation(.easeOut(duration: 0.8)) {
+                            showSmoke = false
                         }
                     }
                 }
@@ -87,12 +96,18 @@ struct PlaneteUser: View {
             .buttonStyle(PlainButtonStyle())
             .contentShape(Circle())
             .frame(width: 100, height: 100)
-            .offset(x: 0, y: 650)
-            .scaleEffect(rocketPressed ? 1.1 : 1.0)
+            .offset(x: 0, y: 640)
             
             // CHECKLIST: Gauge de progression et bouton (visibles seulement si planetsVisible est true)
             if planetsVisible {
-                VStack(spacing: 8) {
+                VStack(spacing: 0) {
+                    //texte de la barre de progression
+                    Text("Jauge de bonheur de la semaine ")
+                        .font(.custom("SpaceMono-Regular", size: 14))
+                        .foregroundColor(.white)
+                        .bold()
+                       
+                    //Jauge de progression de la semaine
                     HStack(spacing: 12) {
                         
                         Gauge(value: progressPercentage, in: 0...1) {
@@ -104,6 +119,7 @@ struct PlaneteUser: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color.greyLightButton)
                             )
+        
                         // Bouton pour ouvrir la checklist
                         Button(action: {
                             showChecklistPopup = true
@@ -119,8 +135,9 @@ struct PlaneteUser: View {
                         .font(.custom("SpaceMono-Regular", size: 22))
                         .bold()
                         .foregroundColor(.white)
+                
                 }
-                .offset(x: 5, y: 760)
+                .offset(x: 18, y: 735)
                 .opacity(planetsVisible ? 1.0 : 0.0)
                 .animation(.easeInOut(duration: 0.8).delay(1.2), value: planetsVisible)
             }
@@ -129,14 +146,27 @@ struct PlaneteUser: View {
             VStack {
                 Spacer()
                 
-                Text(planetsVisible ? "Choisis ta destination" : "Placeholder citation...")
-                    .font(.custom("SpaceMono-Regular", size: 22))
+                Text(planetsVisible ? "Choisis ta destination" : "« Le bonheur est parfois caché dans l’inconnu, comme une lumière que l’on découvre en avançant. »")
+                    .font(.custom("SpaceMono-Regular", size: 20))
                     .foregroundStyle(.white)
-                    .padding(.top, -380)
+                    .padding(.top, planetsVisible ? -380 : 0)
                     .animation(.easeInOut(duration: 0.5), value: planetsVisible)
                     .allowsHitTesting(false)
+                    .padding()
                 
                 Spacer()
+            }
+            
+            // FUMÉE: Animation de fumée lors du clic sur la fusée (au premier plan)
+            if showSmoke {
+                Image("FuméeFusée")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .offset(x: 0, y: 550)
+                    .opacity(showSmoke ? 1.0 : 0.5)
+                    .transition(.opacity)
+                    .allowsHitTesting(false) // Empêche la fumée de bloquer les interactions
             }
         }
         // MODAL: Configuration de la modal plein écran
@@ -169,7 +199,6 @@ struct PlaneteUser: View {
                 ZStack {
                     // Card de checklist
                     VStack(spacing: 20) {
-                        // Titre
                         Text("Cette semaine...")
                             .font(.custom("SpaceMono-Regular", size: 24))
                             .foregroundColor(.black)
@@ -212,7 +241,7 @@ struct PlaneteUser: View {
                                     RoundedRectangle(cornerRadius: 12)
                                         .fill(
                                     Color("greyDarkButton").opacity(1))
-                                        .stroke(Color.orangeSand.opacity(1), lineWidth: 2)
+                                        .stroke(Color.greenLight.opacity(1), lineWidth: 2)
                                 )
                             }
                         }
@@ -229,6 +258,7 @@ struct PlaneteUser: View {
                                 .background(
                                     RoundedRectangle(cornerRadius: 20)
                                         .fill(Color("greenLight"))
+                                        .stroke(Color.greyDarkButton.opacity(1), lineWidth: 2)
                                 )
                         }
                         .padding(.top, 10)
@@ -237,7 +267,7 @@ struct PlaneteUser: View {
                     .background(
                         RoundedRectangle(cornerRadius: 20)
                             .fill(Color("greyLightButton"))
-                            .stroke(Color("orangeSand"), lineWidth: 2)
+                            .stroke(Color("greenLight"), lineWidth: 2)
                     )
                     .frame(width: 320)
                 }
