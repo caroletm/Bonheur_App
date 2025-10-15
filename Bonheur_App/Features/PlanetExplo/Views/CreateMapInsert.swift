@@ -12,7 +12,8 @@ struct CreateMapInsert: View {
     
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
-    @Bindable private var souvenirViewModel = SouvenirsViewModel()
+    @Environment(SouvenirsViewModel.self) private var souvenirViewModel
+//    @Bindable private var souvenirViewModel = SouvenirsViewModel()
     @State private var showCamera = false
     @State private var showModalDescription = false
     @Binding var dismissModal : Bool
@@ -51,6 +52,7 @@ struct CreateMapInsert: View {
                                         souvenirViewModel.selectedTheme = nil
                                     }else {
                                         souvenirViewModel.selectedTheme = theme
+                                        mapViewModel.selectedTheme = theme
                                     }
                                     print(souvenirViewModel.selectedTheme as Any)
                                     
@@ -220,15 +222,6 @@ struct CreateMapInsert: View {
                                     print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
                                     
                                     
-                                    //                                        var isValid: Bool {
-                                    //                                            return selectedTheme != nil &&
-                                    //                                                   !descriptionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                                    //                                        }
-                                    //                                        var isValid : Bool {
-                                    //                                            return !nomDuLieu.isEmpty && selectedTheme != nil && !descriptionText.isEmpty && addressSelected != nil
-                                    //                                        }
-                                    //                                    }
-                                    
                                     dismissModal = false
                                     
                                     
@@ -261,11 +254,12 @@ struct CreateMapInsert: View {
                     .padding(.top, 20)
                     
                     .sheet(isPresented: $showCamera) {
+                        @Bindable var vm = souvenirViewModel
+                        
                         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                            ImagePicker(sourceType: .camera, selectedImage: $souvenirViewModel.image)
+                            ImagePicker(sourceType: .camera, selectedImage: $vm.image)
                         } else {
-                            
-                            ImagePicker(sourceType: .photoLibrary, selectedImage: $souvenirViewModel.image)
+                            ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.image)
                         }
                     }
                 }
