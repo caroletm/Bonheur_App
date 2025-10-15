@@ -29,7 +29,7 @@ struct MapView: View {
                     
                     Annotation(place.nom, coordinate: coordinate) {
                         Button {
-                            navigationViewModel.path.append(AppRoute.planeteUserTest)
+//                            navigationViewModel.path.append(AppRoute.planeteUserTest)
                         }label:{
                             Image(place.theme.iconName)
                                 .resizable()
