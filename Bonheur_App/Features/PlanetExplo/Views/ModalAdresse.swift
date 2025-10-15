@@ -33,7 +33,10 @@ struct ModalAdresse: View {
                 .padding()
                 Button {
                     closeAdressModal = false
-                    mapViewModel.adressRentree = text
+                    if !text.isEmpty {
+                        mapViewModel.isManualAddressSelected = true
+                        mapViewModel.addressSelected = text
+                    }
                 }label : {
                     BoutonText(text: "OK", width: 45)
                 }

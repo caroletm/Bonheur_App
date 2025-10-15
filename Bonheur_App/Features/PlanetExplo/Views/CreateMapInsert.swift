@@ -12,9 +12,7 @@ struct CreateMapInsert: View {
     
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
-    @Environment(SouvenirsViewModel.self) private var souvenirViewModel
-    
-    @State var nomDuLieu : String = ""
+    @Bindable private var souvenirViewModel = SouvenirsViewModel()
     @State private var showCamera = false
     @State private var showModalDescription = false
     @Binding var dismissModal : Bool
@@ -22,6 +20,8 @@ struct CreateMapInsert: View {
     @State private var showAdressModal = false
     
     var body: some View {
+        
+        @Bindable var vm = mapViewModel
         
         ZStack {
             
@@ -34,9 +34,8 @@ struct CreateMapInsert: View {
                     
                     VStack {
                         
-                        @Bindable var vm = mapViewModel
                         
-                        TextField("Nom du lieu", text: $nomDuLieu)
+                        TextField("Nom du lieu", text: $vm.nomDuLieu)
                             .font(.custom("SpaceMono-Bold", size: 20))
                             .multilineTextAlignment(.center)
                             .padding()
@@ -97,7 +96,6 @@ struct CreateMapInsert: View {
                                     
                                     Text("Photo optionnelle")
                                         .font(.custom("Poppins-Light", size: 10))
-                                    
                                 }
                                 .opacity(0.6)
                             }
@@ -111,26 +109,22 @@ struct CreateMapInsert: View {
                             
                             Button {
                                 
-                                if mapViewModel.adressRentree.isEmpty && mapViewModel.addressFound == nil {
-                                    showAdressModal = true
-                                }
+                                showAdressModal = true
+                                
                             }label : {
                                 VStack(alignment: .center,spacing: 0){
                                     
                                     ZStack{
-                                        if mapViewModel.addressFound != nil {
-                                            Text("\(mapViewModel.addressFound ?? "Adresse introuvable")")
-                                                .font(.custom("SpaceMono-Bold", size: 16))
-                                                .foregroundStyle(Color.black)
-                                        }else{
-                                            Text("")
-                                        }
-                                        if !mapViewModel.adressRentree.isEmpty {
-                                            Text("\(mapViewModel.adressRentree)")
+                                        
+                                        if mapViewModel.isUserLocationSelected || mapViewModel.isManualAddressSelected{
+                                            Text("\(mapViewModel.addressSelected ?? "adresse introuvable")")
                                                 .font(.custom("SpaceMono-Bold", size: 16))
                                                 .foregroundStyle(Color.black)
                                                 .lineLimit(2)
+                                        }else {
+                                            Text("")
                                         }
+                                        
                                         LigneTiretView()
                                     }
                                     .offset(y: 5)
@@ -161,15 +155,13 @@ struct CreateMapInsert: View {
                                         }
                                     }
                                     .frame(width: 300)
-                                    if !souvenirViewModel.descriptionText.isEmpty{
-                                        Text(souvenirViewModel.descriptionText)
+                                        Text(mapViewModel.descriptionText)
                                             .font(.custom("SpaceMono-Bold", size: 16))
-                                            .foregroundColor(.greyDarkText)
+                                            .foregroundColor(.black)
                                             .lineLimit(3)
                                             .multilineTextAlignment(.leading)
                                             .padding(.horizontal)
                                             .padding(.top, -24)
-                                    }
                                 }
                             }
                             Spacer()
@@ -178,27 +170,70 @@ struct CreateMapInsert: View {
                                 Spacer()
                                 
                                 Button {
-                                    guard souvenirViewModel.isValid else {
-                                            print("Informations incomplètes.")
-                                            return
+                               
+                                    Task {
+                                        
+                                        if souvenirViewModel.isValid && mapViewModel.isValid {
+                                            
+                                            if mapViewModel.isUserLocationSelected {
+                                                
+                                                guard let userLocation = mapViewModel.userLocation else {
+                                                    print("Localisation inconnue.")
+                                                    return
+                                                }
+                                                let latitude = userLocation.latitude
+                                                let longitude = userLocation.longitude
+                                                @Bindable var vm = mapViewModel
+                                                let nom = vm.nomDuLieu.isEmpty ? "Lieu sans nom" : vm.nomDuLieu
+                                                
+                                                souvenirViewModel.createSouvenirCarte(name: nom, latitude: latitude, longitude: longitude)
+                                                mapViewModel.createMapPoint(nom: nom, theme: vm.selectedTheme!, coordinate: userLocation)
+                                                
+                                            } else if mapViewModel.isManualAddressSelected {
+                                                
+                                                guard let addressSelected = mapViewModel.addressSelected else {
+                                                    print("Adresse inconnue.")
+                                                    return
+                                                }
+                                                
+                                                if let coordinate = await mapViewModel.getCoordinates(from: addressSelected) {
+                                                    let nom = vm.nomDuLieu.isEmpty ? "Lieu sans nom" : vm.nomDuLieu
+                                                    let selectedTheme = vm.selectedTheme
+                                                    
+                                                    souvenirViewModel.createSouvenirCarte(name: nom, latitude: coordinate.latitude, longitude: coordinate.longitude)
+                                                    mapViewModel.createMapPoint(nom: nom, theme: selectedTheme!, coordinate: coordinate)
+                                                }else{
+                                                    print("Impossible d'obtenir les coordonnées de l'adresse")
+                                                }
+
+                                            }
                                         }
-                                        
-                                        guard let userLocation = mapViewModel.userLocation else {
-                                            print("Localisation inconnue.")
-                                            return
-                                        }
-                                        
-                                        let latitude = userLocation.latitude
-                                        let longitude = userLocation.longitude
-                                 
-                                        let nom = nomDuLieu.isEmpty ? "Lieu sans nom" : nomDuLieu
-                                        
-                                        souvenirViewModel.createSouvenirCarte(name: nom, latitude: latitude, longitude: longitude)
-                                
-                                        dismissModal = false
+                                    }
+                                    
+                                    print(mapViewModel.places.last?.nom ?? "")
+                                    print(souvenirViewModel.souvenirsData.last?.nom ?? "")
+                                    print("souvenirTheme: \( souvenirViewModel.selectedTheme ?? .energie )")
+                                    print("souvenirDesc: \(souvenirViewModel.descriptionText)")
+                                    print("mapNom: \(mapViewModel.nomDuLieu)")
+                                    print("mapTheme: \( mapViewModel.selectedTheme ?? .energie )")
+                                    print("mapDesc: \(mapViewModel.descriptionText)")
+                                    print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
+                                    
+                                    
+                                    //                                        var isValid: Bool {
+                                    //                                            return selectedTheme != nil &&
+                                    //                                                   !descriptionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                    //                                        }
+                                    //                                        var isValid : Bool {
+                                    //                                            return !nomDuLieu.isEmpty && selectedTheme != nil && !descriptionText.isEmpty && addressSelected != nil
+                                    //                                        }
+                                    //                                    }
+                                    
+                                    dismissModal = false
+                                    
                                     
                                 }label:{
-                                    if souvenirViewModel.isValid {
+                                    if souvenirViewModel.isValid && mapViewModel.isValid {
                                         BoutonValider(isValid: true)
                                     }else{
                                         BoutonValider(isValid: false)
@@ -212,23 +247,27 @@ struct CreateMapInsert: View {
                         
                         .frame(width: 285, height: 250)
                         .clipped()
-                        
-                        
                     }
                     .sheet(isPresented: $showModalDescription){
-                        ModalDescription()
+                        ModalDescription(dismissModalDescription: $showModalDescription)
                             .presentationDetents([.fraction(0.5)])
                         
                     }
                     .sheet(isPresented: $showAdressModal) {
                         ModalAdresse(closeAdressModal: $showAdressModal)
-                            .presentationDetents([.fraction(0.5)])
+                            .presentationDetents([.fraction(0.3)])
                     }
                     .padding(.vertical,10)
                     .padding(.top, 20)
                     
-                    
-                    
+                    .sheet(isPresented: $showCamera) {
+                        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                            ImagePicker(sourceType: .camera, selectedImage: $souvenirViewModel.image)
+                        } else {
+                            
+                            ImagePicker(sourceType: .photoLibrary, selectedImage: $souvenirViewModel.image)
+                        }
+                    }
                 }
                 
                 .padding()

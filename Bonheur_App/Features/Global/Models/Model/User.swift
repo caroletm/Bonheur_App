@@ -13,15 +13,19 @@ class User {
     var email: String
     var motDePasse : String
     var txBonheur: CGFloat
-    var souvenirs : [Souvenir]
+    var souvenirs : [Souvenir] = []
+    var missionAcomplished : [Challenge] = []
+    var mapPoints : [MapPoint] = []
     
-    init(nom: String, email: String, motDePasse: String, txBonheur: CGFloat, souvenirs: [Souvenir]) {
+    init(nom: String, email: String, motDePasse: String, txBonheur: CGFloat, souvenirs: [Souvenir], missionAcomplished: [Challenge], mapPoints: [MapPoint]) {
         self.nom = nom
         self.email = email
         self.motDePasse = motDePasse
         self.txBonheur = txBonheur
-        self.souvenirs = souvenirs
+//        self.souvenirs = []
+//        self.missionAcomplished = []
+//        self.mapPoints = []
     }
 }
 
-let user = User(nom: "Jean Dupont", email: "jean.dupont@example.com", motDePasse: "azerty", txBonheur: 0.2, souvenirs: [])
+let user = User(nom: "Jean Dupont", email: "jean.dupont@example.com", motDePasse: "azerty", txBonheur: 0.2, souvenirs: [], missionAcomplished: [], mapPoints: [])
