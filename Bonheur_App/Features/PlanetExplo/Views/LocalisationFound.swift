@@ -41,8 +41,14 @@ struct LocalisationFound : View {
                     .padding()
                 HStack {
                     Button {
+            
+                        mapViewModel.isUserLocationSelected = true
+                        
+                        if mapViewModel.isUserLocationSelected {
+                            mapViewModel.addressSelected = address
+                        }
                         closePopup = false
-                        mapViewModel.addressFound = address
+                        
                     }label:{
                         BoutonText(text: "Oui", width: 50)
                     }

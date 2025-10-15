@@ -24,7 +24,10 @@ struct MapView: View {
             
             Map(initialPosition: mapViewModel.cameraPosition) {
                 ForEach(mapViewModel.places) { place in
-                    Annotation(place.nom, coordinate: place.coordinate) {
+                    
+                    let coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
+                    
+                    Annotation(place.nom, coordinate: coordinate) {
                         Button {
                             navigationViewModel.path.append(AppRoute.planeteUserTest)
                         }label:{

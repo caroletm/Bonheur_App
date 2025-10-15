@@ -98,57 +98,37 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
             centerMap(on: userLoc)
         }
     
-    //MARK: - Convertir une adresse en mapInsert
+    //MARK: - Convertir une adresse en mapPoint
     
-    func addMapPoint(from address: String, theme: SouvenirTheme, completion: @escaping (Bool) -> Void) {
-           let geocoder = CLGeocoder()
-           
-           geocoder.geocodeAddressString(address) { placemarks, error in
-               if let error = error {
-                   print("Erreur de géocodage : \(error.localizedDescription)")
-                   completion(false)
-                   return
-               }
+    var nomDuLieu : String = ""
+    var selectedTheme : SouvenirTheme? = nil
+    var descriptionText : String = ""
+    
+    func getCoordinates(from address : String) async -> CLLocationCoordinate2D? {
+        let geocoder = CLGeocoder()
+        
+        do {
+               let placemarks = try await geocoder.geocodeAddressString(address)
                
-               guard let location = placemarks?.first?.location else {
+               if let location = placemarks.first?.location {
+                   return location.coordinate
+               } else {
                    print("Adresse introuvable")
-                   completion(false)
-                   return
+                   return nil
                }
                
-               let coordinate = location.coordinate
-               let newPoint = MapPoint(nom: address, theme: theme, coordinate: coordinate)
-               
-               DispatchQueue.main.async {
-                   self.places.append(newPoint)
-                   completion(true)
-               }
+           } catch {
+               print("Erreur de géocodage : \(error.localizedDescription)")
+               return nil
            }
-       }
+    }
+    
+    func createMapPoint(nom: String, theme : SouvenirTheme, coordinate : CLLocationCoordinate2D) {
+        let newMapPoint = MapPoint(nom: nomDuLieu, description: descriptionText , theme: selectedTheme! , latitude: coordinate.latitude, longitude: coordinate.longitude)
+        places.append(newMapPoint)
+    }
     
     //MARK: - Convertir des coordonnées en adresse String
-    
-//    func getAddress(from coordinate: CLLocationCoordinate2D, completion: @escaping (String?) -> Void) {
-//        let geocoder = CLGeocoder()
-//        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-//        
-//        geocoder.reverseGeocodeLocation(location) { placemarks, error in
-//            if let error = error {
-//                print("Erreur reverse geocoding : \(error.localizedDescription)")
-//                completion(nil)
-//                return
-//            }
-//            
-//            if let placemark = placemarks?.first {
-//                // Exemple : on combine le nom de la rue + la ville
-//                let street = placemark.thoroughfare ?? ""
-//                let city = placemark.locality ?? ""
-//                completion("\(street), \(city)")
-//            } else {
-//                completion(nil)
-//            }
-//        }
-//    }
     
     func getAddress(from coordinate: CLLocationCoordinate2D) async -> String? {
         let geocoder = CLGeocoder()
@@ -169,16 +149,13 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         return nil
     }
     
-    var addressFound : String? = nil
-    var adressRentree : String = ""
+    var addressSelected : String? = nil
+    var isUserLocationSelected : Bool = false
+    var isManualAddressSelected : Bool = false
     
-    //MARK: - Ajouter des points sur la carte
-    
-//    var nomDuLieu : String? = nil
-    var mapThemeSelected : SouvenirTheme? = nil
-    var latitudeSelected : CGFloat? = nil
-    var longitudeSelected : CGFloat? = nil
-    
+    var isValid : Bool {
+        return !nomDuLieu.isEmpty && selectedTheme != nil && !descriptionText.isEmpty && addressSelected != nil
+    }
 }
 
 //MARK: - Rendre CLLocationCoordinate 2D Equatable
