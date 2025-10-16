@@ -10,27 +10,21 @@ import SwiftUI
 struct MissionView: View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @State private var viewmissionmodel = ChallengeViewModel()
-  
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
                 .ignoresSafeArea()
-                
             Image(.cadreOnboarding)
                 .resizable()
                 .scaledToFit()
                 .frame(width:333, height: 440)
                 .padding(.bottom,130)
- 
             VStack{
-                
                 VStack(alignment:.center){
                     Text("Mission du jour")
                         .font(.custom("SpaceMono-Bold", size: 20))
                         .foregroundStyle(.white)
                         .padding(.top)
-                        
-                    
                     Text(viewmissionmodel.currentChallenge.challengeName)
                             .font(.custom("Poppins-Regular", size: 16))
                             .lineLimit(nil)
@@ -39,16 +33,10 @@ struct MissionView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal,16)
                             .padding(.top,70)
-                   
-                        
-                    
                     Button(action: {
-                        
                         navigationViewModel.path.append(
                                 AppRoute.missionAccepter(challenge: viewmissionmodel.currentChallenge)
                             )
-                       
-
                     }){
                         ZStack {
                             Rectangle()
@@ -95,15 +83,11 @@ struct MissionView: View {
                     Spacer()
                 }
                 .padding(.bottom,50)
-                
-                
             }
             .padding(.top,170)
         }.navigationBarBackButtonHidden(true)
     }
 }
-
-
 #Preview {
     MissionView()
         .environment(NavigationViewModel())
