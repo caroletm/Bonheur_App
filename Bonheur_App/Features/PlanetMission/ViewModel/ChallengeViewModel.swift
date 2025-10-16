@@ -12,46 +12,54 @@ import Foundation
     /// et suivre l’état actuel de la progression.
 class ChallengeViewModel{
     // MARK: - Propriétés
-    var challenges: [Challenge] = [
-        Challenge(challengeName: "promene toi dans un parc en pleine ete a l'ombre", challengeDay: false),
-        Challenge(challengeName: "boires deux litres D'eau", challengeDay: false),
-        Challenge(challengeName: "Faire 10 pompes", challengeDay: false),
-        Challenge(challengeName: "Lire 10 pages", challengeDay: true),
-        Challenge(challengeName: "Marcher 5000 pas", challengeDay: false)
-    ]
-    var currentIndex : Int?
-    var dayIndex : Int?
+    var challenges: [Challenge]
+    var currentIndex : Int
+    var dayChallengeIndex : Int
+    var randomChallengeIndex : Int
     
     // MARK: - Initialisation
+    
+    /// Initialise le `ViewModel` et sélectionne le défi du jour s’il existe.
+    /// Sinon, sélectionne le premier défi de la liste.
+    init(challenges: [Challenge]? = nil) {
         
-        /// Initialise le `ViewModel` et sélectionne le défi du jour s’il existe.
-        /// Sinon, sélectionne le premier défi de la liste.
-    init(){
-        if let index = challenges.firstIndex(where: {$0.challengeDay}){
-            currentIndex = index
-            dayIndex = index
-        }else{
-            currentIndex = 0
-        }
+        let list = challenges ?? [
+            Challenge(challengeName: "Promène-toi dans un parc à l'ombre"),
+            Challenge(challengeName: "Bois deux litres d’eau"),
+            Challenge(challengeName: "Fais 10 pompes"),
+            Challenge(challengeName: "Lis 10 pages"),
+            Challenge(challengeName: "Marche 5000 pas")
+        ]
+        self.challenges = list
+
+        
+        let dayIndex = Int.random(in: 0..<list.count)
+        
+        self.dayChallengeIndex = dayIndex
+        
+        var randomIndex: Int
+        repeat {
+            randomIndex = Int.random(in: 0..<list.count)
+        } while randomIndex == dayIndex
+        self.randomChallengeIndex = randomIndex
+        self.currentIndex = dayIndex
     }
     // MARK: - Accès au défi courant
     
-        /// Retourne le défi actuellement sélectionné.
-        /// - Returns: Le `Challenge` correspondant à `currentIndex`, ou `nil` si aucun n’est défini.
-    var currentChalenge : Challenge? {
-        guard let index = currentIndex else {return nil}
-        return challenges[index]
+    /// Retourne le défi actuellement sélectionné.
+    /// - Returns: Le `Challenge` correspondant à `currentIndex`, ou `nil` si aucun n’est défini.
+    var currentChallenge: Challenge {
+        challenges[currentIndex]
+    }
+    var isDayChallenge: Bool {
+        currentIndex == dayChallengeIndex
+    }
+    var toggleButtonTitle: String {
+        isDayChallenge ? "Donner une autre mission" : "Retour à la mission du jour"
     }
     
-    func ToggleChallenge(){
-        if let dayIndex = dayIndex , currentIndex == dayIndex {
-            var randomIndex: Int
-            repeat{
-                randomIndex = Int.random(in: 0..<challenges.count)
-            } while randomIndex == dayIndex
-            currentIndex = randomIndex
-        } else if let dayIndex = dayIndex {
-            
-        }
+    func toggleChallenge() {
+        currentIndex = isDayChallenge ? randomChallengeIndex : dayChallengeIndex
+        
     }
 }

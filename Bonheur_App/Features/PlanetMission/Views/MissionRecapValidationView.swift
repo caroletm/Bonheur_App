@@ -10,7 +10,7 @@ import SwiftUI
 struct MissionRecapValidationView: View {
     
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
-
+    
     
     let memoryChallenge: SouvenirDefi
     var body: some View {
@@ -19,62 +19,77 @@ struct MissionRecapValidationView: View {
                 .resizable()
                 .ignoresSafeArea()
             VStack{
-                Text("bravo tu a accompli ta mission du :")
+                Text("bravo tu a accompli ta mission du : ")
                     .padding(.vertical,15)
-                Text("mission")
-                    .padding(.bottom,30)
-                    
+                    .font(.custom("SpaceMono-Bold", size: 20))
+                    .foregroundColor(.black)
+                Text(souvenirsViewModel.dateFormatter(memoryChallenge.date))
+                    .font(.custom("SpaceMono-Regular", size: 16))
+                    .foregroundColor(.black)
+                    .padding(.bottom,35)
                 
-                ZStack{
+                
+                VStack {
                     
+                    VStack (alignment: .center,spacing: 10){
+                        ZStack {
+                            Image(memoryChallenge.theme.iconName)
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .offset(y: -38)
+                            Text("\"Défi:\(memoryChallenge.nom)\"")
+                                .font(.custom("SpaceMono-Bold", size: 20))
+                                .foregroundColor(.black)
+                                .padding(.top,10)
+                        }
+                        HStack{
+                            Image(memoryChallenge.photo ?? "photoSmile")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 106, height: 138)
+                                .padding(.horizontal,10)
+                            VStack{
+                                Text(memoryChallenge.description)
+                                    .font(.custom("SpaceMono-Regular", size: 12))
+                                    .foregroundColor(.black)
+                                    .padding(.trailing)
+                            }
+                        }
+                    }                    
+                    Spacer()
+                }
+                .frame(width: 341, height: 288)
+                .background {
                     Rectangle()
                         .foregroundStyle(Color.white)
                         .cornerRadius(12)
                         .opacity(0.8)
-                        .frame(width: 341, height: 223)
-                    Image(memoryChallenge.theme.iconName)
-                        .offset(x:0,y:-190)
-                    VStack{
-                        Text("\"\(memoryChallenge.nom)\"")
-                        HStack{
-                            
-                                Image(memoryChallenge.photo ?? "photoSmile")
-                                    .resizable()
-                                    .frame(width: 106, height: 138)
-                                    .scaledToFit()
-                                
-                                
-                            
-                            VStack{
-                                
-                                Text(memoryChallenge.description)
-                            }
-                        }.padding(.vertical,10)
-                    }
+                        
                 }
+                
                 Image(.missionValide)
                     .resizable()
                     .frame(width: 56, height: 56)
                     .offset(x:0,y:-25)
                 Button {
-//                    redirection a voir
+                    //                    redirection a voir
                 } label: {
                     Image(.boutonOK)
-                }.padding(.vertical,15)
-
+                }.padding(.vertical,5)
+                
             }.padding(20)
-            .background(
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.white, Color.blueGrey, Color.blueDark]),
-                            startPoint: UnitPoint(x: 0.42, y: -0.17),
-                            endPoint: UnitPoint(x: 0.46, y: 1.08)
+                .background(
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(
+                            LinearGradient(
+                                gradient: Gradient(colors: [Color.white, Color.blueGrey, Color.blueDark]),
+                                startPoint: UnitPoint(x: 0.42, y: -0.17),
+                                endPoint: UnitPoint(x: 0.46, y: 1.08)
+                            )
                         )
-                    )
-                    .opacity(0.7)
-            )
-            .frame(width:350 , height: 680)
+                        .opacity(0.7)
+                )
+                .frame(width:350 , height: 680)
             
             
         }
@@ -84,6 +99,6 @@ struct MissionRecapValidationView: View {
 #Preview {
     MissionRecapValidationView(
         memoryChallenge:  SouvenirDefi(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/09/2025"), theme: .inspiration, type : .mission, isValidated: true)
-        )
+    )
     .environment(SouvenirsViewModel())
 }

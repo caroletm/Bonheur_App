@@ -30,8 +30,8 @@ struct MissionView: View {
                         .foregroundStyle(.white)
                         .padding(.top)
                         
-                    if let challenge = viewmissionmodel.currentChalenge {
-                        Text(challenge.challengeName)
+                    
+                    Text(viewmissionmodel.currentChallenge.challengeName)
                             .font(.custom("Poppins-Regular", size: 16))
                             .lineLimit(nil)
                             .fixedSize(horizontal: false, vertical: true)
@@ -39,17 +39,16 @@ struct MissionView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal,16)
                             .padding(.top,70)
-                    } else {
-                        Text( "aucun challenge aujourd'hui")
-                            .font(.custom("Poppins-Regular", size: 16))
-                            .foregroundStyle(.white)
-                            .padding(.top,90)
-                    }
+                   
+                        
+                    
                     Button(action: {
                         
-                        if let challenge = viewmissionmodel.currentChalenge {
-                            navigationViewModel.path.append(AppRoute.missionAccepter(challenge: challenge))
-                        }
+                        navigationViewModel.path.append(
+                                AppRoute.missionAccepter(challenge: viewmissionmodel.currentChallenge)
+                            )
+                       
+
                     }){
                         ZStack {
                             Rectangle()
@@ -67,13 +66,16 @@ struct MissionView: View {
                         }
                     }.padding(.top, 70)
                     Button {
-                        viewmissionmodel.ToggleChallenge()
+                        withAnimation(.easeInOut){
+                            viewmissionmodel.toggleChallenge()
+                        }
                     } label: {
-                        Text("donner une autre mission")
-                            .font(.custom("Poppins-Medium", size: 10))
+                        Text(viewmissionmodel.toggleButtonTitle)
+                            .font(.custom("Poppins-Medium", size: 16))
                             .foregroundStyle(.white)
                             .underline()
                     }.padding(.vertical,20)
+                        .padding(.top)
                 }
                 .frame(width: 300, height: 380)
                 Spacer()

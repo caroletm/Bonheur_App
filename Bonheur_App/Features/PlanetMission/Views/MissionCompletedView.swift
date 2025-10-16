@@ -191,9 +191,10 @@ struct MissionCompletedView: View {
                 .padding(.vertical,10)
                 Button{
                     if souvenirViewModel.isValid {
-                            
-                    souvenirViewModel.buildSouvenirChallenge(name: challenge.challengeName)
-                            }
+                        if let newSouvenir = souvenirViewModel.buildSouvenirChallenge(name: challenge.challengeName) {
+                                memoryChallengeForRecap = newSouvenir
+                        }
+                    }
                         
                 }label :{
                     
@@ -220,7 +221,9 @@ struct MissionCompletedView: View {
 }
 
 #Preview {
-    MissionCompletedView(challenge: Challenge(challengeName: "promene toi dans un parc en plein été à l'ombre", challengeDay: false)).environment(NavigationViewModel())
+    MissionCompletedView(
+            challenge: Challenge(challengeName: "Promène toi dans un parc en plein été à l'ombre")
+        ).environment(NavigationViewModel())
     
 }
 
