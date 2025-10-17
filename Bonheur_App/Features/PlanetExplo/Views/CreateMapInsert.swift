@@ -35,7 +35,6 @@ struct CreateMapInsert: View {
                     
                     VStack {
                         
-                        
                         TextField("Nom du lieu", text: $vm.nomDuLieu)
                             .font(.custom("SpaceMono-Bold", size: 20))
                             .multilineTextAlignment(.center)
@@ -264,6 +263,9 @@ struct CreateMapInsert: View {
                         Button("OK", role: .cancel) {}
                     } message: {
                         Text("Les champs ne sont pas tous renseignés !")
+                    }
+                    .onAppear {
+                        mapViewModel.resetForm()
                     }
                 }
                 

@@ -203,6 +203,7 @@ struct MissionCompletedView: View {
             }.padding(.bottom,20)
         }.navigationBarBackButtonHidden(true)
         .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
+            
             MissionRecapValidationView(memoryChallenge: memoryChallenge)
         }
     }
