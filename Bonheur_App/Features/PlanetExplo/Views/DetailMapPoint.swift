@@ -11,7 +11,6 @@ import CoreLocation
 struct DetailMapPoint: View {
     
     @Environment(NavigationViewModel.self) private var navigationViewModel
-    
     @Environment(MapViewModel.self) private var mapViewModel
     
     var mapPoint: MapPoint
