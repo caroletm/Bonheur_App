@@ -12,12 +12,12 @@ class Challenge : Identifiable, Hashable{
     
     var id = UUID()
     var challengeName : String
-    var challengeDay : Bool
+   
     
-    init(challengeName: String, challengeDay: Bool) {
+    init(challengeName: String) {
         
         self.challengeName = challengeName
-        self.challengeDay = challengeDay
+        
     }
     // MARK: - Equatable
         static func == (lhs: Challenge, rhs: Challenge) -> Bool {

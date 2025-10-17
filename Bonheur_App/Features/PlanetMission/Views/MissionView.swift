@@ -10,28 +10,22 @@ import SwiftUI
 struct MissionView: View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @State private var viewmissionmodel = ChallengeViewModel()
-  
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
                 .ignoresSafeArea()
-                
             Image(.cadreOnboarding)
                 .resizable()
                 .scaledToFit()
                 .frame(width:333, height: 440)
                 .padding(.bottom,130)
- 
             VStack{
-                
                 VStack(alignment:.center){
                     Text("Mission du jour")
                         .font(.custom("SpaceMono-Bold", size: 20))
                         .foregroundStyle(.white)
                         .padding(.top)
-                        
-                    if let challenge = viewmissionmodel.currentChalenge {
-                        Text(challenge.challengeName)
+                    Text(viewmissionmodel.currentChallenge.challengeName)
                             .font(.custom("Poppins-Regular", size: 16))
                             .lineLimit(nil)
                             .fixedSize(horizontal: false, vertical: true)
@@ -39,17 +33,10 @@ struct MissionView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal,16)
                             .padding(.top,70)
-                    } else {
-                        Text( "aucun challenge aujourd'hui")
-                            .font(.custom("Poppins-Regular", size: 16))
-                            .foregroundStyle(.white)
-                            .padding(.top,90)
-                    }
                     Button(action: {
-                        
-                        if let challenge = viewmissionmodel.currentChalenge {
-                            navigationViewModel.path.append(AppRoute.missionAccepter(challenge: challenge))
-                        }
+                        navigationViewModel.path.append(
+                                AppRoute.missionAccepter(challenge: viewmissionmodel.currentChallenge)
+                            )
                     }){
                         ZStack {
                             Rectangle()
@@ -67,13 +54,16 @@ struct MissionView: View {
                         }
                     }.padding(.top, 70)
                     Button {
-                        viewmissionmodel.ToggleChallenge()
+                        withAnimation(.easeInOut){
+                            viewmissionmodel.toggleChallenge()
+                        }
                     } label: {
-                        Text("donner une autre mission")
-                            .font(.custom("Poppins-Medium", size: 10))
+                        Text(viewmissionmodel.toggleButtonTitle)
+                            .font(.custom("Poppins-Medium", size: 16))
                             .foregroundStyle(.white)
                             .underline()
                     }.padding(.vertical,20)
+                        .padding(.top)
                 }
                 .frame(width: 300, height: 380)
                 Spacer()
@@ -93,15 +83,11 @@ struct MissionView: View {
                     Spacer()
                 }
                 .padding(.bottom,50)
-                
-                
             }
             .padding(.top,170)
         }.navigationBarBackButtonHidden(true)
     }
 }
-
-
 #Preview {
     MissionView()
         .environment(NavigationViewModel())

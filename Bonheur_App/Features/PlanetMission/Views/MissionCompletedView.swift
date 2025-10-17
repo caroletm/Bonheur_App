@@ -42,20 +42,15 @@ struct MissionCompletedView: View {
                         }
                     )
                 HStack(spacing:18){
-                    
                     ForEach(SouvenirTheme.allCases, id: \.self) { theme in
-                        
                         Button {
-                            
                             if souvenirViewModel.selectedTheme == theme {
                                 souvenirViewModel.selectedTheme = nil
                             }else {
                                 souvenirViewModel.selectedTheme = theme
                             }
                             print(souvenirViewModel.selectedTheme as Any)
-                            
                         }label: {
-                            
                             VStack {
                                 Image(theme.iconName)
                                     .resizable()
@@ -72,7 +67,6 @@ struct MissionCompletedView: View {
                 .padding(.bottom, 15)
                 ZStack{
                     if let selectedImage = souvenirViewModel.image {
-                        
                         Image(uiImage: selectedImage)
                             .resizable()
                             .scaledToFill()
@@ -99,12 +93,10 @@ struct MissionCompletedView: View {
                         }
                     }
                 }
-                
                 .sheet(isPresented: $showCamera) {
                     if UIImagePickerController.isSourceTypeAvailable(.camera) {
                         ImagePicker(sourceType: .camera, selectedImage: $souvenirViewModel.image)
                     } else {
-                        
                         ImagePicker(sourceType: .photoLibrary, selectedImage: $souvenirViewModel.image)
                     }
                 }
@@ -130,11 +122,9 @@ struct MissionCompletedView: View {
                         .padding(.leading)
                         .padding(.bottom,10)
                         .opacity(0.8)
-                    
                     Button {
                         showModalDescription = true
                     } label: {
-                       
                             ZStack(alignment: .topLeading) {
                                 // Les lignes pointillées
                                 VStack(spacing: 24) {
@@ -191,10 +181,10 @@ struct MissionCompletedView: View {
                 .padding(.vertical,10)
                 Button{
                     if souvenirViewModel.isValid {
-                            
-                    souvenirViewModel.buildSouvenirChallenge(name: challenge.challengeName)
-                            }
-                        
+                        if let newSouvenir = souvenirViewModel.buildSouvenirChallenge(name: challenge.challengeName) {
+                                memoryChallengeForRecap = newSouvenir
+                        }
+                    }
                 }label :{
                     
                     if souvenirViewModel.isValid {
@@ -215,13 +205,13 @@ struct MissionCompletedView: View {
         .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
             MissionRecapValidationView(memoryChallenge: memoryChallenge)
         }
-   
     }
 }
 
 #Preview {
-    MissionCompletedView(challenge: Challenge(challengeName: "promene toi dans un parc en plein été à l'ombre", challengeDay: false)).environment(NavigationViewModel())
-    
+    MissionCompletedView(
+            challenge: Challenge(challengeName: "Promène toi dans un parc en plein été à l'ombre")
+        ).environment(NavigationViewModel())
 }
 
 

@@ -106,13 +106,11 @@ class SouvenirsViewModel {
     /// - Parameter name: Nom du défi mémoire.
     /// - Returns: Un objet `MemoryChallenge` si toutes les données sont valides, sinon `nil`.
     ///
-    func buildSouvenirChallenge(name: String) {
-        guard let theme = selectedTheme else {return }
+    func buildSouvenirChallenge(name: String)-> SouvenirDefi? {
+        guard let theme = selectedTheme else {return nil}
         var imagePath: String? = nil
         if let image = image {
             imagePath = saveImageToDocuments(image:image)
-        }else{
-            imagePath = nil
         }
         
         let souvenir = SouvenirDefi(
@@ -126,6 +124,7 @@ class SouvenirsViewModel {
             isValidated: true
         )
         souvenirsData.append(souvenir)
+        return souvenir
     }
     
     //MARK: - Création du SouvenirCarte
