@@ -157,16 +157,16 @@ struct PlaneteUser: View {
                 if let souvenir = souvenirViewModel.souvenirsData.randomElement() {
                     // NavigationStack: Nécessaire pour afficher la barre de navigation avec le bouton fermer
                     
-                    NavigationStack {
-                        SouvenirsDetailsView(souvenir: souvenir)
-                            .toolbar {
-                                ToolbarItem(placement: .navigationBarTrailing) {
-                                    Button("Fermer") {
-                                        showSouvenirPopup = false
-                                    }
-                                }
-                            }
-                    }
+//                    NavigationStack {
+                        SouvenirsDetailsPolaView(souvenir: souvenir, showSouvenirPopup: $showSouvenirPopup)
+//                            .toolbar {
+//                                ToolbarItem(placement: .navigationBarTrailing) {
+//                                    Button("Fermer") {
+//                                        showSouvenirPopup = false
+//                                    }
+//                                }
+//                            }
+//                    }
                     
                     .presentationDetents([.medium])
                     // Affiche le petit trait en haut permettant de swiper pour fermer
