@@ -156,13 +156,13 @@ struct CreateMapInsert: View {
                                         }
                                     }
                                     .frame(width: 300)
-                                        Text(mapViewModel.descriptionText)
-                                            .font(.custom("SpaceMono-Bold", size: 16))
-                                            .foregroundColor(.black)
-                                            .lineLimit(3)
-                                            .multilineTextAlignment(.leading)
-                                            .padding(.horizontal)
-                                            .padding(.top, -24)
+                                    Text(mapViewModel.descriptionText)
+                                        .font(.custom("SpaceMono-Bold", size: 16))
+                                        .foregroundColor(.black)
+                                        .lineLimit(3)
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.horizontal)
+                                        .padding(.top, -24)
                                 }
                             }
                             Spacer()
@@ -171,7 +171,7 @@ struct CreateMapInsert: View {
                                 Spacer()
                                 
                                 Button {
-                               
+                                    
                                     Task {
                                         
                                         if souvenirViewModel.isValid && mapViewModel.isValid {
@@ -186,6 +186,7 @@ struct CreateMapInsert: View {
                                                 let longitude = userLocation.longitude
                                                 @Bindable var vm = mapViewModel
                                                 let nom = vm.nomDuLieu.isEmpty ? "Lieu sans nom" : vm.nomDuLieu
+                                                mapViewModel.image = souvenirViewModel.image
                                                 
                                                 souvenirViewModel.createSouvenirCarte(name: nom, latitude: latitude, longitude: longitude)
                                                 mapViewModel.createMapPoint(nom: nom, theme: vm.selectedTheme!, coordinate: userLocation)
@@ -200,6 +201,7 @@ struct CreateMapInsert: View {
                                                 if let coordinate = await mapViewModel.getCoordinates(from: addressSelected) {
                                                     let nom = vm.nomDuLieu.isEmpty ? "Lieu sans nom" : vm.nomDuLieu
                                                     let selectedTheme = vm.selectedTheme
+                                                    mapViewModel.image = souvenirViewModel.image
                                                     
                                                     souvenirViewModel.createSouvenirCarte(name: nom, latitude: coordinate.latitude, longitude: coordinate.longitude)
                                                     mapViewModel.createMapPoint(nom: nom, theme: selectedTheme!, coordinate: coordinate)
@@ -207,21 +209,28 @@ struct CreateMapInsert: View {
                                                     print("Impossible d'obtenir les coordonnées de l'adresse")
                                                 }
                                             }
+                                            dismissModal = false
+                                            print(mapViewModel.places.last?.nom ?? "")
+                                            print(souvenirViewModel.souvenirsData.last?.nom ?? "")
+                                            print("souvenirTheme: \( souvenirViewModel.selectedTheme ?? .energie )")
+                                            print("souvenirDesc: \(souvenirViewModel.descriptionText)")
+                                            print("mapNom: \(mapViewModel.nomDuLieu)")
+                                            print("mapTheme: \( mapViewModel.selectedTheme ?? .energie )")
+                                            print("mapDesc: \(mapViewModel.descriptionText)")
+                                            print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
                                         }else{
                                             isAlertPresented = true
+                                            print(mapViewModel.places.last?.nom ?? "")
+                                            print(souvenirViewModel.souvenirsData.last?.nom ?? "")
+                                            print("souvenirTheme: \( souvenirViewModel.selectedTheme ?? .energie )")
+                                            print("souvenirDesc: \(souvenirViewModel.descriptionText)")
+                                            print("mapNom: \(mapViewModel.nomDuLieu)")
+                                            print("mapTheme: \( mapViewModel.selectedTheme ?? .energie )")
+                                            print("mapDesc: \(mapViewModel.descriptionText)")
+                                            print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
                                         }
+                                        
                                     }
-                                    
-                                    print(mapViewModel.places.last?.nom ?? "")
-                                    print(souvenirViewModel.souvenirsData.last?.nom ?? "")
-                                    print("souvenirTheme: \( souvenirViewModel.selectedTheme ?? .energie )")
-                                    print("souvenirDesc: \(souvenirViewModel.descriptionText)")
-                                    print("mapNom: \(mapViewModel.nomDuLieu)")
-                                    print("mapTheme: \( mapViewModel.selectedTheme ?? .energie )")
-                                    print("mapDesc: \(mapViewModel.descriptionText)")
-                                    print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
-                                    
-                                    dismissModal = false
                                     
                                 }label:{
                                     if souvenirViewModel.isValid && mapViewModel.isValid {
@@ -230,7 +239,6 @@ struct CreateMapInsert: View {
                                         BoutonValider(isValid: false)
                                     }
                                 }
-                                .padding()
                                 Spacer()
                             }
                         }
@@ -267,10 +275,15 @@ struct CreateMapInsert: View {
                     .onAppear {
                         mapViewModel.resetForm()
                     }
+        
                 }
                 
                 .padding()
             }
+            .scrollDismissesKeyboard(.interactively)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            
+            
             if showLocalisationPopup {
                 ZStack{
                     Color.black.opacity(0.5)
