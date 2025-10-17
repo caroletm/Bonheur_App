@@ -24,11 +24,14 @@ struct CadreVignette: View {
             .overlay(
                 ZStack {
                     if hasPhoto {
-                        Image(souvenir.photo ?? "photoDog")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 170, height: 200)
-                            .cornerRadius(20)
+                        if let image = souvenirsViewModel.loadImage(from: souvenir.photo ?? "photoDog") {
+                            
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 170, height: 200)
+                                .cornerRadius(20)
+                        }
                     }else{
                         Text(souvenir.description)
                             .padding(5)

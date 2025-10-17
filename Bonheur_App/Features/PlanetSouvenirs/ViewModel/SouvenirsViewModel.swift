@@ -136,6 +136,7 @@ class SouvenirsViewModel {
         
         if let image = image {
             imagePath = saveImageToDocuments(image: image)
+            saveImageToPhotoLibrary(image)
         }
        let souvenir = SouvenirCarte(
             id : UUID(),
@@ -172,6 +173,12 @@ class SouvenirsViewModel {
     /// Retourne l’URL du dossier Documents de l’application.
     private func getDocumentsDirectory() -> URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    }
+    
+    // Sauvagarde l'image dans la librairie Photo de l'iPhone
+    
+    func saveImageToPhotoLibrary(_ image: UIImage) {
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
     }
     // MARK: - Chargement de l'image
         

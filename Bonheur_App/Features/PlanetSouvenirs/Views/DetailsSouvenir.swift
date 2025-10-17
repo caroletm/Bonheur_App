@@ -46,10 +46,13 @@ struct SouvenirsDetailsView: View {
                             .opacity(0.7)
                         
                         if souvenir.photo != nil {
-                            Image(souvenir.photo ?? "photoDog")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 200, height: 260)
+                            if let image = souvenirsViewModel.loadImage(from: souvenir.photo ?? "photoDog") {
+                                
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 200, height: 260)
+                            }
                         }else{
                             souvenir.type == .mapInsert ?
                             Image(.pointGps)
@@ -102,8 +105,6 @@ struct SouvenirsDetailsView: View {
                             }else{
                                 navigationViewModel.path.removeLast()
                             }
-                            
-                        
                         } label: {
                             BoutonRetour()
                         }
