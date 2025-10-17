@@ -10,9 +10,6 @@ struct PlaneteUser: View {
     @State private var planetsVisible: Bool = false
     @State private var rocketPressed: Bool = false
     
-    // FUMÉE: État pour contrôler l'affichage de la fumée
-    @State private var showSmoke: Bool = false
-    
     // MODAL: État pour contrôler l'affichage de la modal du souvenir
     @State private var showSouvenirPopup: Bool = false
     
@@ -31,249 +28,237 @@ struct PlaneteUser: View {
     
     var body: some View {
         
-        ZStack(alignment: .top){
-            // Image de fond d'écran qui remplit tout l'écran
-            Image("BackgroundUser")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-            
-            // Génération des planètes-boutons avec animation de sortie de la fusée
-            if planetsVisible {
-                ForEach(planetViewModel.planetes.indices, id: \.self) { index in
-                    PlanetButton(
-                        planet: planetViewModel.planetes[index],
-                        rocketPosition: rocketPosition,
-                        animationDelay: Double(index) * 0.2,
-                        breathingPhaseOffset: Double(index) * 1.2
-                    )
-                }
-            }
-            
-            // MODAL: Bouton Polaroid souvenir du jour qui déclenche l'ouverture de la modal
-            if planetsVisible {
-                Button(action: {
-                    showSouvenirPopup = true
-                }) {
-                    Image("SouvenirPola.")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 85, height: 85)
-                }
-                .offset(x: 145, y: 530)
-                .opacity(planetsVisible ? 1.0 : 0.0)
-                .animation(.easeInOut(duration: 0.8).delay(1.0), value: planetsVisible)
-            }
-            
-            // Bouton Fusée
-            Button(action: {
-                // Afficher la fumée
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    showSmoke = true
-                    rocketPressed = true
+        NavigationView {
+            ZStack(alignment: .top){
+                // Image de fond d'écran qui remplit tout l'écran
+                Image("BackgroundUser")
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
+                
+                // Génération des planètes-boutons avec animation de sortie de la fusée
+                if planetsVisible {
+                    ForEach(planetViewModel.planetes.indices, id: \.self) { index in
+                        PlanetButton(
+                            planet: planetViewModel.planetes[index],
+                            rocketPosition: rocketPosition,
+                            animationDelay: Double(index) * 0.2,
+                            breathingPhaseOffset: Double(index) * 1.2
+                        )
+                    }
                 }
                 
-                // Animation de lancement des planètes
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    withAnimation(.easeOut(duration: 1.2)) {
-                        planetsVisible.toggle()
+                // MODAL: Bouton Polaroid souvenir du jour qui déclenche l'ouverture de la modal
+                if planetsVisible {
+                    Button(action: {
+                        showSouvenirPopup = true
+                    }) {
+                        Image("SouvenirPola.")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 85, height: 85)
+                    }
+                    .offset(x: 145, y: 530)
+                    .opacity(planetsVisible ? 1.0 : 0.0)
+                    .animation(.easeInOut(duration: 0.8).delay(1.0), value: planetsVisible)
+                }
+                
+                // Bouton Fusée
+                Button(action: {
+                    // Animation de lancement des planètes
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        rocketPressed = true
                     }
                     
-                    // Reset de l'état de la fusée et masquer la fumée
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            rocketPressed = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation(.easeOut(duration: 1.2)) {
+                            planetsVisible.toggle()
                         }
-                        // Faire disparaître la fumée progressivement
-                        withAnimation(.easeOut(duration: 0.8)) {
-                            showSmoke = false
+                        
+                        // Reset de l'état de la fusée
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                rocketPressed = false
+                            }
                         }
                     }
+                }) {
+                    BoutonFusee(isPressed: false)
                 }
-            }) {
-                BoutonFusee(isPressed: false)
-            }
-            .buttonStyle(PlainButtonStyle())
-            .contentShape(Circle())
-            .frame(width: 100, height: 100)
-            .offset(x: 0, y: 640)
-            
-            // CHECKLIST: Gauge de progression et bouton (visibles seulement si planetsVisible est true)
-            if planetsVisible {
-                VStack(spacing: 0) {
-                    //texte de la barre de progression
-                    Text("Jauge de bonheur de la semaine ")
-                        .font(.custom("SpaceMono-Regular", size: 14))
-                        .foregroundColor(.white)
-                        .bold()
-                       
-                    //Jauge de progression de la semaine
-                    HStack(spacing: 12) {
+                .buttonStyle(PlainButtonStyle())
+                .contentShape(Circle())
+                .frame(width: 100, height: 100)
+                .offset(x: 0, y: 640)
+                
+                // CHECKLIST: Gauge de progression et bouton (visibles seulement si planetsVisible est true)
+                if planetsVisible {
+                    VStack(spacing: 0) {
+                        //texte de la barre de progression
+                        Text("Jauge de bonheur de la semaine ")
+                            .font(.custom("SpaceMono-Regular", size: 14))
+                            .foregroundColor(.white)
+                            .bold()
                         
-                        Gauge(value: progressPercentage, in: 0...1) {
-                        }
-                        .gaugeStyle(.linearCapacity)
-                        .tint(Color("greenLight"))
-                        .frame(width: 200, height: 20)
-                        .background(
+                        //Jauge de progression de la semaine
+                        HStack(spacing: 12) {
+                            
+                            Gauge(value: progressPercentage, in: 0...1) {
+                            }
+                            .gaugeStyle(.linearCapacity)
+                            .tint(Color("greenLight"))
+                            .frame(width: 200, height: 20)
+                            .background(
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color.greyLightButton)
                             )
-        
-                        // Bouton pour ouvrir la checklist
-                        Button(action: {
-                            showChecklistPopup = true
-                        }) {
-                            Image("BoutonFleche")
-                                .font(.system(size: 32))
-                                .foregroundColor(.greyLightButton)
-                        }
-                    }
-                    
-                    // Compteur de pourcentage numerique
-                    Text("\(Int(progressPercentage * 100))%")
-                        .font(.custom("SpaceMono-Regular", size: 22))
-                        .bold()
-                        .foregroundColor(.white)
-                
-                }
-                .offset(x: 18, y: 735)
-                .opacity(planetsVisible ? 1.0 : 0.0)
-                .animation(.easeInOut(duration: 0.8).delay(1.2), value: planetsVisible)
-            }
-            
-            // Contenu au premier plan contenant le texte avant et aprés avoir appuyé sur le bouton fusée
-            VStack {
-                Spacer()
-                
-                Text(planetsVisible ? "Choisis ta destination" : "« Le bonheur est parfois caché dans l’inconnu, comme une lumière que l’on découvre en avançant. »")
-                    .font(.custom("SpaceMono-Regular", size: 20))
-                    .foregroundStyle(.white)
-                    .padding(.top, planetsVisible ? -380 : 0)
-                    .animation(.easeInOut(duration: 0.5), value: planetsVisible)
-                    .allowsHitTesting(false)
-                    .padding()
-                
-                Spacer()
-            }
-            
-            // FUMÉE: Animation de fumée lors du clic sur la fusée (au premier plan)
-            if showSmoke {
-                Image("FuméeFusée")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 200)
-                    .offset(x: 0, y: 550)
-                    .opacity(showSmoke ? 1.0 : 0.5)
-                    .transition(.opacity)
-                    .allowsHitTesting(false) // Empêche la fumée de bloquer les interactions
-            }
-        }
-        // MODAL: Configuration de la modal plein écran
-        // .fullScreenCover affiche la vue en plein écran sans laisser voir l'arrière-plan
-        .fullScreenCover(isPresented: $showSouvenirPopup) {
-            // Sélection aléatoire d'un souvenir (gestion sécurisée avec if let)
-            if let souvenir = souvenirViewModel.souvenirsData.randomElement() {
-                // NavigationStack: Nécessaire pour afficher la barre de navigation avec le bouton fermer
-       
-                    SouvenirsDetailsView(souvenir: souvenir)
-//                        .toolbar {
-//                            ToolbarItem(placement: .navigationBarTrailing) {
-//                                Button("Fermer") {
-//                                    showSouvenirPopup = false
-//                                }
-//                            }
-//                        }
-             
-                .presentationDetents([.medium])
-                // Affiche le petit trait en haut permettant de swiper pour fermer
-                .presentationDragIndicator(.visible)
-                // Arrondi des coins supérieurs de la modal
-                .presentationCornerRadius(30)
-            }
-        }
-        // CHECKLIST: Popup de checklist centré à l'écran
-        .overlay {
-            if showChecklistPopup {
-                ZStack {
-                    // Card de checklist
-                    VStack(spacing: 20) {
-                        Text("Cette semaine...")
-                            .font(.custom("SpaceMono-Regular", size: 24))
-                            .foregroundColor(.black)
-                        
-                        // Textes de la checklist
-                        let checklistTexts = [
-                            "J'ai relevé 1 défi",
-                            "J'ai écouté 1 musique",
-                            "J'ai consulté 1 souvenir"
-                        ]
-                        
-                        // Les 3 items de checklist
-                        ForEach(0..<3) { index in
+                            
+                            // Bouton pour ouvrir la checklist
                             Button(action: {
-                                withAnimation(.spring(response: 0.3)) {
-                                    checklistItems[index].toggle()
-                                }
+                                showChecklistPopup = true
                             }) {
-                                HStack(spacing: 12) {
-                                    
-                                    Spacer()
-                                    
-                                    Text(checklistTexts[index])
-                                        .font(.custom("SpaceMono-Regular", size: 16))
-                                        .foregroundColor(.black)
-                                        .multilineTextAlignment(.leading)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                    
-                                    Spacer()
-                                    
-                                    Image(systemName: checklistItems[index] ? "checkmark.circle.fill" : "circle")
-                                        .font(.system(size: 24))
-                                        .foregroundColor(checklistItems[index] ? Color("greenLight") : .gray)
-                                        .frame(width: 24)
-                                    
-                                    Spacer()
-                                }
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(
-                                    Color("greyDarkButton").opacity(1))
-                                        .stroke(Color.greenLight.opacity(1), lineWidth: 2)
-                                )
+                                Image("BoutonFleche")
+                                    .font(.system(size: 32))
+                                    .foregroundColor(.greyLightButton)
                             }
                         }
                         
-                        // Bouton fermer
-                        Button(action: {
-                            showChecklistPopup = false
-                        }) {
-                            Text("Fermer")
-                                .font(.custom("SpaceMono-Regular", size: 16))
-                                .foregroundColor(.black)
-                                .padding(.horizontal, 40)
-                                .padding(.vertical, 12)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .fill(Color("greenLight"))
-                                        .stroke(Color.greyDarkButton.opacity(1), lineWidth: 2)
-                                )
-                        }
-                        .padding(.top, 10)
+                        // Compteur de pourcentage numerique
+                        Text("\(Int(progressPercentage * 100))%")
+                            .font(.custom("SpaceMono-Regular", size: 22))
+                            .bold()
+                            .foregroundColor(.white)
+                        
                     }
-                    .padding(30)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color("greyLightButton"))
-                            .stroke(Color("greenLight"), lineWidth: 2)
-                    )
-                    .frame(width: 320)
+                    .offset(x: 18, y: 735)
+                    .opacity(planetsVisible ? 1.0 : 0.0)
+                    .animation(.easeInOut(duration: 0.8).delay(1.2), value: planetsVisible)
                 }
-                .transition(.opacity)
-                .animation(.easeInOut(duration: 0.3), value: showChecklistPopup)
+                
+                // Contenu au premier plan contenant le texte avant et aprés avoir appuyé sur le bouton fusée
+                VStack {
+                    Spacer()
+                    
+                    Text(planetsVisible ? "Choisis ta destination" : "« On ne trouve pas le bonheur, on le cultive »")
+                        .font(.custom("SpaceMono-Regular", size: 20))
+                        .foregroundStyle(.white)
+                        .padding(.top, planetsVisible ? -380 : 0)
+                        .animation(.easeInOut(duration: 0.5), value: planetsVisible)
+                        .allowsHitTesting(false)
+                        .padding()
+                    
+                    Spacer()
+                }
+            }
+            // MODAL: Configuration de la modal plein écran
+            // .fullScreenCover affiche la vue en plein écran sans laisser voir l'arrière-plan
+            .fullScreenCover(isPresented: $showSouvenirPopup) {
+                // Sélection aléatoire d'un souvenir (gestion sécurisée avec if let)
+                
+                if let souvenir = souvenirViewModel.souvenirsData.randomElement() {
+                    // NavigationStack: Nécessaire pour afficher la barre de navigation avec le bouton fermer
+                    
+                    NavigationStack {
+                        SouvenirsDetailsView(souvenir: souvenir)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarTrailing) {
+                                    Button("Fermer") {
+                                        showSouvenirPopup = false
+                                    }
+                                }
+                            }
+                    }
+                    
+                    .presentationDetents([.medium])
+                    // Affiche le petit trait en haut permettant de swiper pour fermer
+                    .presentationDragIndicator(.visible)
+                    // Arrondi des coins supérieurs de la modal
+                    .presentationCornerRadius(30)
+                }
+            }
+            // CHECKLIST: Popup de checklist centré à l'écran
+            .overlay {
+                if showChecklistPopup {
+                    ZStack {
+                        // Card de checklist
+                        VStack(spacing: 20) {
+                            Text("Cette semaine...")
+                                .font(.custom("SpaceMono-Regular", size: 24))
+                                .foregroundColor(.black)
+                            
+                            // Textes de la checklist
+                            let checklistTexts = [
+                                "J'ai relevé 1 défi",
+                                "J'ai écouté 1 musique",
+                                "J'ai consulté 1 souvenir"
+                            ]
+                            
+                            // Les 3 items de checklist
+                            ForEach(0..<3) { index in
+                                Button(action: {
+                                    withAnimation(.spring(response: 0.3)) {
+                                        checklistItems[index].toggle()
+                                    }
+                                }) {
+                                    HStack(spacing: 12) {
+                                        
+                                        Spacer()
+                                        
+                                        Text(checklistTexts[index])
+                                            .font(.custom("SpaceMono-Regular", size: 16))
+                                            .foregroundColor(.black)
+                                            .multilineTextAlignment(.leading)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                        
+                                        Spacer()
+                                        
+                                        Image(systemName: checklistItems[index] ? "checkmark.circle.fill" : "circle")
+                                            .font(.system(size: 24))
+                                            .foregroundColor(checklistItems[index] ? Color("greenLight") : .gray)
+                                            .frame(width: 24)
+                                        
+                                        Spacer()
+                                    }
+                                    .padding()
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(
+                                                Color("greyDarkButton").opacity(1))
+                                            .stroke(Color.greenLight.opacity(1), lineWidth: 2)
+                                    )
+                                }
+                            }
+                            
+                            // Bouton fermer
+                            Button(action: {
+                                showChecklistPopup = false
+                            }) {
+                                Text("Fermer")
+                                    .font(.custom("SpaceMono-Regular", size: 16))
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal, 40)
+                                    .padding(.vertical, 12)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .fill(Color("greenLight"))
+                                            .stroke(Color.greyDarkButton.opacity(1), lineWidth: 2)
+                                    )
+                            }
+                            .padding(.top, 10)
+                        }
+                        .padding(30)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color("greyLightButton"))
+                                .stroke(Color("greenLight"), lineWidth: 2)
+                        )
+                        .frame(width: 320)
+                    }
+                    .transition(.opacity)
+                    .animation(.easeInOut(duration: 0.3), value: showChecklistPopup)
+                }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
