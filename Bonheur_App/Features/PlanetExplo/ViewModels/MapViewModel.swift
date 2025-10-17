@@ -15,7 +15,7 @@ import SwiftUI
 
 class MapViewModel: NSObject, CLLocationManagerDelegate {
     
-//    CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522)
+    //    CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522)
     
     //MARK: -  Map Data
     
@@ -39,7 +39,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
             )
         }
     }
-
+    
     
     override init() {
         super.init()
@@ -85,48 +85,70 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     
     func centerMap(on coordinate: CLLocationCoordinate2D) {
         _ = MKCoordinateRegion(
-               center: coordinate,
-               span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-           )
-   //        withAnimation(.easeInOut(duration: 0.5)) {
-   //            cameraPosition = .region(region)
-   //        }
-       }
-       
-       func centerOnUser() {
-            guard let userLoc = userLocation else { return }
-            centerMap(on: userLoc)
-        }
+            center: coordinate,
+            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        )
+        //        withAnimation(.easeInOut(duration: 0.5)) {
+        //            cameraPosition = .region(region)
+        //        }
+    }
+    
+    func centerOnUser() {
+        guard let userLoc = userLocation else { return }
+        centerMap(on: userLoc)
+    }
     
     //MARK: - Convertir une adresse en mapPoint
     
     var nomDuLieu : String = ""
     var selectedTheme : SouvenirTheme? = nil
     var descriptionText : String = ""
+    var image: UIImage? = nil
     
     func getCoordinates(from address : String) async -> CLLocationCoordinate2D? {
         let geocoder = CLGeocoder()
         
         do {
-               let placemarks = try await geocoder.geocodeAddressString(address)
-               
-               if let location = placemarks.first?.location {
-                   return location.coordinate
-               } else {
-                   print("Adresse introuvable")
-                   return nil
-               }
-               
-           } catch {
-               print("Erreur de géocodage : \(error.localizedDescription)")
-               return nil
-           }
+            let placemarks = try await geocoder.geocodeAddressString(address)
+            
+            if let location = placemarks.first?.location {
+                return location.coordinate
+            } else {
+                print("Adresse introuvable")
+                return nil
+            }
+        } catch {
+            print("Erreur de géocodage : \(error.localizedDescription)")
+            return nil
+        }
     }
     
     func createMapPoint(nom: String, theme : SouvenirTheme, coordinate : CLLocationCoordinate2D) {
-        let newMapPoint = MapPoint(nom: nomDuLieu, description: descriptionText , theme: selectedTheme! , latitude: coordinate.latitude, longitude: coordinate.longitude)
+        var imagePath: String? = nil
+        
+        if let image = image {
+            imagePath = saveImageToDocuments(image: image)
+            saveImageToPhotoLibrary(image)
+        }
+        
+        let newMapPoint = MapPoint(
+            nom: nomDuLieu,
+            photo: imagePath,
+            description: descriptionText ,
+            theme: selectedTheme! ,
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude)
         places.append(newMapPoint)
     }
+    
+    var addressSelected : String? = nil
+    var isUserLocationSelected : Bool = false
+    var isManualAddressSelected : Bool = false
+    
+    var isValid : Bool {
+        return !nomDuLieu.isEmpty && selectedTheme != nil && !descriptionText.isEmpty && addressSelected != nil
+    }
+    
     
     //MARK: - Convertir des coordonnées en adresse String
     
@@ -148,16 +170,58 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         }
         return nil
     }
+    //MARK: - Reset les données de la vue à l'initial
     
-    var addressSelected : String? = nil
-    var isUserLocationSelected : Bool = false
-    var isManualAddressSelected : Bool = false
+    func resetForm() {
+        nomDuLieu = ""
+        descriptionText = ""
+        selectedTheme = nil
+        addressSelected = nil
+        isUserLocationSelected = false
+        isManualAddressSelected = false
+    }
     
-    var isValid : Bool {
-        return !nomDuLieu.isEmpty && selectedTheme != nil && !descriptionText.isEmpty && addressSelected != nil
+    // MARK: - Gestion des images
+    
+    /// Sauvegarde une image dans le répertoire Documents de l’application.
+    /// - Parameter image: L’image à sauvegarder.
+    /// - Returns: Le nom du fichier sauvegardé (String) ou `nil` en cas d’erreur.
+    private func saveImageToDocuments(image: UIImage) -> String?{
+        guard let data = image.jpegData(compressionQuality: 0.8) else {return nil}
+        
+        let filename = UUID().uuidString + ".jpg"
+        let url = getDocumentsDirectory().appendingPathComponent(filename)
+        do {
+            try data.write(to: url)
+            return filename
+        } catch {
+            print("erreur sauvegarde image :", error)
+            return nil
+        }
+    }
+    /// Retourne l’URL du dossier Documents de l’application.
+    private func getDocumentsDirectory() -> URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    }
+    
+    // Sauvagarde l'image dans la librairie Photo de l'iPhone
+    
+    func saveImageToPhotoLibrary(_ image: UIImage) {
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+    }
+    
+    // MARK: - Chargement de l'image
+        
+        /// Charge une image enregistrée localement à partir de son nom de fichier.
+        /// - Parameter filename: Nom du fichier image (optionnel).
+        /// - Returns: L’image chargée (`UIImage`) ou `nil` si le fichier n’existe pas.
+    func loadImage(from filename : String?) -> UIImage? {
+        guard let filename = filename else { return nil}
+        let url = getDocumentsDirectory().appendingPathComponent(filename)
+        return UIImage(contentsOfFile: url.path)
     }
 }
-
+    
 //MARK: - Rendre CLLocationCoordinate 2D Equatable
 
 // Wrapper pour rendre CLLocationCoordinate2D équatable facilement
@@ -174,4 +238,5 @@ struct EquatableCoordinate: Equatable {
     }
 
 }
+
 

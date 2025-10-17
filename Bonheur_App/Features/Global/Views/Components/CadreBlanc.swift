@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CadreBlanc: View {
     var body: some View {
+        
         Rectangle()
             .foregroundColor(.clear)
             .frame(width: 333, height: 433)

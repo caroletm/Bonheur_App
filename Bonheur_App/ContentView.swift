@@ -64,6 +64,9 @@ struct ContentView: View {
                     case .createMapInsert:
                         CreateMapInsert(dismissModal : .constant(false))
                         
+                    case .detailMapPoint(mapPoint: let mapPoint):
+                        DetailMapPoint(mapPoint: mapPoint)
+                        
                     }
                 }
         }

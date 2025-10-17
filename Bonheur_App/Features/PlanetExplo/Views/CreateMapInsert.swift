@@ -13,12 +13,12 @@ struct CreateMapInsert: View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
     @Environment(SouvenirsViewModel.self) private var souvenirViewModel
-//    @Bindable private var souvenirViewModel = SouvenirsViewModel()
     @State private var showCamera = false
     @State private var showModalDescription = false
     @Binding var dismissModal : Bool
     @State private var showLocalisationPopup : Bool = true
     @State private var showAdressModal = false
+    @State private var isAlertPresented: Bool = false
     
     var body: some View {
         
@@ -194,7 +194,7 @@ struct CreateMapInsert: View {
                                             } else if mapViewModel.isManualAddressSelected {
                                                 
                                                 guard let addressSelected = mapViewModel.addressSelected else {
-                                                    print("Adresse inconnue.")
+                                                    print("Adresse non renseignée.")
                                                     return
                                                 }
                                                 
@@ -207,8 +207,9 @@ struct CreateMapInsert: View {
                                                 }else{
                                                     print("Impossible d'obtenir les coordonnées de l'adresse")
                                                 }
-
                                             }
+                                        }else{
+                                            isAlertPresented = true
                                         }
                                     }
                                     
@@ -221,9 +222,7 @@ struct CreateMapInsert: View {
                                     print("mapDesc: \(mapViewModel.descriptionText)")
                                     print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
                                     
-                                    
                                     dismissModal = false
-                                    
                                     
                                 }label:{
                                     if souvenirViewModel.isValid && mapViewModel.isValid {
@@ -236,7 +235,6 @@ struct CreateMapInsert: View {
                                 Spacer()
                             }
                         }
-                        
                         
                         .frame(width: 285, height: 250)
                         .clipped()
@@ -261,6 +259,11 @@ struct CreateMapInsert: View {
                         } else {
                             ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.image)
                         }
+                    }
+                    .alert("Creation invalide", isPresented: $isAlertPresented) {
+                        Button("OK", role: .cancel) {}
+                    } message: {
+                        Text("Les champs ne sont pas tous renseignés !")
                     }
                 }
                 
