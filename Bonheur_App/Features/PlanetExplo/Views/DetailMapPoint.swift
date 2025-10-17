@@ -15,6 +15,8 @@ struct DetailMapPoint: View {
     
     var mapPoint: MapPoint
     @State var address : String?
+    @Binding var showDetailPopup: Bool
+    
     
     var body: some View {
         
@@ -30,15 +32,16 @@ struct DetailMapPoint: View {
                     .font(.custom("Poppins-Regular", size: 12))
             }
             .offset(y: -245)
+            .padding(.bottom, 20)
             
             VStack {
          
-                    Text("Votre lieu a bien été ajouté")
-                        .font(.custom("SpaceMono-Bold", size: 16))
+                Text(mapPoint.nom)
+                        .font(.custom("SpaceMono-Bold", size: 18))
                     
                 if let address = address {
                     Text(address)
-                        .font(.custom("SpaceMono-Bold", size: 14))
+                        .font(.custom("SpaceMono-Bold", size: 12))
                         .frame(maxWidth : 200, maxHeight : 50)
                         .lineLimit(2)
                         .multilineTextAlignment(.center)
@@ -62,8 +65,9 @@ struct DetailMapPoint: View {
                             }
                             
                             Text(mapPoint.description)
+                                .font(.custom("Poppins-Regular", size: 12))
                                 .frame(maxWidth : 150, maxHeight : 190)
-                                .background(Color.white.opacity(0.1))
+//                                .background(Color.white.opacity(0.1))
                         }
                     }
                     }else{
@@ -74,12 +78,15 @@ struct DetailMapPoint: View {
                                 .frame(height:  40)
                                 .padding()
                             Text(mapPoint.description)
+                                .font(.custom("Poppins-Regular", size: 12))
                                 .frame(maxWidth : 250, maxHeight : 120)
-                                .background(Color.white.opacity(0.1))
+//                                .background(Color.white.opacity(0.1))
                         }
                     }
                 Button {
-                    //
+                    mapViewModel.selectedMapPoint = nil
+                    showDetailPopup = false
+                    
                 }label: {
                     BoutonText(text: "OK", width: 45)
                 }
@@ -97,7 +104,7 @@ struct DetailMapPoint: View {
 #Preview {
     ZStack{
         Color.blueDark.ignoresSafeArea(edges: .all)
-        DetailMapPoint(mapPoint: mapPoints[1])
+        DetailMapPoint(mapPoint: mapPoints[1], showDetailPopup: .constant(false))
             .environment(NavigationViewModel())
             .environment(MapViewModel())
     }

@@ -164,7 +164,6 @@ struct MissionCompletedView: View {
                                         .stroke(style: StrokeStyle(lineWidth: 1))
                                 )
                                 .padding()
-                           
                             Button(action: {
                                 showModalDescription = false
                                 souvenirViewmodel.descriptionText = text

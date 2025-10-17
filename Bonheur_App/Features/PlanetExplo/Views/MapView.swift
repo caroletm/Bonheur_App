@@ -16,8 +16,8 @@ struct MapView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
     @State private var lastUserLocation: EquatableCoordinate?
-    @State var showDetailPopUp : Bool = false
-    @State var selectedPlace : MapPoint? = nil
+    
+    @Binding var showDetailPopup: Bool
     
     var body: some View {
         
@@ -32,7 +32,10 @@ struct MapView: View {
                         
                         Annotation(place.nom, coordinate: coordinate) {
                             Button {
-                                showDetailPopUp = true
+  
+                                mapViewModel.selectedMapPoint = place
+                                showDetailPopup = true
+                                
                             }label:{
                                 Image(place.theme.iconName)
                                     .resizable()
@@ -70,16 +73,12 @@ struct MapView: View {
                 }
                 
             }
-            if showDetailPopUp, let place = selectedPlace {
-                DetailMapPoint(mapPoint: place)
-                    
-            }
         }
     }
 }
 
 #Preview {
-    MapView()
+    MapView(showDetailPopup: .constant(true))
         .environment(MapViewModel())
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
