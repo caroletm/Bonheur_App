@@ -181,6 +181,10 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         isManualAddressSelected = false
     }
     
+    //MARK: - Selectionner le detail MapPoint
+    
+    var selectedMapPoint: MapPoint? = nil
+    
     // MARK: - Gestion des images
     
     /// Sauvegarde une image dans le répertoire Documents de l’application.
