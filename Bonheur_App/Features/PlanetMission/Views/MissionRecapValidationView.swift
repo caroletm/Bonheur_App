@@ -16,12 +16,13 @@ struct MissionRecapValidationView: View {
                 .resizable()
                 .ignoresSafeArea()
             VStack{
-                Text("bravo tu a accompli ta mission du : ")
+                Text("Bravo tu a accompli ta mission du : ")
                     .padding(.vertical,15)
-                    .font(.custom("SpaceMono-Bold", size: 20))
+                    .font(.custom("SpaceMono-Bold", size: 14))
                     .foregroundColor(.black)
+                    .multilineTextAlignment(TextAlignment.center)
                 Text(souvenirsViewModel.dateFormatter(memoryChallenge.date))
-                    .font(.custom("SpaceMono-Regular", size: 16))
+                    .font(.custom("SpaceMono-Bold", size: 16))
                     .foregroundColor(.black)
                     .padding(.bottom,35)
                 VStack {
@@ -31,8 +32,8 @@ struct MissionRecapValidationView: View {
                                 .resizable()
                                 .frame(width: 60, height: 60)
                                 .offset(y: -38)
-                            Text("\"Défi:\(memoryChallenge.nom)\"")
-                                .font(.custom("SpaceMono-Bold", size: 20))
+                            Text("\"\(memoryChallenge.nom)\"")
+                                .font(.custom("Poppins-bold", size: 20))
                                 .foregroundColor(.black)
                                 .padding(.top,10)
                         }
