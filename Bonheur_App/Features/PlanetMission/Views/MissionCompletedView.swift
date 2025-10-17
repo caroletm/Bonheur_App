@@ -145,14 +145,16 @@ struct MissionCompletedView: View {
                     }
                     .sheet(isPresented: $showModalDescription){
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("Details :")
-                                .font(.custom("SpaceMono-Bold", size: 16))
+                            Text("Donne plus de details concernant ton action :")
+                                .font(.custom("Poppins-Regular", size: 14))
+                                .multilineTextAlignment(.center)
                                 .padding(.top)
+                                
                             TextField("Décris ton expérience", text: $souvenirViewModel.descriptionText, axis: .vertical)
                                 .padding()
                                 .background(Color(.systemGray6))
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
-                                .frame(height: 150)
+                                .frame(height:150)
                             Spacer()
                             Button(action: {
                                 showModalDescription = false
@@ -174,8 +176,10 @@ struct MissionCompletedView: View {
                                 }.padding(.leading,150)
                             }
                         }
-                        .padding()
+                        .padding(20)
                         .frame(alignment: .center)
+                        .presentationDetents([.medium])
+                        .presentationDragIndicator(.visible)
                     }
                 }
                 .padding(.vertical,10)
