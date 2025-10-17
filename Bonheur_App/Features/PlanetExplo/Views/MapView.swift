@@ -16,51 +16,63 @@ struct MapView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
     @State private var lastUserLocation: EquatableCoordinate?
+    @State var showDetailPopUp : Bool = false
+    @State var selectedPlace : MapPoint? = nil
     
     var body: some View {
         
-        
-        MapReader { proxy in
+        ZStack {
             
-            Map(initialPosition: mapViewModel.cameraPosition) {
-                ForEach(mapViewModel.places) { place in
+            MapReader { proxy in
+                
+                Map(initialPosition: mapViewModel.cameraPosition) {
+                    ForEach(mapViewModel.places) { place in
+                        
+                        let coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
+                        
+                        Annotation(place.nom, coordinate: coordinate) {
+                            Button {
+                                showDetailPopUp = true
+                            }label:{
+                                Image(place.theme.iconName)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 70, height: 70)
+                            }
+                        }
+                        
+                    }
                     
-                    let coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
                     
-                    Annotation(place.nom, coordinate: coordinate) {
-                        Button {
-                            navigationViewModel.path.append(AppRoute.detailMapPoint(mapPoint: place))
-                        }label:{
-                            Image(place.theme.iconName)
+                    if let userLoc = mapViewModel.userLocation {
+                        
+                        Annotation("Moi", coordinate: userLoc) {
+                            Image(.pointGps)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 70, height: 70)
+                                .frame(width: 50, height: 50)
                         }
                     }
                 }
-                if let userLoc = mapViewModel.userLocation {
-        
-                    Annotation("Moi", coordinate: userLoc) {
-                        Image(.pointGps)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 50)
-                    }
+                .mapControls {
+                    MapUserLocationButton() //pour le bouton de geolocalisation
+                    MapCompass() // pour la boussole
+                    MapScaleView() //pour le bouton 3D
                 }
+                .mapStyle(.standard(elevation: .realistic)) // style de la map en standard
+                
+                .onAppear {
+                    mapViewModel.requestLocationAuthorization()
+                    mapViewModel.centerOnUser()
+                }
+                .onChange(of: mapViewModel.userLocation.map { EquatableCoordinate($0) }) {
+                    mapViewModel.centerOnUser()
+                }
+                
             }
-            .mapControls {
-                MapUserLocationButton() //pour le bouton de geolocalisation
-                MapCompass() // pour la boussole
-                MapScaleView() //pour le bouton 3D
-            }
-            .mapStyle(.standard(elevation: .realistic)) // style de la map en standard
-            
-            .onAppear {
-                mapViewModel.requestLocationAuthorization()
-                mapViewModel.centerOnUser()
-            }
-            .onChange(of: mapViewModel.userLocation.map { EquatableCoordinate($0) }) {
-                mapViewModel.centerOnUser()
+            if showDetailPopUp, let place = selectedPlace {
+                DetailMapPoint(mapPoint: place)
+                    
             }
         }
     }

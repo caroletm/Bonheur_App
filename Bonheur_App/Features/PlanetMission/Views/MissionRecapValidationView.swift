@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MissionRecapValidationView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
+    @Environment(NavigationViewModel.self) private var navigationViewModel
+
     let memoryChallenge: SouvenirDefi
     var body: some View {
         ZStack{
@@ -66,10 +68,12 @@ struct MissionRecapValidationView: View {
                     .frame(width: 56, height: 56)
                     .offset(x:0,y:-25)
                 Button {
-                    //                    redirection a voir
+                    navigationViewModel.path.append(
+                            AppRoute.planeteUserTest
+                        )
                 } label: {
-                    Image(.boutonOK)
-                }.padding(.vertical,5) 
+                   BoutonText(text: "OK", width: 45)
+                }.padding(.vertical,5)
             }.padding(20)
                 .background(
                     RoundedRectangle(cornerRadius: 25)
@@ -91,4 +95,5 @@ struct MissionRecapValidationView: View {
         memoryChallenge:  SouvenirDefi(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/09/2025"), theme: .inspiration, type : .mission, isValidated: true)
     )
     .environment(SouvenirsViewModel())
+    .environment(NavigationViewModel())
 }
