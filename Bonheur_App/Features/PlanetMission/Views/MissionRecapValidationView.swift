@@ -61,7 +61,7 @@ struct MissionRecapValidationView: View {
                         .cornerRadius(12)
                         .opacity(0.8)
                 }
-                Image(.missionValide)
+                Image("defiValidate")
                     .resizable()
                     .frame(width: 56, height: 56)
                     .offset(x:0,y:-25)
