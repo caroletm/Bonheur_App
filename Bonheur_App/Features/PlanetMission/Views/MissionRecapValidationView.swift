@@ -10,6 +10,8 @@ import SwiftUI
 struct MissionRecapValidationView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
+//    @Bindable private var souvenirViewModel = SouvenirsViewModel()
+    @Environment(\.dismiss) private var dismiss
 
     let memoryChallenge: SouvenirDefi
     var body: some View {
@@ -72,6 +74,8 @@ struct MissionRecapValidationView: View {
                     navigationViewModel.path.append(
                             AppRoute.planeteUserTest
                         )
+                    dismiss()
+                    
                 } label: {
                    BoutonText(text: "OK", width: 45)
                 }.padding(.vertical,5)

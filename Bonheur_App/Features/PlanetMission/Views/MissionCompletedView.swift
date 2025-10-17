@@ -11,11 +11,14 @@ struct MissionCompletedView: View {
 
     @Environment(NavigationViewModel.self) private var navigationViewModel
     let challenge : Challenge
-    @Bindable private var souvenirViewModel = SouvenirsViewModel()
+    @Environment(SouvenirsViewModel.self) private var souvenirViewmodel
+//    @Bindable private var souvenirViewModel = SouvenirsViewModel()
     @State private var showCamera = false
+    @State var text: String = ""
     @State private var showModalDescription = false
     @State private var fitsInOneLine = true
     @State private var memoryChallengeForRecap: SouvenirDefi? = nil
+    @State private var showValidationAlert = false
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
@@ -44,12 +47,12 @@ struct MissionCompletedView: View {
                 HStack(spacing:18){
                     ForEach(SouvenirTheme.allCases, id: \.self) { theme in
                         Button {
-                            if souvenirViewModel.selectedTheme == theme {
-                                souvenirViewModel.selectedTheme = nil
+                            if souvenirViewmodel.selectedTheme == theme {
+                                souvenirViewmodel.selectedTheme = nil
                             }else {
-                                souvenirViewModel.selectedTheme = theme
+                                souvenirViewmodel.selectedTheme = theme
                             }
-                            print(souvenirViewModel.selectedTheme as Any)
+                            print(souvenirViewmodel.selectedTheme as Any)
                         }label: {
                             VStack {
                                 Image(theme.iconName)
@@ -59,14 +62,14 @@ struct MissionCompletedView: View {
                                 Text(theme.title).font(.custom("Poppins-Regular", size: 9))
                                     .foregroundStyle(.black)
                             }
-                            .opacity( souvenirViewModel.selectedTheme == theme ? 1 : 0.3)
+                            .opacity( souvenirViewmodel.selectedTheme == theme ? 1 : 0.3)
                         }
                     }
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 15)
                 ZStack{
-                    if let selectedImage = souvenirViewModel.image {
+                    if let selectedImage = souvenirViewmodel.image {
                         Image(uiImage: selectedImage)
                             .resizable()
                             .scaledToFill()
@@ -94,10 +97,11 @@ struct MissionCompletedView: View {
                     }
                 }
                 .sheet(isPresented: $showCamera) {
+                    @Bindable var vm = souvenirViewmodel
                     if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                        ImagePicker(sourceType: .camera, selectedImage: $souvenirViewModel.image)
+                        ImagePicker(sourceType: .camera, selectedImage: $vm.image)
                     } else {
-                        ImagePicker(sourceType: .photoLibrary, selectedImage: $souvenirViewModel.image)
+                        ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.image)
                     }
                 }
                 ZStack{
@@ -107,7 +111,7 @@ struct MissionCompletedView: View {
                             .padding(.leading)
                             .opacity(0.8)
                         VStack(alignment: .leading,spacing: 0){
-                            Text(": \(souvenirViewModel.formattedDate())")
+                            Text(": \(souvenirViewmodel.formattedDate())")
                                 .opacity(0.8)
                                 .font(.custom("SpaceMono-Bold", size: 20))
                             LigneTiretView()
@@ -132,8 +136,8 @@ struct MissionCompletedView: View {
                                     LigneTiretView()
                                     LigneTiretView()
                                 }
-                                if !souvenirViewModel.descriptionText.isEmpty{
-                                    Text(souvenirViewModel.descriptionText)
+                                if !souvenirViewmodel.descriptionText.isEmpty{
+                                    Text(souvenirViewmodel.descriptionText)
                                         .font(.custom("SpaceMono-Bold", size: 16))
                                         .foregroundColor(.black)
                                         .lineLimit(3)
@@ -149,15 +153,22 @@ struct MissionCompletedView: View {
                                 .font(.custom("Poppins-Regular", size: 14))
                                 .multilineTextAlignment(.center)
                                 .padding(.top)
-                                
-                            TextField("Décris ton expérience", text: $souvenirViewModel.descriptionText, axis: .vertical)
-                                .padding()
-                                .background(Color(.systemGray6))
+                                .padding(.horizontal)
+                            TextEditor( text: $text)
+                                .font(.custom("Poppins-Regular", size: 14))
+                                .padding(8)
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
-                                .frame(height:150)
-                            Spacer()
+                                .frame(maxHeight: .infinity)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(style: StrokeStyle(lineWidth: 1))
+                                )
+                                .padding()
+                           
                             Button(action: {
                                 showModalDescription = false
+                                souvenirViewmodel.descriptionText = text
+                                
                             }) {
                                 ZStack (){
                                     Rectangle()
@@ -184,19 +195,26 @@ struct MissionCompletedView: View {
                 }
                 .padding(.vertical,10)
                 Button{
-                    if souvenirViewModel.isValid {
-                        if let newSouvenir = souvenirViewModel.buildSouvenirChallenge(name: challenge.challengeName) {
-                                memoryChallengeForRecap = newSouvenir
+                    if souvenirViewmodel.isValid {
+                        if let newSouvenir = souvenirViewmodel.buildSouvenirChallenge(name: challenge.challengeName) {
+                            memoryChallengeForRecap = newSouvenir
                         }
+                    }else{
+                        showValidationAlert = true
                     }
                 }label :{
                     
-                    if souvenirViewModel.isValid {
+                    if souvenirViewmodel.isValid {
                         BoutonValider(isValid: true)
                     }else{
                         BoutonValider(isValid: false)
                     }
                 }
+                .alert("Champs requis", isPresented: $showValidationAlert) {
+                    Button("OK", role: .cancel) { }
+                    } message: {
+                        Text("Veuillez sélectionner un thème et remplir la description avant de valider.")
+                    }
             }
             .frame(width: 350,height: 680)
             Button {
@@ -217,6 +235,7 @@ struct MissionCompletedView: View {
     MissionCompletedView(
             challenge: Challenge(challengeName: "Promène toi dans un parc en plein été à l'ombre")
         ).environment(NavigationViewModel())
+        .environment(SouvenirsViewModel())
 }
 
 
