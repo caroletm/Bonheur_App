@@ -9,23 +9,26 @@ import SwiftUI
 
 struct ExploView : View {
     
-
+    
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
     @State var showModal: Bool = false
-
-        
+    
+    @State var showDetailPopup : Bool = false
+    
+    
     var body: some View {
         
         NavigationView {
+            
             ZStack {
-                Image(.backgroundExplora)
-                    .ignoresSafeArea(.all)
-                
+                    Image(.backgroundExplora)
+                        .ignoresSafeArea(.all)
+                if !showDetailPopup {
                     ZStack {
-                        MapView()
+                        MapView(showDetailPopup: $showDetailPopup)
                         Rectangle()
                             .fill(Color.clear)
                             .overlay(
@@ -45,15 +48,20 @@ struct ExploView : View {
                     }
                     .offset(y : 280)
                     
-                BoutonsRetoursFusee()
-                    .padding()
-                    .padding(.bottom, 20)
-
+                    BoutonsRetoursFusee()
+                        .padding()
+                        .padding(.bottom, 20)
+                    
+                }else{
+                    ZStack {
+                        Color.black.opacity(0.3).ignoresSafeArea(.all)
+                        DetailMapPoint(mapPoint: mapViewModel.selectedMapPoint!, showDetailPopup: $showDetailPopup)
+                    }
+                }
             }
             .sheet(isPresented: $showModal) {
                 CreateMapInsert(dismissModal: $showModal)
                     .presentationDragIndicator(.visible)
-                
             }
         }
         .navigationBarBackButtonHidden(true)
