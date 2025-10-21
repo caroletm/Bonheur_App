@@ -40,8 +40,8 @@ class MapPoint : Identifiable, Hashable {
 }
 
 let mapPoints: [MapPoint] = [
-    MapPoint(nom: "Simplon", photo: "photoDog",  description: "HelloWord", theme: .apprentissage, latitude: 48.854699219973625, longitude: 2.435966996632539),
-    MapPoint(nom: "Métro", photo: nil, description: "HelloWord", theme: .social, latitude: 48.85772153332712, longitude: 2.4357114297413385),
+    MapPoint(nom: "Simplon", photo: "photoDog",  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum accumsan iaculis odio, vel rutrum magna imperdiet vel. Nunc quis sagittis orci. Proin interdum ac ex non elementum. Nulla scelerisque tellus et justo porta congue. Integer luctus lectus vel iaculis lacinia. Nullam porta urna ut aliquam viverra. Maecenas in tortor efficitur, viverra urna eget, placerat sem. Nam euismod nisi sed quam viverra mattis. Quisque faucibus, mauris in dictum dapibus, nulla dolor pulvinar massa, vitae varius ex erat eget nulla.", theme: .apprentissage, latitude: 48.854699219973625, longitude: 2.435966996632539),
+    MapPoint(nom: "Métro", photo: nil, description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum accumsan iaculis odio, vel rutrum magna imperdiet vel. Nunc quis sagittis orci. Proin interdum ac ex non elementum. Nulla scelerisque tellus et justo porta congue. Integer luctus lectus vel iaculis lacinia. Nullam porta urna ut aliquam viverra. Maecenas in tortor efficitur, viverra urna eget, placerat sem. Nam euismod nisi sed quam viverra mattis. Quisque faucibus, mauris in dictum dapibus, nulla dolor pulvinar massa, vitae varius ex erat eget nulla.", theme: .social, latitude: 48.85772153332712, longitude: 2.4357114297413385),
     MapPoint(nom: "Maison de l'art", photo: "photoSmile", description: "HelloWord", theme: .energie, latitude: 48.861780219087784, longitude: 2.4413059667895727),
     MapPoint(nom: "Café de potes", photo: nil, description: "HelloWord", theme: .energie, latitude: 48.8622179008456, longitude: 2.4364069667699884),
     MapPoint(nom: "Parc des idées", photo: nil, description: "HelloWord", theme: .apprentissage, latitude: 48.865321, longitude: 2.440112),

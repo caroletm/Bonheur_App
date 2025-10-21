@@ -159,11 +159,12 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         do {
             let placemarks = try await geocoder.reverseGeocodeLocation(location)
             if let placemark = placemarks.first {
+                let number = placemark.subThoroughfare ?? ""
                 let street = placemark.thoroughfare ?? ""
                 let city = placemark.locality ?? ""
                 let postalCode = placemark.postalCode ?? ""
                 
-                return "\(street), \(postalCode) \(city)"
+                return "\(number) \(street),\n\(postalCode) \(city)"
             }
         } catch {
             print("Erreur reverse geocoding : \(error.localizedDescription)")

@@ -53,7 +53,8 @@ struct CreateMapInsert: View {
                                         souvenirViewModel.selectedTheme = theme
                                         mapViewModel.selectedTheme = theme
                                     }
-                                    print(souvenirViewModel.selectedTheme as Any)
+                                    print("themeSouvenir: \(souvenirViewModel.selectedTheme as Any)")
+                                    print("themeMap : \(mapViewModel.selectedTheme as Any)")
                                     
                                 }label: {
                                     
@@ -68,7 +69,7 @@ struct CreateMapInsert: View {
                                     .opacity( souvenirViewModel.selectedTheme == theme ? 1 : 0.3)
                                 }
                             }
-                        }
+                        }.zIndex(2)
                         ZStack{
                             if let selectedImage = souvenirViewModel.image {
                                 
@@ -101,6 +102,7 @@ struct CreateMapInsert: View {
                                 .opacity(0.6)
                             }
                         }
+                        .zIndex(1)
                         .padding()
                         
                         HStack{
@@ -186,7 +188,8 @@ struct CreateMapInsert: View {
                                                 let longitude = userLocation.longitude
                                                 @Bindable var vm = mapViewModel
                                                 let nom = vm.nomDuLieu.isEmpty ? "Lieu sans nom" : vm.nomDuLieu
-                                                mapViewModel.image = souvenirViewModel.image
+                                                vm.image = souvenirViewModel.image
+                                                vm.selectedTheme = souvenirViewModel.selectedTheme
                                                 
                                                 souvenirViewModel.createSouvenirCarte(name: nom, latitude: latitude, longitude: longitude)
                                                 mapViewModel.createMapPoint(nom: nom, theme: vm.selectedTheme!, coordinate: userLocation)
@@ -274,6 +277,7 @@ struct CreateMapInsert: View {
                     }
                     .onAppear {
                         mapViewModel.resetForm()
+                        souvenirViewModel.resetFormCarte()
                     }
         
                 }
