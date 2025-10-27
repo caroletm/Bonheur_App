@@ -5,17 +5,18 @@ struct PlaneteUser: View {
     @Environment(PlanetViewModel.self) private var planetViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(SouvenirsViewModel.self) private var souvenirViewModel
+    @Environment(CitationViewModel.self) private var citationViewModel // AJOUT
     
     @State private var selectedPlanet: Planete? = nil
     @State private var planetsVisible: Bool = false
     @State private var rocketPressed: Bool = false
     
-    // MODAL: État pour contrôler l'affichage de la modal du souvenir
+    // MODAL l'affichage de la modal du souvenir
     @State private var showSouvenirPopup: Bool = false
     
     // CHECKLIST: États pour la checklist et sa progression
     @State private var showChecklistPopup: Bool = false
-    @State private var checklistItems: [Bool] = [false, false, false] // 3 items non cochés au départ
+    @State private var checklistItems: [Bool] = [false, false, false, false, false] // 3 items non cochés au départ
     
     // Position de la fusée (point de départ des planètes)
     @State var rocketPosition = CGPoint(x: 0, y: 650)
@@ -138,7 +139,7 @@ struct PlaneteUser: View {
                 VStack {
                     Spacer()
                     
-                    Text(planetsVisible ? "Choisis ta destination" : "« On ne trouve pas le bonheur, on le cultive »")
+                    Text(planetsVisible ? "Choisis ta destination" : citationViewModel.currentCitation) // MODIFICATION
                         .font(.custom("SpaceMono-Regular", size: 20))
                         .foregroundStyle(.white)
                         .padding(.top, planetsVisible ? -380 : 0)
@@ -189,11 +190,13 @@ struct PlaneteUser: View {
                             let checklistTexts = [
                                 "J'ai relevé 1 défi",
                                 "J'ai écouté 1 musique",
-                                "J'ai consulté 1 souvenir"
+                                "J'ai consulté 1 souvenir",
+                                "J'ai crée 1 lieu d'intérêt",
+                                "J'ai consulté 1 philosophie"
                             ]
                             
                             // Les 3 items de checklist
-                            ForEach(0..<3) { index in
+                            ForEach(0..<5) { index in
                                 Button(action: {
                                     withAnimation(.spring(response: 0.3)) {
                                         checklistItems[index].toggle()
@@ -204,7 +207,7 @@ struct PlaneteUser: View {
                                         Spacer()
                                         
                                         Text(checklistTexts[index])
-                                            .font(.custom("SpaceMono-Regular", size: 16))
+                                            .font(.custom("SpaceMono-Regular", size: 15))
                                             .foregroundColor(.black)
                                             .multilineTextAlignment(.leading)
                                             .fixedSize(horizontal: false, vertical: true)
@@ -259,6 +262,9 @@ struct PlaneteUser: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .task { // AJOUT: Charge les citations depuis l'API au lancement de la vue
+            await citationViewModel.fetchCitations()
+        }
     }
 }
 
@@ -267,4 +273,5 @@ struct PlaneteUser: View {
         .environment(PlanetViewModel())
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
+        .environment(CitationViewModel()) // AJOUT
 }
