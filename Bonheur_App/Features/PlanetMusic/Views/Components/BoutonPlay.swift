@@ -4,6 +4,12 @@
 //
 //  Created by Apprenant156 on 25/09/2025.
 //
+//
+//  BoutonPlay.swift
+//  Bonheur_App
+//
+//  Created by Apprenant156 on 25/09/2025.
+//
 
 import SwiftUI
 import AVFoundation
@@ -29,40 +35,43 @@ struct Octagon: Shape {
         return path
     }
 }
-import SwiftUI
-import AVFoundation
 
 struct PlayButtonOctagon: View {
     @Binding var isPlaying: Bool
     @Binding var selectedSegment: Int?
+    var action: () -> Void
+    
+    @State private var glowAnimation = false
     
     var body: some View {
-        Button {
-            let audioManager = AudioPlayerManager.shared
-
+        Button(action: {
             withAnimation(.easeInOut(duration: 0.2)) {
-                if isPlaying {
-                    isPlaying = false
-                    audioManager.stop()
-                } else {
-                    isPlaying = true
-                    if selectedSegment == nil {
-                        selectedSegment = 0
-                    }
-                    if let selected = selectedSegment {
-                        let theme = planeteMusic.themes[selected]
-                        audioManager.play(theme.musique)
-                    }
-                }
+                action()
             }
-
-        } label: {
+        }) {
             ZStack {
-                // Cercle rose au lieu d'octogone
+                // ✅ Lueur animée
+                if isPlaying {
+                    Circle()
+                        .fill(Color.pinkMusic.opacity(0.4))
+                        .frame(width: 110, height: 110)
+                        .blur(radius: 20)
+                        .scaleEffect(glowAnimation ? 1.1 : 0.9)
+                        .animation(
+                            .easeInOut(duration: 1)
+                                .repeatForever(autoreverses: true),
+                            value: glowAnimation
+                        )
+                        .onAppear { glowAnimation = true }
+                        .onDisappear { glowAnimation = false }
+                }
+                
+                // ✅ Bouton principal
                 Circle()
-                    .fill(Color.pinkMusic)
+                    .fill(isPlaying ? Color.greyDarkButton : Color.pinkMusic)
                     .frame(width: 80, height: 80)
                     .overlay(Circle().stroke(Color.white, lineWidth: 3))
+                    .shadow(color: isPlaying ? Color.pinkMusic.opacity(0.6) : .clear, radius: 10)
                 
                 Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                     .resizable()
@@ -75,11 +84,14 @@ struct PlayButtonOctagon: View {
         .buttonStyle(.plain)
     }
 }
+
+
 #Preview {
     ZStack {
         PlayButtonOctagon(
             isPlaying: .constant(false),
-            selectedSegment: .constant(nil)
+            selectedSegment: .constant(nil),
+            action: {}
         )
     }
 }
