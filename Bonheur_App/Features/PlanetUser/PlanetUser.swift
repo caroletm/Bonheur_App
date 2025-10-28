@@ -11,6 +11,8 @@ struct PlaneteUser: View {
     @State private var planetsVisible: Bool = false
     @State private var rocketPressed: Bool = false
     
+    //    @State private var citation = CitationViewModelApi()
+    
     // MODAL l'affichage de la modal du souvenir
     @State private var showSouvenirPopup: Bool = false
     
@@ -262,9 +264,13 @@ struct PlaneteUser: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        
+        
         .task { // AJOUT: Charge les citations depuis l'API au lancement de la vue
             await citationViewModel.fetchCitations()
         }
+        
+        
     }
 }
 
