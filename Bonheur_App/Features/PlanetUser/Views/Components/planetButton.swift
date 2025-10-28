@@ -88,4 +88,5 @@ struct PlanetButton: View {
         .environment(PlanetViewModel())
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
+        .environment(CitationViewModel())
 }

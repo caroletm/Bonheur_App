@@ -76,6 +76,7 @@ struct ContentView: View {
         .environment(challengeViewModel)
         .environment(mapViewModel)
         
+        
     }
 }
 
@@ -86,4 +87,5 @@ struct ContentView: View {
         .environment(SouvenirsViewModel())
         .environment(ChallengeViewModel())
         .environment(MapViewModel())
+        .environment(CitationViewModel())
 }
