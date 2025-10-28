@@ -107,6 +107,24 @@ class CitationViewModel {
         selectRandomCitation()
     }
 }
+// MARK: - Call api
+@Observable
+class CitationViewModelApi{
+    var citation : [CitationData] = []
+    
+    func fetchCitation() async {
+        guard let url = URL(string:"http://127.0.0.1:8080/citations") else { return }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            if let decodeResponse = try? JSONDecoder().decode([CitationData].self, from: data) {
+                citation = decodeResponse
+            }
+        } catch {
+            print("invalid data : \(error)")
+        }
+    }
+    
+}
 
 // MARK: - Citation Model
 
