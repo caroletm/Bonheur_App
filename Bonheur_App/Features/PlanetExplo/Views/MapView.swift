@@ -71,7 +71,9 @@ struct MapView: View {
                 .onChange(of: mapViewModel.userLocation.map { EquatableCoordinate($0) }) {
                     mapViewModel.centerOnUser()
                 }
-                
+                .task {
+                    await mapViewModel.fetchMapPoints()
+                }
             }
         }
     }

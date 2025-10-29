@@ -19,7 +19,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     
     //MARK: -  Map Data
     
-    var places : [MapPoint] = mapPoints
+    var places : [MapPointDTO] = []
     let manager = CLLocationManager()
     var userLocation : CLLocationCoordinate2D? = nil
     var cameraPosition: MapCameraPosition {
@@ -63,11 +63,12 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         )
     }
     
-    // Fonction utilitaire pour comparer deux coordonnées (optionnelles)
-    func didLocationChange(from old: CLLocationCoordinate2D?, to new: CLLocationCoordinate2D?) -> Bool {
-        guard let old = old, let new = new else { return true }
-        return old.latitude != new.latitude || old.longitude != new.longitude
-    }
+//    // Fonction utilitaire pour comparer deux coordonnées (optionnelles)
+//    func didLocationChange(from old: CLLocationCoordinate2D?, to new: CLLocationCoordinate2D?) -> Bool {
+//        guard let old = old, let new = new else { return true }
+//        return old.latitude != new.latitude || old.longitude != new.longitude
+//    }
+//
     
     // Delegate appelé quand une nouvelle position est détectée
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -131,11 +132,11 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
             saveImageToPhotoLibrary(image)
         }
         
-        let newMapPoint = MapPoint(
+        let newMapPoint = MapPointDTO(
             nom: nomDuLieu,
             photo: imagePath,
+            theme: selectedTheme!,
             description: descriptionText ,
-            theme: selectedTheme! ,
             latitude: coordinate.latitude,
             longitude: coordinate.longitude)
         places.append(newMapPoint)
@@ -184,7 +185,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     
     //MARK: - Selectionner le detail MapPoint
     
-    var selectedMapPoint: MapPoint? = nil
+    var selectedMapPoint: MapPointDTO? = nil
     
     // MARK: - Gestion des images
     
@@ -225,6 +226,23 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         let url = getDocumentsDirectory().appendingPathComponent(filename)
         return UIImage(contentsOfFile: url.path)
     }
+    
+    // MARK: - Call API : Données Back / Front
+    
+    private let service = MapPointService()
+    
+    //Recupérer les mapPoints
+    func fetchMapPoints() async {
+        do {
+            places = try await service.getAllMapPoints()
+        } catch {
+            print("Erreur dans le chargement des mapPoints: \(error)")
+        }
+    }
+    
+    //Créer un mapPoint
+    
+    
 }
     
 //MARK: - Rendre CLLocationCoordinate 2D Equatable
