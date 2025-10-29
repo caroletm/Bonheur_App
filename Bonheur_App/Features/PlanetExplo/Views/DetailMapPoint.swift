@@ -13,7 +13,7 @@ struct DetailMapPoint: View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
     
-    var mapPoint: MapPoint
+    var mapPoint: MapPointDTO
     @State var address : String?
     @Binding var showDetailPopup: Bool
     

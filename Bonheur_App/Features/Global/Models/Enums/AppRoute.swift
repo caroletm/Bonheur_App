@@ -22,6 +22,6 @@ enum AppRoute: Hashable {
     case missionAccepter(challenge: Challenge)
     case detailSouvenir (souvenir : Souvenir)
     case createMapInsert
-    case detailMapPoint(mapPoint: MapPoint)
+    case detailMapPoint(mapPoint: MapPointDTO)
     
 }
