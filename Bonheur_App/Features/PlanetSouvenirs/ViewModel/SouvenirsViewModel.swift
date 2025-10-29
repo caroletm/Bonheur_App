@@ -151,6 +151,21 @@ class SouvenirsViewModel {
         souvenirsData.append(souvenir)
     }
     
+    //MARK: - Reset les formulaires
+    
+    func resetFormMission() {
+        image = nil
+        descriptionText = ""
+        creationDate = Date()
+        selectedTheme = nil
+    }
+    
+    func resetFormCarte() {
+        image = nil
+        descriptionText = ""
+        selectedTheme = nil
+    }
+    
     // MARK: - Gestion des images
     
     /// Sauvegarde une image dans le répertoire Documents de l’application.
