@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum SouvenirTheme: CaseIterable {
+enum SouvenirTheme: String, CaseIterable, Codable {
     case inspiration
     case social
     case apprentissage

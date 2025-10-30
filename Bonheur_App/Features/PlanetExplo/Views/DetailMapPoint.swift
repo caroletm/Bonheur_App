@@ -13,7 +13,7 @@ struct DetailMapPoint: View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
     
-    var mapPoint: MapPoint
+    var mapPoint: MapPointDTO
     @State var address : String?
     @Binding var showDetailPopup: Bool
     
@@ -42,7 +42,7 @@ struct DetailMapPoint: View {
                 if let address = address {
                     Text(address)
                         .font(.custom("SpaceMono-Bold", size: 12))
-                        .frame(maxWidth : 200, maxHeight : 50)
+                        .frame(maxWidth : .infinity, maxHeight : 50)
                         .lineLimit(2)
                         .multilineTextAlignment(.center)
                         .padding(5)
@@ -63,11 +63,12 @@ struct DetailMapPoint: View {
                                     .frame(height:  40)
                                     .offset(y : 70)
                             }
-                            
-                            Text(mapPoint.description)
-                                .font(.custom("Poppins-Regular", size: 12))
-                                .frame(maxWidth : 150, maxHeight : 190)
-//                                .background(Color.white.opacity(0.1))
+                            ScrollView {
+                                Text(mapPoint.description)
+                                    .font(.custom("Poppins-Regular", size: 12))
+                                    .frame(maxWidth : 150, maxHeight : 190)
+                                //                                .background(Color.white.opacity(0.1))
+                            }
                         }
                     }
                     }else{
@@ -77,10 +78,12 @@ struct DetailMapPoint: View {
                                 .scaledToFit()
                                 .frame(height:  40)
                                 .padding()
-                            Text(mapPoint.description)
-                                .font(.custom("Poppins-Regular", size: 12))
-                                .frame(maxWidth : 250, maxHeight : 120)
-//                                .background(Color.white.opacity(0.1))
+                            ScrollView {
+                                Text(mapPoint.description)
+                                    .font(.custom("Poppins-Regular", size: 12))
+                                //                                .background(Color.white.opacity(0.1))
+                            }
+                            .frame(maxWidth : 250, maxHeight : 120)
                         }
                     }
                 Button {
@@ -104,7 +107,7 @@ struct DetailMapPoint: View {
 #Preview {
     ZStack{
         Color.blueDark.ignoresSafeArea(edges: .all)
-        DetailMapPoint(mapPoint: mapPoints[1], showDetailPopup: .constant(false))
+        DetailMapPoint(mapPoint: mapPoints[0], showDetailPopup: .constant(false))
             .environment(NavigationViewModel())
             .environment(MapViewModel())
     }

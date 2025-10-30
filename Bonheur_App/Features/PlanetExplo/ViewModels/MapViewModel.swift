@@ -19,7 +19,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     
     //MARK: -  Map Data
     
-    var places : [MapPoint] = mapPoints
+    var places : [MapPointDTO] = []
     let manager = CLLocationManager()
     var userLocation : CLLocationCoordinate2D? = nil
     var cameraPosition: MapCameraPosition {
@@ -63,11 +63,12 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         )
     }
     
-    // Fonction utilitaire pour comparer deux coordonnées (optionnelles)
-    func didLocationChange(from old: CLLocationCoordinate2D?, to new: CLLocationCoordinate2D?) -> Bool {
-        guard let old = old, let new = new else { return true }
-        return old.latitude != new.latitude || old.longitude != new.longitude
-    }
+//    // Fonction utilitaire pour comparer deux coordonnées (optionnelles)
+//    func didLocationChange(from old: CLLocationCoordinate2D?, to new: CLLocationCoordinate2D?) -> Bool {
+//        guard let old = old, let new = new else { return true }
+//        return old.latitude != new.latitude || old.longitude != new.longitude
+//    }
+//
     
     // Delegate appelé quand une nouvelle position est détectée
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -123,7 +124,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    func createMapPoint(nom: String, theme : SouvenirTheme, coordinate : CLLocationCoordinate2D) {
+    func createMapPoint(nom: String, theme : SouvenirTheme, coordinate : CLLocationCoordinate2D) async {
         var imagePath: String? = nil
         
         if let image = image {
@@ -131,14 +132,20 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
             saveImageToPhotoLibrary(image)
         }
         
-        let newMapPoint = MapPoint(
+        let newMapPoint = MapPointDTO(
             nom: nomDuLieu,
             photo: imagePath,
+            theme: selectedTheme!,
             description: descriptionText ,
-            theme: selectedTheme! ,
             latitude: coordinate.latitude,
             longitude: coordinate.longitude)
         places.append(newMapPoint)
+        
+        do {
+            _ = try await service.createMapPoint(newMapPoint)
+        } catch{
+            print ("Erreur lors de la création du mapPoint : \(error)")
+        }
     }
     
     var addressSelected : String? = nil
@@ -159,11 +166,12 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         do {
             let placemarks = try await geocoder.reverseGeocodeLocation(location)
             if let placemark = placemarks.first {
+                let number = placemark.subThoroughfare ?? ""
                 let street = placemark.thoroughfare ?? ""
                 let city = placemark.locality ?? ""
                 let postalCode = placemark.postalCode ?? ""
                 
-                return "\(street), \(postalCode) \(city)"
+                return "\(number) \(street),\n\(postalCode) \(city)"
             }
         } catch {
             print("Erreur reverse geocoding : \(error.localizedDescription)")
@@ -183,7 +191,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     
     //MARK: - Selectionner le detail MapPoint
     
-    var selectedMapPoint: MapPoint? = nil
+    var selectedMapPoint: MapPointDTO? = nil
     
     // MARK: - Gestion des images
     
@@ -224,6 +232,29 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         let url = getDocumentsDirectory().appendingPathComponent(filename)
         return UIImage(contentsOfFile: url.path)
     }
+    
+    // MARK: - Call API : Données Back / Front
+    
+    private let service = MapPointService()
+    
+    //Recupérer les mapPoints
+    func fetchMapPoints() async {
+        do {
+            places = try await service.getAllMapPoints()
+        } catch {
+            print("Erreur dans le chargement des mapPoints: \(error)")
+        }
+    }
+    
+    //Créer un mapPoint
+//    func addMapPointToDB(mapPoint: MapPointDTO) async {
+//        do {
+//            _ = try await service.createMapPoint(mapPoint)
+//        } catch{
+//            print ("Erreur lors de la création du mapPoint : \(error)")
+//        }
+//    }
+    
 }
     
 //MARK: - Rendre CLLocationCoordinate 2D Equatable
