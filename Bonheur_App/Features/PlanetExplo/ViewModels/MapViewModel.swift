@@ -124,7 +124,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    func createMapPoint(nom: String, theme : SouvenirTheme, coordinate : CLLocationCoordinate2D) {
+    func createMapPoint(nom: String, theme : SouvenirTheme, coordinate : CLLocationCoordinate2D) async {
         var imagePath: String? = nil
         
         if let image = image {
@@ -140,6 +140,12 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
             latitude: coordinate.latitude,
             longitude: coordinate.longitude)
         places.append(newMapPoint)
+        
+        do {
+            _ = try await service.createMapPoint(newMapPoint)
+        } catch{
+            print ("Erreur lors de la création du mapPoint : \(error)")
+        }
     }
     
     var addressSelected : String? = nil
@@ -241,7 +247,13 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     }
     
     //Créer un mapPoint
-    
+//    func addMapPointToDB(mapPoint: MapPointDTO) async {
+//        do {
+//            _ = try await service.createMapPoint(mapPoint)
+//        } catch{
+//            print ("Erreur lors de la création du mapPoint : \(error)")
+//        }
+//    }
     
 }
     
