@@ -11,7 +11,7 @@ struct CadreVignette: View {
     
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
-    var souvenir : Souvenir
+    var souvenir : SouvenirDTO
     var hasPhoto : Bool
     
     var body: some View {

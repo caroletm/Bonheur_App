@@ -67,20 +67,24 @@ func dateFromString(_ string: String) -> Date {
 
 //Instanciation
 
-let souvenirs: [Souvenir] = [
-    SouvenirCarte(id : UUID(), nom: "Parc", photo: nil, description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/01/2025"), theme: .inspiration, type: .mapInsert, latitude: 48.8566, longitude: 2.3522),
-    SouvenirDefi(id : UUID(), nom: "Défi sourire", photo: nil, description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("02/02/2025"), theme: .social, type : .mission, isValidated: true),
-    SouvenirCarte(id : UUID(), nom: "Parc", photo: "photoVoiture", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("02/02/2025"), theme: .apprentissage, type: .mapInsert, latitude: 48.8566, longitude: 2.3522),
-    SouvenirDefi(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("02/02/2025"), theme: .social, type : .mission, isValidated: true),
-    SouvenirCarte(id : UUID(), nom: "Parc", photo: "photoVoiture", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("02/02/2025"), theme: .energie, type: .mapInsert, latitude: 48.8566, longitude: 2.3522),
-    SouvenirDefi(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description:"J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/07/2025"), theme: .inspiration, type : .mission, isValidated: true),
-    SouvenirCarte(id : UUID(), nom: "Parc", photo: "photoVoiture", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/07/2025"), theme: .social, type: .mapInsert, latitude: 48.8566, longitude: 2.3522),
-    SouvenirDefi(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/08/2025"), theme: .apprentissage, type : .mission, isValidated: true),
-    SouvenirCarte(id : UUID(), nom: "Parc", photo: "photoVoiture", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date:dateFromString("20/09/2025"), theme: .energie, type: .mapInsert, latitude: 48.8566, longitude: 2.3522),
-    SouvenirDefi(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/09/2025"), theme: .inspiration, type : .mission, isValidated: true),
-    SouvenirCarte(id : UUID(), nom: "Parc", photo: "photoVoiture", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/09/2025"), theme: .social, type: .mapInsert, latitude: 48.8566, longitude: 2.3522),
-    SouvenirDefi(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/09/2025"), theme: .apprentissage, type : .mission, isValidated: true)
+//var id: UUID?
+//var nom: String
+//var photo: String?
+//var description: String
+//var theme: SouvenirTheme
+//var type: SouvenirType
+//var date: Date
+//var latitude: Double?
+//var longitude: Double?
+//var isValidated: Bool?
 
+let souvenirs: [SouvenirDTO] = [
+    SouvenirDTO(id : UUID(), nom: "Parc", photo: nil, description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", theme: .inspiration, type: .mapInsert, date: dateFromString("20/01/2025"), latitude: 48.8566, longitude: 2.3522),
+    SouvenirDTO(id : UUID(), nom: "Défi sourire", photo: nil, description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", theme: .social, type : .mission, date: dateFromString("02/02/2025"), isValidated: true),
+    SouvenirDTO(id : UUID(), nom: "Parc", photo: "photoVoiture", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", theme: .apprentissage, type: .mapInsert, date: dateFromString("02/02/2025"), latitude: 48.8566, longitude: 2.3522),
+    SouvenirDTO(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", theme: .social, type : .mission, date: dateFromString("02/02/2025"), isValidated: true),
+    SouvenirDTO(id : UUID(), nom: "Parc", photo: "photoVoiture", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.",  theme: .energie, type: .mapInsert, date: dateFromString("02/02/2025"), latitude: 48.8566, longitude: 2.3522),
+    SouvenirDTO(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description:"J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", theme: .inspiration, type : .mission, date: dateFromString("20/07/2025"), isValidated: true)
 ]
 
 //protocol Souvenir : Identifiable{

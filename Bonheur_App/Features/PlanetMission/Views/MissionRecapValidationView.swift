@@ -12,8 +12,9 @@ struct MissionRecapValidationView: View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
 //    @Bindable private var souvenirViewModel = SouvenirsViewModel()
     @Environment(\.dismiss) private var dismiss
+    @Binding var dismissModal: Bool
 
-    let memoryChallenge: SouvenirDefi
+    let memoryChallenge: SouvenirDTO
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
@@ -97,7 +98,7 @@ struct MissionRecapValidationView: View {
 }
 #Preview {
     MissionRecapValidationView(
-        memoryChallenge:  SouvenirDefi(id : UUID(), nom: "Défi sourire", photo: "photoSmile", description: "J’adore ce parc, il me donne l’impression de m’évader de la ville. Entre les arbres, le petit lac et les enfants qui jouent, je retrouve toujours un peu de calme et de sérénité.", date: dateFromString("20/09/2025"), theme: .inspiration, type : .mission, isValidated: true)
+        dismissModal: .constant(false), memoryChallenge: souvenirs[1]
     )
     .environment(SouvenirsViewModel())
     .environment(NavigationViewModel())

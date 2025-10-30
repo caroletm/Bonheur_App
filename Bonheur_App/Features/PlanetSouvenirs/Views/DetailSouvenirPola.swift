@@ -12,7 +12,7 @@ struct SouvenirsDetailsPolaView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
     
-    var souvenir : Souvenir
+    var souvenir : SouvenirDTO
     @Binding var showSouvenirPopup : Bool
     
     var body: some View {

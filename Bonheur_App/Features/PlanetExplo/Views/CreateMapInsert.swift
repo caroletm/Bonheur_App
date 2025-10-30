@@ -191,7 +191,7 @@ struct CreateMapInsert: View {
                                                 vm.image = souvenirViewModel.image
                                                 vm.selectedTheme = souvenirViewModel.selectedTheme
                                                 
-                                                souvenirViewModel.createSouvenirCarte(name: nom, latitude: latitude, longitude: longitude)
+                                                await souvenirViewModel.createSouvenirCarte(name: nom, latitude: latitude, longitude: longitude)
                                                 await mapViewModel.createMapPoint(nom: nom, theme: vm.selectedTheme!, coordinate: userLocation)
                                                 
                                             } else if mapViewModel.isManualAddressSelected {
@@ -206,7 +206,7 @@ struct CreateMapInsert: View {
                                                     let selectedTheme = vm.selectedTheme
                                                     mapViewModel.image = souvenirViewModel.image
                                                     
-                                                    souvenirViewModel.createSouvenirCarte(name: nom, latitude: coordinate.latitude, longitude: coordinate.longitude)
+                                                    await souvenirViewModel.createSouvenirCarte(name: nom, latitude: coordinate.latitude, longitude: coordinate.longitude)
                                                     await mapViewModel.createMapPoint(nom: nom, theme: selectedTheme!, coordinate: coordinate)
                                                 }else{
                                                     print("Impossible d'obtenir les coordonnées de l'adresse")
@@ -279,7 +279,6 @@ struct CreateMapInsert: View {
                         mapViewModel.resetForm()
                         souvenirViewModel.resetFormCarte()
                     }
-        
                 }
                 
                 .padding()

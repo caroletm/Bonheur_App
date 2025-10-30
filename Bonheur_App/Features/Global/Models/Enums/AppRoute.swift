@@ -20,7 +20,7 @@ enum AppRoute: Hashable {
     case planetePhilo
     case planeteMission
     case missionAccepter(challenge: Challenge)
-    case detailSouvenir (souvenir : Souvenir)
+    case detailSouvenir (souvenir : SouvenirDTO)
     case createMapInsert
     case detailMapPoint(mapPoint: MapPointDTO)
     

@@ -50,7 +50,6 @@ class Planete: Hashable, Identifiable  {
 // MARK: - : PlaneteSouvenirs = Héritage de la classe Planete
 
 class PlaneteSouvenirs : Planete {
-    var souvenirsData : [Souvenir] = souvenirs
 }
 
 //Instanciation de la planete souvenirs
