@@ -1,5 +1,5 @@
 import SwiftUI
-
+// PAS FINI, DEMANDER A EMMANUEL 
 struct StarryBackgroundView: View {
     
     @State private var glowIntensity: CGFloat = 0.3
@@ -67,7 +67,7 @@ struct StarGroup: View {
                 .frame(width: 15, height: 15)
                 .position(x: positions[index].x, y: positions[index].y)
                 .shadow(
-                    color: .white.opacity(glowIntensity),
+                    color: .yellow.opacity(glowIntensity),
                     radius: 8
                 )
                 .shadow(
