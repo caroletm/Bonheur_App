@@ -15,9 +15,9 @@ class SouvenirsViewModel {
     
     //MARK: - Data
     
-    var souvenirsData : [Souvenir] = souvenirs
+    var souvenirsData : [SouvenirDTO] = []
     
-    func groupSouvenirsByMonth(_ souvenirs: [Souvenir]) -> [(key: String, value: [Souvenir])] {
+    func groupSouvenirsByMonth(_ souvenirs: [SouvenirDTO]) -> [(key: String, value: [SouvenirDTO])] {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "fr_FR")
         formatter.dateFormat = "MMMM yyyy"
@@ -40,7 +40,7 @@ class SouvenirsViewModel {
     
     var filters = SouvenirFilter()
     
-    var filteredSouvenirs : [Souvenir] {
+    var filteredSouvenirs : [SouvenirDTO] {
         
         souvenirsData.filter { souvenir in
             
@@ -106,21 +106,21 @@ class SouvenirsViewModel {
     /// - Parameter name: Nom du défi mémoire.
     /// - Returns: Un objet `MemoryChallenge` si toutes les données sont valides, sinon `nil`.
     ///
-    func buildSouvenirChallenge(name: String)-> SouvenirDefi? {
+    func buildSouvenirChallenge(name: String)-> SouvenirDTO? {
         guard let theme = selectedTheme else {return nil}
         var imagePath: String? = nil
         if let image = image {
             imagePath = saveImageToDocuments(image:image)
         }
         
-        let souvenir = SouvenirDefi(
-            id: UUID(),
+        let souvenir = SouvenirDTO(
+            id : UUID(),
             nom: name,
             photo: imagePath,
             description: descriptionText,
-            date: creationDate,
             theme: theme,
-            type: .mission,
+            type : .mapInsert,
+            date: creationDate,
             isValidated: true
         )
         souvenirsData.append(souvenir)
@@ -129,7 +129,7 @@ class SouvenirsViewModel {
     
     //MARK: - Création du SouvenirCarte
     
-    func createSouvenirCarte(name: String, latitude : CGFloat, longitude : CGFloat) {
+    func createSouvenirCarte(name: String, latitude : CGFloat, longitude : CGFloat) async {
         guard let theme = selectedTheme else { return }
         var imagePath: String? = nil
         
@@ -137,18 +137,24 @@ class SouvenirsViewModel {
             imagePath = saveImageToDocuments(image: image)
             saveImageToPhotoLibrary(image)
         }
-       let souvenir = SouvenirCarte(
+       let souvenir = SouvenirDTO(
             id : UUID(),
             nom: name,
             photo: imagePath,
             description: descriptionText,
-            date: creationDate,
             theme: theme,
             type : .mapInsert,
+            date: creationDate,
             latitude: latitude,
             longitude: longitude
-        )
+       )
         souvenirsData.append(souvenir)
+        
+        do {
+            _ = try await service.createSouvenir(souvenir)
+        }catch{
+            print ("Erreur lors de la création du mapPoint : \(error)")
+        }
     }
     
     //MARK: - Reset les formulaires
@@ -164,6 +170,19 @@ class SouvenirsViewModel {
         image = nil
         descriptionText = ""
         selectedTheme = nil
+    }
+    
+    // MARK: - Call API : Données Back / Front
+    
+    private let service = SouvenirService()
+    
+    //Recupérer les souvenirs
+    func fetchSouvenirs() async {
+        do {
+            souvenirsData = try await service.getAllSouvenirs()
+        } catch {
+            print("Erreur dans le chargement des souvenirs: \(error)")
+        }
     }
     
     // MARK: - Gestion des images
