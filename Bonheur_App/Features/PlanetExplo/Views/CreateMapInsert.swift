@@ -192,7 +192,7 @@ struct CreateMapInsert: View {
                                                 vm.selectedTheme = souvenirViewModel.selectedTheme
                                                 
                                                 souvenirViewModel.createSouvenirCarte(name: nom, latitude: latitude, longitude: longitude)
-                                                mapViewModel.createMapPoint(nom: nom, theme: vm.selectedTheme!, coordinate: userLocation)
+                                                await mapViewModel.createMapPoint(nom: nom, theme: vm.selectedTheme!, coordinate: userLocation)
                                                 
                                             } else if mapViewModel.isManualAddressSelected {
                                                 
@@ -207,7 +207,7 @@ struct CreateMapInsert: View {
                                                     mapViewModel.image = souvenirViewModel.image
                                                     
                                                     souvenirViewModel.createSouvenirCarte(name: nom, latitude: coordinate.latitude, longitude: coordinate.longitude)
-                                                    mapViewModel.createMapPoint(nom: nom, theme: selectedTheme!, coordinate: coordinate)
+                                                    await mapViewModel.createMapPoint(nom: nom, theme: selectedTheme!, coordinate: coordinate)
                                                 }else{
                                                     print("Impossible d'obtenir les coordonnées de l'adresse")
                                                 }
