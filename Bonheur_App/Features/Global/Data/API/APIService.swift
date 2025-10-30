@@ -15,13 +15,17 @@ final class APIService {
     private init() {}
 
     //METHODE GET
-    func get<T: Decodable>(_ endpoint: String) async throws -> T {
+    func get<T: Decodable>(_ endpoint: String,token: String? = nil) async throws -> T {
         guard let url = URL(string : baseURL + endpoint) else {
             throw URLError(.badURL)
         }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if let token = token {
+                    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                }
 
         let (data, response) = try await URLSession.shared.data(for: request)
         
