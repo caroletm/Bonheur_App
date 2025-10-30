@@ -57,7 +57,7 @@ struct LandingView: View {
                             .opacity(animateButton ? 0.7 : 0.4)
                             .blur(radius: 10)
                         
-                        // 🚀 Bouton fusée
+                        // Bouton fusée
                         Button(action: {
                             withAnimation {
                                 authViewModel.showLanding = false
