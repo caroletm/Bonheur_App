@@ -12,7 +12,7 @@ struct SouvenirsDetailsView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
     
-    var souvenir : Souvenir
+    var souvenir : SouvenirDTO
     
     var body: some View {
         

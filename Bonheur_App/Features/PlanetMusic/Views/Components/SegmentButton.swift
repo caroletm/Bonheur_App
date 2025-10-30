@@ -4,6 +4,12 @@
 //
 //  Created by Apprenant156 on 29/09/2025.
 //
+//
+//  SegmentButton.swift
+//  Bonheur_App
+//
+//  Created by Apprenant156 on 29/09/2025.
+//
 import SwiftUI
 
 struct SegmentButton: View {
@@ -17,7 +23,7 @@ struct SegmentButton: View {
     var body: some View {
         GeometryReader { geo in
             let midAngle = (startAngle.degrees + endAngle.degrees) / 2
-            let radius = geo.size.width / 2 * 0.70  
+            let radius = geo.size.width / 2 * 0.70
             
             Button(action: action) {
                 ZStack {

@@ -17,8 +17,11 @@ struct MissionCompletedView: View {
     @State var text: String = ""
     @State private var showModalDescription = false
     @State private var fitsInOneLine = true
-    @State private var memoryChallengeForRecap: SouvenirDefi? = nil
+    @State private var memoryChallengeForRecap: SouvenirDTO? = nil
     @State private var showValidationAlert = false
+    
+    @State var showModal : Bool = false
+    
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
@@ -223,10 +226,18 @@ struct MissionCompletedView: View {
                     .offset(x:0,y:385)
             }.padding(.bottom,20)
         }.navigationBarBackButtonHidden(true)
-        .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
-            
-            MissionRecapValidationView(memoryChallenge: memoryChallenge)
-        }
+//        .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
+//            
+//            MissionRecapValidationView(memoryChallenge: memoryChallenge)
+//        }
+        
+            .sheet(isPresented: $showModal) {
+                
+                MissionRecapValidationView(dismissModal: $showModal,memoryChallenge: memoryChallengeForRecap ?? souvenirs[1])
+                
+                    .presentationDragIndicator(.visible)
+            }
+
     }
 }
 
