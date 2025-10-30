@@ -7,9 +7,10 @@
 import SwiftUI
 
 struct LoginView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @Environment(AuthViewModel.self) private var authViewModel
     
     var body: some View {
+        @Bindable var viewModel = authViewModel
         ZStack {
             //
             Image("BackgroundUser2")
@@ -24,16 +25,24 @@ struct LoginView: View {
                 Text("HAPPYVERSE")
                     .font(.custom("SpaceMono-Bold", size: 22))
                     .foregroundColor(.black)
+                // Message d'erreur
+                                if let errorMessage = authViewModel.errorMessage {
+                                    Text(errorMessage)
+                                        .font(.custom("SpaceMono-Regular", size: 12))
+                                        .foregroundColor(.red)
+                                        .multilineTextAlignment(.center)
+                                        .padding(.horizontal)
+                                }
                 
                 // Champs Email et Mot de passe
                 VStack(spacing: 15) {
-                    TextField("Email", text: $authViewModel.email)
+                    TextField("Email", text: $viewModel.email)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .font(.custom("SpaceMono-Regular", size: 12))
                         .keyboardType(.emailAddress)
                         .padding(.horizontal)
                     
-                    SecureField("Mot de passe", text: $authViewModel.password)
+                    SecureField("Mot de passe", text: $viewModel.password)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .font(.custom("SpaceMono-Regular", size: 12))
                         .padding(.horizontal)
@@ -41,20 +50,41 @@ struct LoginView: View {
                 
                 // Bouton Se connecter
                 Button {
-                    authViewModel.signIn()
+                    Task {
+                                            await authViewModel.signIn()
+                                        }
                 } label: {
-                    Text("Se connecter")
-                        .font(.custom("Poppins-Bold", size: 18))
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius: 14)
-                                .fill(Color.blueDark)
-                        )
-                        .foregroundColor(.white)
-                        .padding(.horizontal)
-                        .shadow(radius: 4, y: 2)
+                    if authViewModel.isLoading {
+                                            ProgressView()
+                                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                                .frame(maxWidth: .infinity)
+                                                .frame(height: 50)
+                                        } else {
+                                            Text("Se connecter")
+                                                .font(.custom("Poppins-Bold", size: 18))
+                                                .padding()
+                                                .frame(maxWidth: .infinity)
+                                                .foregroundColor(.white)
+                                        }
+//                    Text("Se connecter")
+//                        .font(.custom("Poppins-Bold", size: 18))
+//                        .padding()
+//                        .frame(maxWidth: .infinity)
+//                        .background(
+//                            RoundedRectangle(cornerRadius: 14)
+//                                .fill(Color.blueDark)
+//                        )
+//                        .foregroundColor(.white)
+//                        .padding(.horizontal)
+//                        .shadow(radius: 4, y: 2)
                 }
+                .background(
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .fill(authViewModel.isLoading ? Color.gray : Color.blueDark)
+                                )
+                                .padding(.horizontal)
+                                .shadow(radius: 4, y: 2)
+                                .disabled(authViewModel.isLoading)
                 .padding(.top, 20)
                 
                
@@ -67,6 +97,7 @@ struct LoginView: View {
                         withAnimation {
                             authViewModel.showLogin = false
                             authViewModel.showSignUp = true
+                            authViewModel.clearError()
                         }
                     } label: {
                         Text("Inscrivez-vous")
@@ -79,10 +110,14 @@ struct LoginView: View {
                 Spacer()
             }
         }
+        .onAppear {
+                    // Clear les erreurs quand on arrive sur la page
+                    authViewModel.clearError()
+                }
     }
 }
 
 #Preview {
     LoginView()
-        .environmentObject(AuthViewModel())
+        .environment(AuthViewModel())
 }

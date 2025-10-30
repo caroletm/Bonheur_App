@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LandingView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @Environment(AuthViewModel.self) private var authViewModel
     @State private var animateButton = false
     
     var body: some View {
@@ -61,7 +61,8 @@ struct LandingView: View {
                         Button(action: {
                             withAnimation {
                                 authViewModel.showLanding = false
-                                authViewModel.showSignUp = true
+                                authViewModel.showLogin = true
+                                authViewModel.clearError()
                             }
                         }) {
                             Image("fusee2")
@@ -90,5 +91,5 @@ struct LandingView: View {
 
 #Preview {
     LandingView()
-        .environmentObject(AuthViewModel())
+        .environment(AuthViewModel())
 }
