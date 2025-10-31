@@ -2,32 +2,26 @@
 //  Untitled.swift
 //  Bonheur_App
 //
-//  Created by caroletm on 11/09/2025.
-//
-//
-//
-//  Untitled.swift
-//  Bonheur_App
-//
-//  Created by caroletm on 11/09/2025.
-//
+//  Created by Apprenant156 on 11/09/2025.
 //
 import SwiftUI
 
 struct MusicPlayerView: View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
-    @StateObject private var viewModel = MusicPlayerViewModel(planeteMusic: planeteMusic)
-    
+
+    @State private var viewModel = MusicPlayerViewModel(planeteMusic: planeteMusic)
+
     var body: some View {
-        ZStack(alignment: .top){
+        ZStack(alignment: .top) {
             Image(.backgroundMusic)
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
-           
+
             CadreBlanc()
                 .padding(.top, 120)
-            
+
+    
             MusicSelectorView(viewModel: viewModel)
                 .padding(.top, 200)
 
@@ -39,7 +33,7 @@ struct MusicPlayerView: View {
                     .padding(.top, -300)
                 Spacer()
             }
-            
+
             BoutonsFuseeRetour(planete: planeteMusic)
                 .padding(.bottom, 50)
         }
@@ -47,7 +41,6 @@ struct MusicPlayerView: View {
         .navigationBarHidden(true)
     }
 }
-
 
 #Preview {
     MusicPlayerView()

@@ -5,13 +5,6 @@
 //  Created by Apprenant156 on 29/09/2025.
 //
 
-//
-//  SegmentShape.swift
-//  Bonheur_App
-//
-//  Created by Apprenant156 on 29/09/2025.
-//
-
 import SwiftUI
 
 struct SegmentShape: Shape {

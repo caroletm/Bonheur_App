@@ -23,8 +23,8 @@ struct LoginView: View {
                 
                
                 Text("HAPPYVERSE")
-                    .font(.custom("SpaceMono-Bold", size: 22))
-                    .foregroundColor(.black)
+                    .font(.custom("SpaceMono-Bold", size: 28))
+                    .foregroundColor(.white)
                 // Message d'erreur
                                 if let errorMessage = authViewModel.errorMessage {
                                     Text(errorMessage)

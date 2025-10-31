@@ -15,8 +15,8 @@ struct SignUpView: View {
             VStack(spacing: 20) {
                 Spacer()
                 Text("HAPPYVERSE")
-                    .font(.custom("SpaceMono-Bold", size: 22))
-                    .foregroundColor(.black)
+                    .font(.custom("SpaceMono-Bold", size: 28))
+                    .foregroundColor(.white)
                 // Message d'erreur
                 if let errorMessage = authViewModel.errorMessage {
                     Text(errorMessage)
@@ -84,7 +84,7 @@ struct SignUpView: View {
                 .padding(.top, 20)
                 
                 
-                // 🔹 Texte mixte : une partie statique et une partie cliquable
+                // Texte mixte : une partie statique et une partie cliquable
                 HStack(spacing: 4) {
                     Text("Déjà un compte ?")
                         .foregroundColor(.black)

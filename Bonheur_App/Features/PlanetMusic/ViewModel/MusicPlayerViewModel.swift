@@ -2,45 +2,42 @@
 import SwiftUI
 import AVFoundation
 
-@MainActor
-final class MusicPlayerViewModel: ObservableObject {
-    @Published var selectedSegment: Int? = 0
-    @Published var isPlaying: Bool = false
-    
+@Observable
+final class MusicPlayerViewModel {
+    var selectedSegment: Int? = 0
+    var isPlaying: Bool = false
+
     let planeteMusic: PlaneteMusic
-    private let audioManager = AudioPlayerManager.shared
-    
-    init(planeteMusic: PlaneteMusic) {
+    private let audioManager: AudioPlayerManager
+
+    init(planeteMusic: PlaneteMusic, audioManager: AudioPlayerManager = .shared) {
         self.planeteMusic = planeteMusic
-        
-        audioManager.$isPlaying
-            .receive(on: DispatchQueue.main)
-            .assign(to: &$isPlaying)
-        
+        self.audioManager = audioManager
+
+        // Synchronise automatiquement l’état du player
+        audioManager.onPlayStateChanged = { [weak self] isPlaying in
+            self?.isPlaying = isPlaying
+        }
+
         if let current = audioManager.currentMusic {
             if let index = planeteMusic.themes.firstIndex(where: { $0.musique == current }) {
                 selectedSegment = index
                 isPlaying = true
             }
         }
-
     }
-    
+
     func handleSegmentTap(index: Int) {
         let theme = planeteMusic.themes[index]
-        
+
         if selectedSegment == index {
-            if isPlaying {
-                stopMusic()
-            } else {
-                playMusic(theme)
-            }
+            isPlaying ? stopMusic() : playMusic(theme)
         } else {
             selectedSegment = index
             playMusic(theme)
         }
     }
-    
+
     func togglePlayPause() {
         if isPlaying {
             stopMusic()
@@ -53,12 +50,12 @@ final class MusicPlayerViewModel: ObservableObject {
             playMusic(planeteMusic.themes[index])
         }
     }
-    
+
     private func playMusic(_ theme: ThemeMusic) {
         isPlaying = true
         audioManager.play(theme.musique)
     }
-    
+
     private func stopMusic() {
         isPlaying = false
         audioManager.stop()

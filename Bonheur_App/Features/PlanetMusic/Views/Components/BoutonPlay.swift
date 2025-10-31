@@ -14,27 +14,6 @@
 import SwiftUI
 import AVFoundation
 
-struct Octagon: Shape {
-    func path(in rect: CGRect) -> Path {
-        let sides = 8
-        let center = CGPoint(x: rect.midX, y: rect.midY)
-        let radius = min(rect.width, rect.height) / 2
-        var path = Path()
-
-        for i in 0..<sides {
-            let angle = (Double(i) * (360.0 / Double(sides))) - 90
-            let x = center.x + CGFloat(cos(angle * .pi / 180)) * radius
-            let y = center.y + CGFloat(sin(angle * .pi / 180)) * radius
-            if i == 0 {
-                path.move(to: CGPoint(x: x, y: y))
-            } else {
-                path.addLine(to: CGPoint(x: x, y: y))
-            }
-        }
-        path.closeSubpath()
-        return path
-    }
-}
 
 struct PlayButtonOctagon: View {
     @Binding var isPlaying: Bool
@@ -50,7 +29,6 @@ struct PlayButtonOctagon: View {
             }
         }) {
             ZStack {
-                // ✅ Lueur animée
                 if isPlaying {
                     Circle()
                         .fill(Color.pinkMusic.opacity(0.4))
@@ -66,7 +44,7 @@ struct PlayButtonOctagon: View {
                         .onDisappear { glowAnimation = false }
                 }
                 
-                // ✅ Bouton principal
+                // Bouton principal
                 Circle()
                     .fill(isPlaying ? Color.greyDarkButton : Color.pinkMusic)
                     .frame(width: 80, height: 80)
