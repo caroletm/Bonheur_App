@@ -19,7 +19,7 @@ enum AppRoute: Hashable {
     case planeteMusic
     case planetePhilo
     case planeteMission
-    case missionAccepter(challenge: Challenge)
+    case missionAccepter(challenge: MissionDTO)
     case detailSouvenir (souvenir : SouvenirDTO)
     case createMapInsert
     case detailMapPoint(mapPoint: MapPointDTO)

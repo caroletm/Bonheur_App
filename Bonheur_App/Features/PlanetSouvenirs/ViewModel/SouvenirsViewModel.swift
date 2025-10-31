@@ -106,25 +106,41 @@ class SouvenirsViewModel {
     /// - Parameter name: Nom du défi mémoire.
     /// - Returns: Un objet `MemoryChallenge` si toutes les données sont valides, sinon `nil`.
     ///
-    func buildSouvenirChallenge(name: String)-> SouvenirDTO? {
+    func buildSouvenirChallenge(name: String,missionID: UUID)async throws-> SouvenirDTO? {
         guard let theme = selectedTheme else {return nil}
         var imagePath: String? = nil
         if let image = image {
             imagePath = saveImageToDocuments(image:image)
         }
         
-        let souvenir = SouvenirDTO(
-            id : UUID(),
+        let dto = SouvenirDefiDTO(
+            id: nil,
             nom: name,
             photo: imagePath,
-            description: descriptionText,
             theme: theme,
-            type : .mapInsert,
-            date: creationDate,
-            isValidated: true
-        )
-        souvenirsData.append(souvenir)
-        return souvenir
+            description: descriptionText,
+            planetedMission: missionID
+            )
+        
+        do {
+            let response = try await SouvenirDefiService().createSouvenirDefi(dto)
+            let souvenir = SouvenirDTO(
+                id: response.id ?? UUID(),
+                nom: response.nom,
+                description: response.description,
+                theme: response.theme,
+                type: .mission,
+                date: creationDate,
+                isValidated: true
+            )
+            souvenirsData.append(souvenir)
+            return souvenir
+                
+        } catch {
+            print("erreur création Souvenir:\(error)")
+            return nil
+        }
+        
     }
     
     //MARK: - Création du SouvenirCarte

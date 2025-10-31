@@ -10,7 +10,7 @@ import SwiftUI
 struct MissionCompletedView: View {
 
     @Environment(NavigationViewModel.self) private var navigationViewModel
-    let challenge : Challenge
+    let challenge : MissionDTO
     @Environment(SouvenirsViewModel.self) private var souvenirViewmodel
 //    @Bindable private var souvenirViewModel = SouvenirsViewModel()
     @State private var showCamera = false
@@ -27,111 +27,111 @@ struct MissionCompletedView: View {
             Image(.backgroundMissions)
                 .ignoresSafeArea()
             RectangleFond()
-            
             VStack{
-                Text(challenge.challengeName)
-                    .font(.custom("SpaceMono-Bold", size: fitsInOneLine ? 20 : 16))
-                    .opacity(0.8)
-                    .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal,16)
-                    .multilineTextAlignment(.center)
-                    .padding(.top,16)
-                    .background(
-                        GeometryReader { proxy in
-                            Color.clear.onAppear {
-                                
-                                let lineHeight = UIFont(name: "SpaceMono-Bold", size: 20)?.lineHeight ?? 20
-                                let numberOfLines = proxy.size.height / lineHeight
-                                fitsInOneLine = numberOfLines <= 1.5
+                VStack{
+                    Text(challenge.nom)
+                        .font(.custom("SpaceMono-Bold", size: fitsInOneLine ? 20 : 16))
+                        .opacity(0.8)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal,16)
+                        .multilineTextAlignment(.center)
+                        .padding(.top,25)
+                        .background(
+                            GeometryReader { proxy in
+                                Color.clear.onAppear {
+                                    
+                                    let lineHeight = UIFont(name: "SpaceMono-Bold", size: 20)?.lineHeight ?? 20
+                                    let numberOfLines = proxy.size.height / lineHeight
+                                    fitsInOneLine = numberOfLines <= 1.5
+                                }
                             }
-                        }
-                    )
-                HStack(spacing:18){
-                    ForEach(SouvenirTheme.allCases, id: \.self) { theme in
-                        Button {
-                            if souvenirViewmodel.selectedTheme == theme {
-                                souvenirViewmodel.selectedTheme = nil
-                            }else {
-                                souvenirViewmodel.selectedTheme = theme
+                        )
+                    HStack(spacing:18){
+                        ForEach(SouvenirTheme.allCases, id: \.self) { theme in
+                            Button {
+                                if souvenirViewmodel.selectedTheme == theme {
+                                    souvenirViewmodel.selectedTheme = nil
+                                }else {
+                                    souvenirViewmodel.selectedTheme = theme
+                                }
+                                print(souvenirViewmodel.selectedTheme as Any)
+                            }label: {
+                                VStack {
+                                    Image(theme.iconName)
+                                        .resizable()
+                                        .frame(width: 65, height: 65)
+                                        .shadow(color : theme.color, radius: 10)
+                                    Text(theme.title).font(.custom("Poppins-Regular", size: 9))
+                                        .foregroundStyle(.black)
+                                }
+                                .opacity( souvenirViewmodel.selectedTheme == theme ? 1 : 0.3)
                             }
-                            print(souvenirViewmodel.selectedTheme as Any)
-                        }label: {
-                            VStack {
-                                Image(theme.iconName)
-                                    .resizable()
-                                    .frame(width: 65, height: 65)
-                                    .shadow(color : theme.color, radius: 10)
-                                Text(theme.title).font(.custom("Poppins-Regular", size: 9))
-                                    .foregroundStyle(.black)
-                            }
-                            .opacity( souvenirViewmodel.selectedTheme == theme ? 1 : 0.3)
                         }
                     }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, 15)
-                ZStack{
-                    if let selectedImage = souvenirViewmodel.image {
-                        Image(uiImage: selectedImage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 271, height: 198)
-                            .clipped()
-                            .cornerRadius(25)
-                            .onTapGesture {
-                                showCamera = true
-                            }
-                    } else {
-                        Rectangle()
-                            .fill(Color.blueGrey)
-                            .frame(width:271,height: 178)
-                            .cornerRadius(25)
-                            .onTapGesture {
-                                showCamera = true
-                            }
-                        VStack{
-                            Image(systemName: "camera")
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 15)
+                    ZStack{
+                        if let selectedImage = souvenirViewmodel.image {
+                            Image(uiImage: selectedImage)
                                 .resizable()
-                                .frame(width: 36, height: 29)
-                            Text("Photo optionnelle")
-                                .font(.custom("Poppins-Light", size: 10))
+                                .scaledToFill()
+                                .frame(width: 271, height: 198)
+                                .clipped()
+                                .cornerRadius(25)
+                                .onTapGesture {
+                                    showCamera = true
+                                }
+                        } else {
+                            Rectangle()
+                                .fill(Color.blueGrey)
+                                .frame(width:271,height: 178)
+                                .cornerRadius(25)
+                                .onTapGesture {
+                                    showCamera = true
+                                }
+                            VStack{
+                                Image(systemName: "camera")
+                                    .resizable()
+                                    .frame(width: 36, height: 29)
+                                Text("Photo optionnelle")
+                                    .font(.custom("Poppins-Light", size: 10))
+                            }
                         }
                     }
-                }
-                .sheet(isPresented: $showCamera) {
-                    @Bindable var vm = souvenirViewmodel
-                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                        ImagePicker(sourceType: .camera, selectedImage: $vm.image)
-                    } else {
-                        ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.image)
+                    .sheet(isPresented: $showCamera) {
+                        @Bindable var vm = souvenirViewmodel
+                        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                            ImagePicker(sourceType: .camera, selectedImage: $vm.image)
+                        } else {
+                            ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.image)
+                        }
                     }
-                }
-                ZStack{
-                    HStack() {
-                        Text("Date")
+                    ZStack{
+                        HStack() {
+                            Text("Date")
+                                .font(.custom("SpaceMono-Bold", size: 14))
+                                .padding(.leading)
+                                .opacity(0.8)
+                            VStack(alignment: .leading,spacing: 0){
+                                Text(": \(souvenirViewmodel.formattedDate())")
+                                    .opacity(0.8)
+                                    .font(.custom("SpaceMono-Bold", size: 20))
+                                LigneTiretView()
+                            }
+                            .padding(.leading)
+                            Spacer()
+                        }
+                    }
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Details :")
                             .font(.custom("SpaceMono-Bold", size: 14))
                             .padding(.leading)
+                            .padding(.bottom,10)
                             .opacity(0.8)
-                        VStack(alignment: .leading,spacing: 0){
-                            Text(": \(souvenirViewmodel.formattedDate())")
-                                .opacity(0.8)
-                                .font(.custom("SpaceMono-Bold", size: 20))
-                            LigneTiretView()
-                        }
-                        .padding(.leading)
-                        Spacer()
-                    }
-                }
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Details :")
-                        .font(.custom("SpaceMono-Bold", size: 14))
-                        .padding(.leading)
-                        .padding(.bottom,10)
-                        .opacity(0.8)
-                    Button {
-                        showModalDescription = true
-                    } label: {
+                        Button {
+                            showModalDescription = true
+                        } label: {
                             ZStack(alignment: .topLeading) {
                                 // Les lignes pointillées
                                 VStack(spacing: 24) {
@@ -149,102 +149,112 @@ struct MissionCompletedView: View {
                                         .padding(.top, -24)
                                 }
                             }
-                    }
-                    .sheet(isPresented: $showModalDescription){
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Donne plus de details concernant ton action :")
-                                .font(.custom("Poppins-Regular", size: 14))
-                                .multilineTextAlignment(.center)
-                                .padding(.top)
-                                .padding(.horizontal)
-                            TextEditor( text: $text)
-                                .font(.custom("Poppins-Regular", size: 14))
-                                .padding(8)
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                                .frame(maxHeight: .infinity)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(style: StrokeStyle(lineWidth: 1))
-                                )
-                                .padding()
-                            Button(action: {
-                                showModalDescription = false
-                                souvenirViewmodel.descriptionText = text
-                                
-                            }) {
-                                ZStack (){
-                                    Rectangle()
-                                        .fill(Color.greyDarkButton)
-                                        .frame(width: 90, height: 42)
-                                        .cornerRadius(3)
+                        }
+                        .sheet(isPresented: $showModalDescription){
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("Donne plus de details concernant ton action :")
+                                    .font(.custom("Poppins-Regular", size: 14))
+                                    .multilineTextAlignment(.center)
+                                    .padding(.top)
+                                    .padding(.horizontal)
+                                TextEditor( text: $text)
+                                    .font(.custom("Poppins-Regular", size: 14))
+                                    .padding(8)
+                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    .frame(maxHeight: .infinity)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(style: StrokeStyle(lineWidth: 1))
+                                    )
+                                    .padding()
+                                Button(action: {
+                                    showModalDescription = false
+                                    souvenirViewmodel.descriptionText = text
                                     
-                                    Rectangle()
-                                        .fill(Color.greyLightButton)
-                                        .frame(width: 78, height: 30)
-                                        .cornerRadius(3)
-                                        .shadow(color: .black.opacity(0.4), radius: 5, x: 3, y: 3)
-                                    Text("OK")
-                                        .font(.custom ("SpaceMono-Bold", size: 14))
-                                        .foregroundStyle(Color.greyDarkText)
-                                }.padding(.leading,150)
+                                }) {
+                                    ZStack (){
+                                        Rectangle()
+                                            .fill(Color.greyDarkButton)
+                                            .frame(width: 90, height: 42)
+                                            .cornerRadius(3)
+                                        
+                                        Rectangle()
+                                            .fill(Color.greyLightButton)
+                                            .frame(width: 78, height: 30)
+                                            .cornerRadius(3)
+                                            .shadow(color: .black.opacity(0.4), radius: 5, x: 3, y: 3)
+                                        Text("OK")
+                                            .font(.custom ("SpaceMono-Bold", size: 14))
+                                            .foregroundStyle(Color.greyDarkText)
+                                    }.padding(.leading,150)
+                                }
                             }
+                            .padding(20)
+                            .frame(alignment: .center)
+                            .presentationDetents([.medium])
+                            .presentationDragIndicator(.visible)
                         }
-                        .padding(20)
-                        .frame(alignment: .center)
-                        .presentationDetents([.medium])
-                        .presentationDragIndicator(.visible)
                     }
-                }
-                .padding(.vertical,10)
-                Button{
-                    if souvenirViewmodel.isValid {
-                        if let newSouvenir = souvenirViewmodel.buildSouvenirChallenge(name: challenge.challengeName) {
-                            memoryChallengeForRecap = newSouvenir
+                    .padding(.vertical,10)
+                    Button{
+                        if souvenirViewmodel.isValid {
+                            Task{
+                                if let newSouvenir = try? await souvenirViewmodel.buildSouvenirChallenge(name: challenge.nom,missionID: challenge.id!
+                                ) {
+                                    memoryChallengeForRecap = newSouvenir
+                                    showModal = true
+                                }else {
+                                    showValidationAlert = true
+                                }
+                            }
+                        }else{
+                            showValidationAlert = true
                         }
-                    }else{
-                        showValidationAlert = true
+                    }label :{
+                        
+                        if souvenirViewmodel.isValid {
+                            BoutonValider(isValid: true)
+                        }else{
+                            BoutonValider(isValid: false)
+                        }
                     }
-                }label :{
                     
-                    if souvenirViewmodel.isValid {
-                        BoutonValider(isValid: true)
-                    }else{
-                        BoutonValider(isValid: false)
-                    }
-                }
-                .alert("Champs requis", isPresented: $showValidationAlert) {
-                    Button("OK", role: .cancel) { }
+                    .alert("Champs requis", isPresented: $showValidationAlert) {
+                        Button("OK", role: .cancel) { }
                     } message: {
                         Text("Veuillez sélectionner un thème et remplir la description avant de valider.")
                     }
-            }
-            .frame(width: 350,height: 680)
-            Button {
-                //                routes a ajouter
-            } label: {
-                BoutonRetour()
-                    .offset(x:0,y:385)
-            }.padding(.bottom,20)
-        }.navigationBarBackButtonHidden(true)
-//        .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
-//            
-//            MissionRecapValidationView(memoryChallenge: memoryChallenge)
-//        }
-        
-            .sheet(isPresented: $showModal) {
+                }
+                .frame(width: 350,height: 680)
+                .padding(.top)
                 
-                MissionRecapValidationView(dismissModal: $showModal,memoryChallenge: memoryChallengeForRecap ?? souvenirs[1])
                 
-                    .presentationDragIndicator(.visible)
-            }
-
+                Button {
+                    if !navigationViewModel.path.isEmpty {
+                            navigationViewModel.path.removeLast()
+                        }
+                } label :{
+                    BoutonRetour()
+                        
+                }
+                .padding(.top)
+                    
+            }.navigationBarBackButtonHidden(true)
+                    .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
+            
+                        MissionRecapValidationView(
+                            dismissModal: .constant(false), memoryChallenge: memoryChallenge)
+                    }
+            
+        }
     }
 }
 
 #Preview {
     MissionCompletedView(
-            challenge: Challenge(challengeName: "Promène toi dans un parc en plein été à l'ombre")
-        ).environment(NavigationViewModel())
+        challenge: MissionDTO(id: UUID(),
+                              nom: "String"))
+        .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
 }
 
