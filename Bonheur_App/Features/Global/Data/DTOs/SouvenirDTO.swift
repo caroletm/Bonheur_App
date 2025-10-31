@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SouvenirDTO: Codable, Hashable {
+struct SouvenirDTO: Codable, Hashable,Identifiable {
     var id: UUID?
     var nom: String
     var photo: String?

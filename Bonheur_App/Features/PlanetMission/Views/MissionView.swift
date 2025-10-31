@@ -25,7 +25,8 @@ struct MissionView: View {
                         .font(.custom("SpaceMono-Bold", size: 20))
                         .foregroundStyle(.white)
                         .padding(.top)
-                    Text(viewmissionmodel.currentChallenge.challengeName)
+                    if let mission = viewmissionmodel.currentMision {
+                        Text(mission.nom)
                             .font(.custom("Poppins-Regular", size: 16))
                             .lineLimit(nil)
                             .fixedSize(horizontal: false, vertical: true)
@@ -33,10 +34,16 @@ struct MissionView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal,16)
                             .padding(.top,70)
+                    } else {
+                        ProgressView("Chargement...")
+                                                    .padding(.top, 70)
+                    }
                     Button(action: {
-                        navigationViewModel.path.append(
-                                AppRoute.missionAccepter(challenge: viewmissionmodel.currentChallenge)
+                        if let mission = viewmissionmodel.currentMision {
+                            navigationViewModel.path.append(
+                                AppRoute.missionAccepter(challenge: mission)
                             )
+                        }
                     }){
                         ZStack {
                             Rectangle()
@@ -83,6 +90,9 @@ struct MissionView: View {
                     Spacer()
                 }
                 .padding(.bottom,50)
+            }
+            .task {
+                await viewmissionmodel.fetchMission()
             }
             .padding(.top,170)
         }.navigationBarBackButtonHidden(true)

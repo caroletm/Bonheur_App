@@ -12,46 +12,29 @@ import Foundation
     /// et suivre l’état actuel de la progression.
 class ChallengeViewModel{
     // MARK: - Propriétés
-    var challenges: [Challenge]
-    var currentIndex : Int
-    var dayChallengeIndex : Int
-    var randomChallengeIndex : Int
+    var challenges: [MissionDTO] = []
+    var currentIndex : Int = 0
+    var dayChallengeIndex : Int = 0
+    var randomChallengeIndex : Int = 0
+    
+    private let service = MissionService()
+    
+    
     
     // MARK: - Initialisation
-    
     /// Initialise le `ViewModel` et sélectionne le défi du jour s’il existe.
     /// Sinon, sélectionne le premier défi de la liste.
-    init(challenges: [Challenge]? = nil) {
-        
-        let list = challenges ?? [
-            Challenge(challengeName: "Promène-toi dans un parc à l'ombre"),
-            Challenge(challengeName: "Bois deux litres d’eau"),
-            Challenge(challengeName: "Fais 10 pompes"),
-            Challenge(challengeName: "Lis 10 pages"),
-            Challenge(challengeName: "Marche 5000 pas")
-        ]
-        self.challenges = list
-
-        
-        let dayIndex = Int.random(in: 0..<list.count)
-        
-        self.dayChallengeIndex = dayIndex
-        
-        var randomIndex: Int
-        repeat {
-            randomIndex = Int.random(in: 0..<list.count)
-        } while randomIndex == dayIndex
-        self.randomChallengeIndex = randomIndex
-        self.currentIndex = dayIndex
-    }
-    // MARK: - Accès au défi courant
     
-    /// Retourne le défi actuellement sélectionné.
-    /// - Returns: Le `Challenge` correspondant à `currentIndex`, ou `nil` si aucun n’est défini.
-    var currentChallenge: Challenge {
-        challenges[currentIndex]
+    init() {
+        Task {
+            await fetchMission()
+        }
     }
-    var isDayChallenge: Bool {
+    var currentMision: MissionDTO? {
+        guard !challenges.isEmpty else { return nil }
+        return challenges[currentIndex]
+    }
+    var isDayChallenge : Bool {
         currentIndex == dayChallengeIndex
     }
     var toggleButtonTitle: String {
@@ -59,7 +42,45 @@ class ChallengeViewModel{
     }
     
     func toggleChallenge() {
+        guard !challenges.isEmpty else { return }
         currentIndex = isDayChallenge ? randomChallengeIndex : dayChallengeIndex
-        
     }
+    
+    func fetchMission() async {
+        do {
+            let missionsFromAPI = try await service.getAllMissions()
+            challenges = missionsFromAPI
+            dayChallengeIndex = Int.random(in: 0..<challenges.count)
+            repeat {
+                randomChallengeIndex = Int.random(in: 0..<challenges.count)
+            } while randomChallengeIndex == dayChallengeIndex
+                        currentIndex = dayChallengeIndex
+        } catch {
+            print("Erreur lors de la recuperation :\(error)")
+        }
+    }
+    
+
+        
+//        let dayIndex = Int.random(in: 0..<list.count)
+//        
+//        self.dayChallengeIndex = dayIndex
+//        
+//        var randomIndex: Int
+//        repeat {
+//            randomIndex = Int.random(in: 0..<list.count)
+//        } while randomIndex == dayIndex
+//        self.randomChallengeIndex = randomIndex
+//        self.currentIndex = dayIndex
+//    }
+    
+//    var currentChallenge: Challenge {
+//        challenges[currentIndex]
+//    }
+//    var isDayChallenge: Bool {
+//        currentIndex == dayChallengeIndex
+//    }
+//    
+//    
+    
 }
