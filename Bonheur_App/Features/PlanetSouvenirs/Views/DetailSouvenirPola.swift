@@ -46,8 +46,8 @@ struct SouvenirsDetailsPolaView: View {
                             .font(.custom("SpaceMono-Regular", size: 14))
                             .opacity(0.7)
                         
-                        if souvenir.photo != nil {
-                            if let image = souvenirsViewModel.loadImage(from: souvenir.photo ?? "photoDog") {
+                        if souvenir.photo != "" {
+                            if let image = souvenirsViewModel.loadImage(from: souvenir.photo ?? "") {
                                 
                                 Image(uiImage: image)
                                     .resizable()
@@ -86,7 +86,7 @@ struct SouvenirsDetailsPolaView: View {
                         .frame(width: 285, height: 250)
                         .clipped()
                     }
-                    .offset(y: souvenir.photo != nil ? 70 : 0)
+                    .offset(y: souvenir.photo != "" ? 70 : 0)
                 }
                 .padding()
                 
@@ -101,7 +101,7 @@ struct SouvenirsDetailsPolaView: View {
                 }
                 .padding(.bottom, 10)
                 
-                if souvenir.photo != nil {
+                if souvenir.photo != "" {
                     if souvenir.type == .mission {
                         Image(.defiValidate)
                             .resizable()

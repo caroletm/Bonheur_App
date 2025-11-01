@@ -49,7 +49,7 @@ struct SouvenirsView: View {
                                         
                                         ForEach(last5Souvenirs, id: \.id) { souvenir in
                                             
-                                            let hasPhoto : Bool = souvenir.photo != nil
+                                            let hasPhoto : Bool = souvenir.photo != ""
                                             
                                             Button {
                                                 navigationViewModel.path.append(AppRoute.detailSouvenir(souvenir : souvenir))
@@ -97,7 +97,7 @@ struct SouvenirsView: View {
                                     LazyVGrid(columns: columns) {
                                         
                                         ForEach(souvenirsOfMonth, id: \.id) { souvenir in
-                                            let hasPhoto : Bool = souvenir.photo != nil
+                                            let hasPhoto : Bool = souvenir.photo != ""
                                             
                                             Button {
                                                 navigationViewModel.path.append(AppRoute.detailSouvenir(souvenir : souvenir))
@@ -154,9 +154,13 @@ struct SouvenirsView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.large)
+          
             
         }
         .navigationBarBackButtonHidden(true)
+        .task {
+            await souvenirsViewModel.fetchSouvenirs()
+        }
     }
 }
 

@@ -24,7 +24,7 @@ struct CadreVignette: View {
             .overlay(
                 ZStack {
                     if hasPhoto {
-                        if let image = souvenirsViewModel.loadImage(from: souvenir.photo ?? "photoDog") {
+                        if let image = souvenirsViewModel.loadImage(from: souvenir.photo ?? "") {
                             
                             Image(uiImage: image)
                                 .resizable()
