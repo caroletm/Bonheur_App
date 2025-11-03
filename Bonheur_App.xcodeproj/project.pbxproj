@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		FF4870122EB8A42400F3F7B5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5DEC87922E72BB3D00EC31A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5DEC87992E72BB3D00EC31A1;
+			remoteInfo = Bonheur_App;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		5DEC879A2E72BB3D00EC31A1 /* Bonheur_App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonheur_App.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF48700E2EB8A42400F3F7B5 /* Bonheur_AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Bonheur_AppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +27,22 @@
 			path = Bonheur_App;
 			sourceTree = "<group>";
 		};
+		FF48700F2EB8A42400F3F7B5 /* Bonheur_AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Bonheur_AppTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		5DEC87972E72BB3D00EC31A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF48700B2EB8A42400F3F7B5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				5DEC879C2E72BB3D00EC31A1 /* Bonheur_App */,
+				FF48700F2EB8A42400F3F7B5 /* Bonheur_AppTests */,
 				5DEC879B2E72BB3D00EC31A1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				5DEC879A2E72BB3D00EC31A1 /* Bonheur_App.app */,
+				FF48700E2EB8A42400F3F7B5 /* Bonheur_AppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,29 @@
 			productReference = 5DEC879A2E72BB3D00EC31A1 /* Bonheur_App.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FF48700D2EB8A42400F3F7B5 /* Bonheur_AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF4870142EB8A42400F3F7B5 /* Build configuration list for PBXNativeTarget "Bonheur_AppTests" */;
+			buildPhases = (
+				FF48700A2EB8A42400F3F7B5 /* Sources */,
+				FF48700B2EB8A42400F3F7B5 /* Frameworks */,
+				FF48700C2EB8A42400F3F7B5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF4870132EB8A42400F3F7B5 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FF48700F2EB8A42400F3F7B5 /* Bonheur_AppTests */,
+			);
+			name = Bonheur_AppTests;
+			packageProductDependencies = (
+			);
+			productName = Bonheur_AppTests;
+			productReference = FF48700E2EB8A42400F3F7B5 /* Bonheur_AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +130,10 @@
 				TargetAttributes = {
 					5DEC87992E72BB3D00EC31A1 = {
 						CreatedOnToolsVersion = 16.4;
+					};
+					FF48700D2EB8A42400F3F7B5 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 5DEC87992E72BB3D00EC31A1;
 					};
 				};
 			};
@@ -100,12 +152,20 @@
 			projectRoot = "";
 			targets = (
 				5DEC87992E72BB3D00EC31A1 /* Bonheur_App */,
+				FF48700D2EB8A42400F3F7B5 /* Bonheur_AppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5DEC87982E72BB3D00EC31A1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF48700C2EB8A42400F3F7B5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +182,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF48700A2EB8A42400F3F7B5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FF4870132EB8A42400F3F7B5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5DEC87992E72BB3D00EC31A1 /* Bonheur_App */;
+			targetProxy = FF4870122EB8A42400F3F7B5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		5DEC87A32E72BB3E00EC31A1 /* Debug */ = {
@@ -255,8 +330,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Bonheur-App-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Nous avons besoin de votre localisation la carte.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Nous avons besoin de votre localisation la carte.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Cette application souhaite enregistrer des photos dans votre galerie.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -286,8 +363,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Bonheur-App-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Nous avons besoin de votre localisation la carte.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Nous avons besoin de votre localisation la carte.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Cette application souhaite enregistrer des photos dans votre galerie.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -303,6 +382,40 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FF4870152EB8A42400F3F7B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Teste.Bonheur-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bonheur_App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Bonheur_App";
+			};
+			name = Debug;
+		};
+		FF4870162EB8A42400F3F7B5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Teste.Bonheur-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bonheur_App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Bonheur_App";
 			};
 			name = Release;
 		};
@@ -323,6 +436,15 @@
 			buildConfigurations = (
 				5DEC87A62E72BB3E00EC31A1 /* Debug */,
 				5DEC87A72E72BB3E00EC31A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF4870142EB8A42400F3F7B5 /* Build configuration list for PBXNativeTarget "Bonheur_AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF4870152EB8A42400F3F7B5 /* Debug */,
+				FF4870162EB8A42400F3F7B5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
