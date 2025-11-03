@@ -21,56 +21,46 @@ struct DetailMapPoint: View {
     var body: some View {
         
         ZStack {
-            
             RectangleFondDetail()
             VStack {
-                Image(mapPoint.theme.iconName)
-                    .resizable()
-                    .frame(width: 65, height: 65)
-                    .shadow(color : mapPoint.theme.color, radius: 15)
-                Text(mapPoint.theme.title)
-                    .font(.custom("Poppins-Regular", size: 12))
-            }
-            .offset(y: -245)
-            .padding(.bottom, 20)
-            
-            VStack {
-         
-                Text(mapPoint.nom)
+                VStack {
+                    Text(mapPoint.nom)
                         .font(.custom("SpaceMono-Bold", size: 18))
                     
-                if let address = address {
-                    Text(address)
-                        .font(.custom("SpaceMono-Bold", size: 12))
-                        .frame(maxWidth : .infinity, maxHeight : 50)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.center)
-                        .padding(5)
-                    
-                }
-                
-                if mapPoint.photo != nil {
-                    HStack {
-                        if let image = mapViewModel.loadImage(from: mapPoint.photo ?? "photoDog") {
-                            ZStack {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 106, height: 138)
-                                Image(.pointGps)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height:  40)
-                                    .offset(y : 70)
-                            }
-                            ScrollView {
-                                Text(mapPoint.description)
-                                    .font(.custom("Poppins-Regular", size: 12))
-                                    .frame(maxWidth : 150, maxHeight : 190)
-                                //                                .background(Color.white.opacity(0.1))
-                            }
-                        }
+                    if let address = address {
+                        Text(address)
+                            .font(.custom("SpaceMono-Bold", size: 12))
+                            .frame(maxWidth : .infinity, maxHeight : 50)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.center)
+                            .padding(.bottom, 10)
                     }
+                    
+                    if mapPoint.photo != "" {
+                        
+                        HStack (alignment: .top, spacing: 10) {
+                            if let image = mapViewModel.loadImage(from: mapPoint.photo ?? "photoDog") {
+                                ZStack {
+                                    Image(uiImage: image )
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 106, height: 138)
+                                    Image(.pointGps)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height:  40)
+                                        .offset(y : 70)
+                                }
+                                
+                                ScrollView {
+                                    Text(mapPoint.description)
+                                        .font(.custom("Poppins-Regular", size: 12))
+                                        .frame(maxWidth : 150, maxHeight : 190)
+                                    //                                .background(Color.white.opacity(0.1))
+                                }
+                 
+                            }
+                        }.padding(10)
                     }else{
                         VStack{
                             Image(.pointGps)
@@ -86,20 +76,37 @@ struct DetailMapPoint: View {
                             .frame(maxWidth : 250, maxHeight : 120)
                         }
                     }
-                Button {
-                    mapViewModel.selectedMapPoint = nil
-                    showDetailPopup = false
-                    
-                }label: {
-                    BoutonText(text: "OK", width: 45)
                 }
-                .padding()
-                
-            }
-            .task {
-                let coordinate = CLLocationCoordinate2D(latitude: mapPoint.latitude, longitude: mapPoint.longitude)
+                .task {
+                    let coordinate = CLLocationCoordinate2D(latitude: mapPoint.latitude, longitude: mapPoint.longitude)
                     address = await mapViewModel.getAddress(from: coordinate)
+                }
+              
             }
+            .frame(width: 363, height: 623)
+            .offset(y: mapPoint.photo == "" ? 0 : 140)
+            
+            VStack {
+                Image(mapPoint.theme.iconName)
+                    .resizable()
+                    .frame(width: 65, height: 65)
+                    .shadow(color : mapPoint.theme.color, radius: 15)
+                Text(mapPoint.theme.title)
+                    .font(.custom("Poppins-Regular", size: 12))
+            }
+            .offset(y: -245)
+            .padding(.bottom, 20)
+            
+            
+            Button {
+                mapViewModel.selectedMapPoint = nil
+                showDetailPopup = false
+                
+            }label: {
+                BoutonText(text: "OK", width: 45)
+            }
+            .padding()
+            .offset(y: 200)
         }
     }
 }
@@ -107,7 +114,7 @@ struct DetailMapPoint: View {
 #Preview {
     ZStack{
         Color.blueDark.ignoresSafeArea(edges: .all)
-        DetailMapPoint(mapPoint: mapPoints[0], showDetailPopup: .constant(false))
+        DetailMapPoint(mapPoint: mapPoints[1], showDetailPopup: .constant(false))
             .environment(NavigationViewModel())
             .environment(MapViewModel())
     }
