@@ -45,20 +45,29 @@ struct SouvenirsView: View {
                                 
                                 ScrollView (.horizontal) {
                                     
-                                    HStack {
-                                        
-                                        ForEach(last5Souvenirs, id: \.id) { souvenir in
+                                    if !last5Souvenirs.isEmpty {
+                                        HStack {
                                             
-                                            let hasPhoto : Bool = souvenir.photo != ""
-                                            
-                                            Button {
-                                                navigationViewModel.path.append(AppRoute.detailSouvenir(souvenir : souvenir))
-                                            }label :{
-                                                CadreVignette(souvenir : souvenir, hasPhoto : hasPhoto )
+                                            ForEach(last5Souvenirs, id: \.id) { souvenir in
+                                                
+                                                let hasPhoto : Bool = souvenir.photo != ""
+                                                
+                                                Button {
+                                                    navigationViewModel.path.append(AppRoute.detailSouvenir(souvenir : souvenir))
+                                                }label :{
+                                                    CadreVignette(souvenir : souvenir, hasPhoto : hasPhoto )
+                                                }
                                             }
                                         }
+                                        .padding()
+                                    }else{
+                                        Text("Vous n'avez pas encore de souvenirs")
+                                            .padding(20)
+                                            .font(.custom("SpaceMono-Bold", size: 16))
+                                            .multilineTextAlignment(.center)
+                                            .foregroundStyle(.white)
+                                           
                                     }
-                                    .padding()
                                 }
                                 
                                 Divider()
