@@ -9,14 +9,12 @@ import SwiftUI
 
 struct LigneTiretView: View {
     var body: some View {
-
         Line()
             .stroke(style: StrokeStyle(lineWidth: 1, dash: [8]))
             .foregroundColor(.blueDark)
             .opacity(0.6)
             .frame(height: 1)
             .padding(.horizontal)
-            
     }
 }
 

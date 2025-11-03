@@ -8,7 +8,6 @@ import Foundation
 struct MissionService {
     func getAllMissions() async throws -> [MissionDTO] {
         try await APIService.shared.get("/missions")
-        
     }
 }
 

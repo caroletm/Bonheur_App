@@ -36,7 +36,7 @@ struct MissionView: View {
                             .padding(.top,70)
                     } else {
                         ProgressView("Chargement...")
-                                                    .padding(.top, 70)
+                            .padding(.top, 70)
                     }
                     Button(action: {
                         if let mission = viewmissionmodel.currentMision {
@@ -80,7 +80,7 @@ struct MissionView: View {
                     }label:{
                         BoutonFusee(isPressed: false)
                     }.padding(.leading,40)
-                   
+                    
                     Button {
                         navigationViewModel.path = NavigationPath()
                         navigationViewModel.path.append(AppRoute.landing(planete: planeteMission))

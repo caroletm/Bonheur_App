@@ -10,11 +10,10 @@ import SwiftUI
 struct MissionRecapValidationView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
-//    @Bindable private var souvenirViewModel = SouvenirsViewModel()
     @Environment(\.dismiss) private var dismiss
     @Binding var dismissModal: Bool
-
     let memoryChallenge: SouvenirDTO
+    
     var body: some View {
         ZStack{
             Image(.backgroundMissions)
@@ -44,18 +43,18 @@ struct MissionRecapValidationView: View {
                         }
                         HStack{
                             if let photoName = memoryChallenge.photo, !photoName.isEmpty {
-                                    Image(photoName)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 106, height: 138)
-                                        .padding(.leading, 10)
-                                }
-                                VStack(alignment: .leading) {
-                                    Text(memoryChallenge.description)
-                                        .font(.custom("SpaceMono-Regular", size: 12))
-                                        .foregroundColor(.black)
-                                        .padding(.horizontal)
-                                }
+                                Image(photoName)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 106, height: 138)
+                                    .padding(.leading, 10)
+                            }
+                            VStack(alignment: .leading) {
+                                Text(memoryChallenge.description)
+                                    .font(.custom("SpaceMono-Regular", size: 12))
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal)
+                            }
                         }
                     }
                     Spacer()
@@ -73,12 +72,12 @@ struct MissionRecapValidationView: View {
                     .offset(x:0,y:-25)
                 Button {
                     navigationViewModel.path.append(
-                            AppRoute.planeteUserTest
-                        )
+                        AppRoute.planeteUserTest
+                    )
+                    souvenirsViewModel.resetFormMission()
                     dismiss()
-                    
                 } label: {
-                   BoutonText(text: "OK", width: 45)
+                    BoutonText(text: "OK", width: 45)
                 }.padding(.vertical,5)
             }.padding(20)
                 .background(

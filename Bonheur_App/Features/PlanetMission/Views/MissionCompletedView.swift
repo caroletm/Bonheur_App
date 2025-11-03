@@ -4,22 +4,19 @@
 //
 //  Created by cyrilH on 26/09/2025.
 //
-
 import SwiftUI
-
 struct MissionCompletedView: View {
-
+    
     @Environment(NavigationViewModel.self) private var navigationViewModel
     let challenge : MissionDTO
     @Environment(SouvenirsViewModel.self) private var souvenirViewmodel
-//    @Bindable private var souvenirViewModel = SouvenirsViewModel()
+    
     @State private var showCamera = false
     @State var text: String = ""
     @State private var showModalDescription = false
     @State private var fitsInOneLine = true
     @State private var memoryChallengeForRecap: SouvenirDTO? = nil
     @State private var showValidationAlert = false
-    
     @State var showModal : Bool = false
     
     var body: some View {
@@ -40,7 +37,6 @@ struct MissionCompletedView: View {
                         .background(
                             GeometryReader { proxy in
                                 Color.clear.onAppear {
-                                    
                                     let lineHeight = UIFont(name: "SpaceMono-Bold", size: 20)?.lineHeight ?? 20
                                     let numberOfLines = proxy.size.height / lineHeight
                                     fitsInOneLine = numberOfLines <= 1.5
@@ -170,14 +166,12 @@ struct MissionCompletedView: View {
                                 Button(action: {
                                     showModalDescription = false
                                     souvenirViewmodel.descriptionText = text
-                                    
                                 }) {
                                     ZStack (){
                                         Rectangle()
                                             .fill(Color.greyDarkButton)
                                             .frame(width: 90, height: 42)
-                                            .cornerRadius(3)
-                                        
+                                            .cornerRadius(3)   
                                         Rectangle()
                                             .fill(Color.greyLightButton)
                                             .frame(width: 78, height: 30)
@@ -211,14 +205,12 @@ struct MissionCompletedView: View {
                             showValidationAlert = true
                         }
                     }label :{
-                        
                         if souvenirViewmodel.isValid {
                             BoutonValider(isValid: true)
                         }else{
                             BoutonValider(isValid: false)
                         }
                     }
-                    
                     .alert("Champs requis", isPresented: $showValidationAlert) {
                         Button("OK", role: .cancel) { }
                     } message: {
@@ -227,25 +219,19 @@ struct MissionCompletedView: View {
                 }
                 .frame(width: 350,height: 680)
                 .padding(.top)
-                
-                
                 Button {
                     if !navigationViewModel.path.isEmpty {
-                            navigationViewModel.path.removeLast()
-                        }
+                        navigationViewModel.path.removeLast()
+                    }
                 } label :{
                     BoutonRetour()
-                        
                 }
                 .padding(.top)
-                    
             }.navigationBarBackButtonHidden(true)
-                    .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
-            
-                        MissionRecapValidationView(
-                            dismissModal: .constant(false), memoryChallenge: memoryChallenge)
-                    }
-            
+                .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
+                    MissionRecapValidationView(
+                        dismissModal: .constant(false), memoryChallenge: memoryChallenge)
+                }
         }
     }
 }
@@ -254,8 +240,8 @@ struct MissionCompletedView: View {
     MissionCompletedView(
         challenge: MissionDTO(id: UUID(),
                               nom: "String"))
-        .environment(NavigationViewModel())
-        .environment(SouvenirsViewModel())
+    .environment(NavigationViewModel())
+    .environment(SouvenirsViewModel())
 }
 
 

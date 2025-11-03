@@ -9,14 +9,22 @@ import SwiftUI
 import Foundation
 import Observation
 
+// MARK: - ViewModel des souvenirs
+/// `SouvenirsViewModel` gère la logique liée aux souvenirs créés par l’utilisateur.
+/// Il permet :
+/// - de filtrer les souvenirs par thème, date ou type,
+/// - de créer de nouveaux souvenirs (liés à une mission ou une carte),
+/// - de sauvegarder les images localement,
+/// - et de formater les dates pour l’affichage.
 @Observable
-
 class SouvenirsViewModel {
     
-    //MARK: - Data
-    
+    // MARK: - Données principales
+    /// Liste complète des souvenirs récupérés depuis le backend.
     var souvenirsData : [SouvenirDTO] = []
     
+    // MARK: - Regroupement par mois
+    /// Regroupe les souvenirs par mois et année, triés du plus récent au plus ancien.
     func groupSouvenirsByMonth(_ souvenirs: [SouvenirDTO]) -> [(key: String, value: [SouvenirDTO])] {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "fr_FR")
@@ -28,6 +36,8 @@ class SouvenirsViewModel {
         return grouped.sorted { $0.key > $1.key }
     }
     
+    // MARK: - Formatage d’une date
+    /// Formate une date au format français lisible, ex. `"07 octobre 2025"`.
     func dateFormatter(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "fr_FR")
@@ -36,12 +46,12 @@ class SouvenirsViewModel {
     }
     
     
-    //MARK: - Filters
-    
+    // MARK: - Filtres
+    /// Contient les filtres actuellement appliqués.
     var filters = SouvenirFilter()
     
+    /// Retourne les souvenirs filtrés selon les critères actifs.
     var filteredSouvenirs : [SouvenirDTO] {
-        
         souvenirsData.filter { souvenir in
             
             if let month = filters.month,
@@ -69,10 +79,12 @@ class SouvenirsViewModel {
         }
     }
     
+    // MARK: - Conversion de la date des filtres en texte
+    /// Retourne une représentation textuelle du mois et de l’année sélectionnés dans les filtres.
     func dateEnString() -> String {
         
         let months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-                             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+                      "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
         
         var result : [String] = []
         
@@ -86,26 +98,29 @@ class SouvenirsViewModel {
         return result.joined(separator : " ")
     }
     
+    // MARK: - Réinitialisation des filtres
+    /// Supprime tous les filtres actifs.
     func resetFilters() {
         filters = SouvenirFilter()
     }
     
-    // MARK: - Création des souvenirs
-    
+    // MARK: - Données de création de souvenir
     var descriptionText: String = ""
     var selectedTheme: SouvenirTheme? = nil
     var image: UIImage? = nil
     var creationDate: Date = Date()
+    /// Vérifie si les champs du formulaire de création sont valides.
     var isValid: Bool {
         return selectedTheme != nil &&
-               !descriptionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !descriptionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
-    // MARK: - Création du SouvenirDefi
-    /// Construit un objet `MemoryChallenge` prêt à être enregistré ou affiché.
-    /// - Parameter name: Nom du défi mémoire.
-    /// - Returns: Un objet `MemoryChallenge` si toutes les données sont valides, sinon `nil`.
-    ///
+    // MARK: - Création d’un souvenir (mission)
+    /// Construit un `SouvenirDefiDTO` et le sauvegarde via le service distant.
+    /// - Parameters:
+    ///   - name: Nom du défi.
+    ///   - missionID: Identifiant de la mission associée.
+    /// - Returns: Un `SouvenirDTO` si la création réussit, sinon `nil`.
     func buildSouvenirChallenge(name: String,missionID: UUID)async throws-> SouvenirDTO? {
         guard let theme = selectedTheme else {return nil}
         var imagePath: String? = nil
@@ -120,7 +135,7 @@ class SouvenirsViewModel {
             theme: theme,
             description: descriptionText,
             planetedMission: missionID
-            )
+        )
         
         do {
             let response = try await SouvenirDefiService().createSouvenirDefi(dto)
@@ -135,7 +150,7 @@ class SouvenirsViewModel {
             )
             souvenirsData.append(souvenir)
             return souvenir
-                
+            
         } catch {
             print("erreur création Souvenir:\(error)")
             return nil
@@ -143,8 +158,8 @@ class SouvenirsViewModel {
         
     }
     
-    //MARK: - Création du SouvenirCarte
-    
+    // MARK: - Création d’un souvenir carte
+    /// Crée un souvenir géolocalisé à partir d’un nom, thème et coordonnées GPS.
     func createSouvenirCarte(name: String, latitude : CGFloat, longitude : CGFloat) async {
         guard let theme = selectedTheme else { return }
         var imagePath: String? = nil
@@ -153,7 +168,7 @@ class SouvenirsViewModel {
             imagePath = saveImageToDocuments(image: image)
             saveImageToPhotoLibrary(image)
         }
-       let souvenir = SouvenirDTO(
+        let souvenir = SouvenirDTO(
             id : UUID(),
             nom: name,
             photo: imagePath,
@@ -163,7 +178,7 @@ class SouvenirsViewModel {
             date: creationDate,
             latitude: latitude,
             longitude: longitude
-       )
+        )
         souvenirsData.append(souvenir)
         
         do {
@@ -173,8 +188,8 @@ class SouvenirsViewModel {
         }
     }
     
-    //MARK: - Reset les formulaires
-    
+    // MARK: - Réinitialisation des formulaires
+    /// Réinitialise le formulaire de création de souvenir mission.
     func resetFormMission() {
         image = nil
         descriptionText = ""
@@ -182,17 +197,18 @@ class SouvenirsViewModel {
         selectedTheme = nil
     }
     
+    /// Réinitialise le formulaire de création de souvenir carte.
     func resetFormCarte() {
         image = nil
         descriptionText = ""
         selectedTheme = nil
     }
     
-    // MARK: - Call API : Données Back / Front
+    // MARK: - Données et service backend
     
     private let service = SouvenirService()
     
-    //Recupérer les souvenirs
+    /// Récupère tous les souvenirs depuis le backend.
     func fetchSouvenirs() async {
         do {
             souvenirsData = try await service.getAllSouvenirs()
@@ -202,10 +218,9 @@ class SouvenirsViewModel {
     }
     
     // MARK: - Gestion des images
-    
-    /// Sauvegarde une image dans le répertoire Documents de l’application.
-    /// - Parameter image: L’image à sauvegarder.
-    /// - Returns: Le nom du fichier sauvegardé (String) ou `nil` en cas d’erreur.
+    /// Sauvegarde une image dans le répertoire Documents local.
+    /// - Parameter image: Image à sauvegarder.
+    /// - Returns: Le nom du fichier sauvegardé.
     private func saveImageToDocuments(image: UIImage) -> String?{
         guard let data = image.jpegData(compressionQuality: 0.8) else {return nil}
         
@@ -224,25 +239,24 @@ class SouvenirsViewModel {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
     
-    // Sauvagarde l'image dans la librairie Photo de l'iPhone
-    
+    /// Enregistre une image dans la photothèque de l’iPhone.
     func saveImageToPhotoLibrary(_ image: UIImage) {
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
     }
+    
     // MARK: - Chargement de l'image
-        
-        /// Charge une image enregistrée localement à partir de son nom de fichier.
-        /// - Parameter filename: Nom du fichier image (optionnel).
-        /// - Returns: L’image chargée (`UIImage`) ou `nil` si le fichier n’existe pas.
+    /// Charge une image enregistrée localement à partir de son nom de fichier.
+    /// - Parameter filename: Nom du fichier image (optionnel).
+    /// - Returns: L’image chargée (`UIImage`) ou `nil` si le fichier n’existe pas.
     func loadImage(from filename : String?) -> UIImage? {
         guard let filename = filename else { return nil}
         let url = getDocumentsDirectory().appendingPathComponent(filename)
         return UIImage(contentsOfFile: url.path)
     }
+    
     // MARK: - Formatage de la date
-        
-    /// Formate la date de création en français (jour mois année).
-    /// - Returns: Une chaîne de type `"07/octobre/2025"`.
+    /// Formate la date de création en français (jour/mois/année).
+    /// - Returns: Une chaîne du type `"07/10/2025"`.
     func formattedDate() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "fr_FR")
