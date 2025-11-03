@@ -16,7 +16,7 @@ struct CreateMapInsert: View {
     @State private var showCamera = false
     @State private var showModalDescription = false
     @Binding var dismissModal : Bool
-    @State private var showLocalisationPopup : Bool = false
+    @State private var showLocalisationPopup : Bool = true
     @State private var showAdressModal = false
     @State private var isAlertPresented: Bool = false
     
@@ -213,26 +213,18 @@ struct CreateMapInsert: View {
                                                 }
                                             }
                                             dismissModal = false
-                                            print(mapViewModel.places.last?.nom ?? "")
-                                            print(souvenirViewModel.souvenirsData.last?.nom ?? "")
-                                            print("souvenirTheme: \( souvenirViewModel.selectedTheme ?? .energie )")
-                                            print("souvenirDesc: \(souvenirViewModel.descriptionText)")
-                                            print("mapNom: \(mapViewModel.nomDuLieu)")
-                                            print("mapTheme: \( mapViewModel.selectedTheme ?? .energie )")
-                                            print("mapDesc: \(mapViewModel.descriptionText)")
-                                            print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
+
                                         }else{
                                             isAlertPresented = true
-                                            print(mapViewModel.places.last?.nom ?? "")
-                                            print(souvenirViewModel.souvenirsData.last?.nom ?? "")
-                                            print("souvenirTheme: \( souvenirViewModel.selectedTheme ?? .energie )")
-                                            print("souvenirDesc: \(souvenirViewModel.descriptionText)")
-                                            print("mapNom: \(mapViewModel.nomDuLieu)")
-                                            print("mapTheme: \( mapViewModel.selectedTheme ?? .energie )")
-                                            print("mapDesc: \(mapViewModel.descriptionText)")
-                                            print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
-                                        }
-                                        
+                                    }
+                                        print(mapViewModel.places.last?.nom ?? "")
+                                        print(souvenirViewModel.souvenirsData.last?.nom ?? "")
+                                        print("souvenirTheme: \( souvenirViewModel.selectedTheme ?? .energie )")
+                                        print("souvenirDesc: \(souvenirViewModel.descriptionText)")
+                                        print("mapNom: \(mapViewModel.nomDuLieu)")
+                                        print("mapTheme: \( mapViewModel.selectedTheme ?? .energie )")
+                                        print("mapDesc: \(mapViewModel.descriptionText)")
+                                        print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
                                     }
                                     
                                 }label:{
