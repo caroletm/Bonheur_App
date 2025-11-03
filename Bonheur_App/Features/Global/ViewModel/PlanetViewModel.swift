@@ -15,6 +15,60 @@ class PlanetViewModel {
     
     //MARK: - Data
     
-    let planetes : [Planete] = [planeteSouvenirs, planeteExplora, planeteMusic, planetePhilo, planeteMission]
+    var planetes : [Planete] = []
+    
+    //MARK: - Call API Front/Back
+    
+    let service = PlaneteService()
+    
+    func fetchPlanetes() async {
+        do {
+            let dtos = try await service.getAllPlanetes()
+            let allPlanetes = dtos.map { Planete(from: $0) }
+            
+            planetes = allPlanetes.map { planete in
+                switch planete.nom {
+                case "Memoria":
+                    planete.position = CGPoint(x: 0, y: 440)
+                    planete.circleSize = CGSize(width: 140, height: 140)
+                    planete.circleRelativeOffset = CGPoint(x: 0, y: 0)
+                    planete.route = .planeteSouvenirs
+                    
+                    
+                case "Explora":
+                    planete.position = CGPoint(x: -100, y: 120)
+                    planete.circleSize = CGSize(width: 132, height: 132)
+                    planete.circleRelativeOffset = CGPoint(x: 0, y: 0)
+                    planete.route = .planeteExplo
+                    
+                case "Harmonia":
+                    planete.position = CGPoint(x: -100, y: 300)
+                    planete.circleSize = CGSize(width: 140, height: 140)
+                    planete.circleRelativeOffset = CGPoint(x: 7.5, y: -6)
+                    planete.route = .planeteMusic
 
+                    
+                case "Lumen":
+                    planete.position = CGPoint(x: 100, y: 120)
+                    planete.circleSize = CGSize(width: 140, height: 140)
+                    planete.circleRelativeOffset = CGPoint(x: 0, y: 0)
+                    planete.route = .planetePhilo
+                    
+                case "Challengis":
+                    planete.position = CGPoint(x: 120, y: 300)
+                    planete.circleSize = CGSize(width: 130, height: 130)
+                    planete.circleRelativeOffset = CGPoint(x: -2, y: 0)
+                    planete.route = .planeteMission
+                    
+                default:
+                    break
+                }
+                return planete
+            }
+            
+        } catch {
+            print("Erreur de chargement des planètes:", error)
+        }
+    }
+    
 }
