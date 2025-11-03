@@ -114,10 +114,10 @@ struct PlaneteUser: View {
                 VStack {
                     Spacer()
                     
-                    Text(planetsVisible ? "Choisis ta destination" : citationViewModel.currentCitation) // MODIFICATION
+                    Text(planetsVisible ? "Choisis ta destination" : citationViewModel.generateRandomCitation()) // MODIFICATION
                         .font(.custom("SpaceMono-Regular", size: 20))
                         .foregroundStyle(.white)
-                        .padding(.top, planetsVisible ? -380 : 0)
+                        .padding(.top, planetsVisible ? -380 : -120)
                         .animation(.easeInOut(duration: 0.5), value: planetsVisible)
                         .allowsHitTesting(false)
                         .padding()
@@ -150,7 +150,7 @@ struct PlaneteUser: View {
         
         
         .task { // AJOUT: Charge les citations depuis l'API au lancement de la vue
-            await citationViewModel.fetchCitations()
+            await citationViewModel.fetchCitation()
         }
         
         
