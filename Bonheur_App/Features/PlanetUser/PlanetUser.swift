@@ -129,14 +129,13 @@ struct PlaneteUser: View {
             // .fullScreenCover affiche la vue en plein écran sans laisser voir l'arrière-plan
             .fullScreenCover(isPresented: $showSouvenirPopup) {
                 // Sélection aléatoire d'un souvenir (gestion sécurisée avec if let)
-                if let souvenir = souvenirViewModel.souvenirsData.randomElement() {
-                    
+                if !souvenirViewModel.souvenirsData.isEmpty {
+                    if let souvenir = souvenirViewModel.souvenirsData.randomElement() {
                         SouvenirsDetailsPolaView(souvenir: souvenir, showSouvenirPopup: $showSouvenirPopup)
-                    
-                    .presentationDetents([.medium])
-                    // Affiche le petit trait en haut permettant de swiper pour fermer
-                    .presentationDragIndicator(.visible)
-                    .presentationCornerRadius(30)
+                            .presentationDetents([.medium])
+                            .presentationDragIndicator(.visible)
+                            .presentationCornerRadius(30)
+                    }
                 }
             }
             // CHECKLIST: Popup de checklist centré à l'écran
@@ -151,6 +150,8 @@ struct PlaneteUser: View {
         
         .task { // AJOUT: Charge les citations depuis l'API au lancement de la vue
             await citationViewModel.fetchCitation()
+            await planetViewModel.fetchPlanetes()
+            await souvenirViewModel.fetchSouvenirs()
         }
         
         
