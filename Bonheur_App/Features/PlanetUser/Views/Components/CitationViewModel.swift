@@ -14,7 +14,7 @@ class CitationViewModel {
     // MARK: - Properties
     
     /// Liste des citations disponibles
-    var citations: [Citation] = []
+    var citations: [CitationDTO] = []
     
     /// Citation actuellement affichée
     var currentCitation: String = "« On ne trouve pas le bonheur, on le cultive »"
@@ -24,116 +24,48 @@ class CitationViewModel {
     
     /// Message d'erreur éventuel
     var errorMessage: String?
-    
-    // MARK: - Initialization
-    
-    init() {
-        // Citations par défaut en cas d'échec de chargement depuis l'API
-        loadDefaultCitations()
-        // Sélectionner une citation aléatoire au démarrage
-        selectRandomCitation()
-    }
-    
+
     // MARK: - Methods
     
     /// Charge les citations par défaut (fallback)
     private func loadDefaultCitations() {
         citations = [
-            Citation(text: "« On ne trouve pas le bonheur, on le cultive »"),
-            Citation(text: "« Le bonheur n'est pas une destination, c'est une façon de voyager »"),
-            Citation(text: "« Le bonheur, c'est de continuer à désirer ce qu'on possède »"),
-            Citation(text: "« Le secret du bonheur, c'est la liberté. Et le secret de la liberté, c'est le courage »"),
-            Citation(text: "« Le bonheur est la seule chose qui se double si on le partage »"),
-            Citation(text: "« Il n'y a qu'un devoir, c'est d'être heureux »"),
-            Citation(text: "« Le bonheur n'est pas au sommet de la montagne, mais dans la façon de la gravir »"),
-            Citation(text: "« Chaque jour est une nouvelle chance de bonheur »"),
-            Citation(text: "« Le bonheur est un parfum que l'on ne peut répandre sur autrui sans en faire rejaillir quelques gouttes sur soi-même »"),
-            Citation(text: "« Le bonheur, c'est de le chercher »")
+            CitationDTO(texte: "« On ne trouve pas le bonheur, on le cultive »"),
+            CitationDTO(texte: "« Le bonheur n'est pas une destination, c'est une façon de voyager »"),
+            CitationDTO(texte: "« Le bonheur, c'est de continuer à désirer ce qu'on possède »"),
+            CitationDTO(texte: "« Le secret du bonheur, c'est la liberté. Et le secret de la liberté, c'est le courage »"),
+            CitationDTO(texte: "« Le bonheur est la seule chose qui se double si on le partage »"),
+            CitationDTO(texte: "« Il n'y a qu'un devoir, c'est d'être heureux »"),
+            CitationDTO(texte: "« Le bonheur n'est pas au sommet de la montagne, mais dans la façon de la gravir »"),
+            CitationDTO(texte: "« Chaque jour est une nouvelle chance de bonheur »"),
+            CitationDTO(texte: "« Le bonheur est un parfum que l'on ne peut répandre sur autrui sans en faire rejaillir quelques gouttes sur soi-même »"),
+            CitationDTO(texte: "« Le bonheur, c'est de le chercher »")
         ]
     }
     
-    /// Sélectionne une citation aléatoire parmi la liste
-    func selectRandomCitation() {
-        guard !citations.isEmpty else {
-            currentCitation = "« On ne trouve pas le bonheur, on le cultive »"
-            return
-        }
-        
-        if let randomCitation = citations.randomElement() {
-            currentCitation = randomCitation.text
-        }
-    }
+
+    //MARK: Call API Emmanuel
+
+    let citationService = CitationService()
     
-    /// Charge les citations depuis l'API Vapor
-    @MainActor
-    func fetchCitations() async {
-        isLoading = true
-        errorMessage = nil
-        
-        // URL de votre API Vapor (à adapter selon votre configuration)
-        guard let url = URL(string: "http://localhost:8080/citations") else {
-            errorMessage = "URL invalide"
-            isLoading = false
-            return
-        }
+    func fetchCitation() async {
         
         do {
-            let (data, response) = try await URLSession.shared.data(from: url)
-            
-            guard let httpResponse = response as? HTTPURLResponse,
-                  httpResponse.statusCode == 200 else {
-                throw URLError(.badServerResponse)
-            }
-            
-            let decoder = JSONDecoder()
-            let fetchedCitations = try decoder.decode([Citation].self, from: data)
-            
-            if !fetchedCitations.isEmpty {
-                citations = fetchedCitations
-                selectRandomCitation()
-            }
-            
-            isLoading = false
-            
-        } catch {
+            citations = try await citationService.getAllCitations()
+        }
+        catch {
             errorMessage = "Erreur de chargement: \(error.localizedDescription)"
-            isLoading = false
             print("Erreur lors du chargement des citations: \(error)")
         }
     }
     
-    /// Rafraîchit la citation affichée (pour un bouton de rafraîchissement optionnel)
-    func refreshCitation() {
-        selectRandomCitation()
-    }
-}
-// MARK: - Call api
-@Observable
-class CitationViewModelApi{
-    var citation : [CitationData] = []
+    //MARK: Generer des citations random
     
-    func fetchCitation() async {
-        guard let url = URL(string:"http://127.0.0.1:8080/citations") else { return }
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            if let decodeResponse = try? JSONDecoder().decode([CitationData].self, from: data) {
-                citation = decodeResponse
-            }
-        } catch {
-            print("invalid data : \(error)")
-        }
+    func generateRandomCitation() -> String {
+        let randomCitation = citations.randomElement()?.texte ?? "Aucune citation disponible"
+        return randomCitation
     }
-    
-}
 
-// MARK: - Citation Model
 
-struct Citation: Codable, Identifiable {
-    var id: UUID?
-    var text: String
-    
-    init(id: UUID? = nil, text: String) {
-        self.id = id ?? UUID()
-        self.text = text
-    }
+
 }

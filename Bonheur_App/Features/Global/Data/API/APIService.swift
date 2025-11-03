@@ -10,7 +10,7 @@ import Foundation
 
 final class APIService {
     static let shared = APIService()
-    let baseURL : String = "http://127.0.0.1:8080"
+    let baseURL : String = "http://10.80.57.238:8080"
     
     private init() {}
 
@@ -33,7 +33,7 @@ final class APIService {
               (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
         }
-        return try JSONDecoder().decode(T.self, from: data)
+        return try JSONDecoder.timestampDecoder.decode(T.self, from: data)
     }
     
     //METHODE POST
@@ -48,7 +48,7 @@ final class APIService {
         if let token = token {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
-        request.httpBody = try JSONEncoder().encode(body)
+        request.httpBody = try JSONEncoder.timestampEncoder.encode(body)
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
@@ -57,7 +57,7 @@ final class APIService {
         }
         switch httpResponse.statusCode {
         case 200..<300:
-            return try JSONDecoder().decode(U.self, from: data)
+            return try JSONDecoder.timestampDecoder.decode(U.self, from: data)
         case 401 :
             throw URLError(.userAuthenticationRequired)
         default:
@@ -102,7 +102,22 @@ final class APIService {
               (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
         }
-        return try JSONDecoder().decode(U.self, from: data)
+        return try JSONDecoder.timestampDecoder.decode(U.self, from: data)
     }
 }
 
+extension JSONDecoder {
+    static var timestampDecoder: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
+        return decoder
+    }
+}
+
+extension JSONEncoder {
+    static var timestampEncoder: JSONEncoder {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .secondsSince1970
+        return encoder
+    }
+}

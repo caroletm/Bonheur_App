@@ -83,23 +83,23 @@ struct CreateMapInsert: View {
                                         showCamera = true
                                     }
                             } else {
-                                Rectangle()
-                                    .fill(Color.blueGrey)
-                                    .opacity(0.3)
-                                    .frame(width: 271, height: 198)
-                                    .cornerRadius(10)
-                                    .onTapGesture {
-                                        showCamera = true
+                                    Rectangle()
+                                        .fill(Color.blueGrey)
+                                        .opacity(0.3)
+                                        .frame(width: 271, height: 198)
+                                        .cornerRadius(10)
+                                        .onTapGesture {
+                                            showCamera = true
+                                        }
+                                    VStack{
+                                        Image(systemName: "camera")
+                                            .resizable()
+                                            .frame(width: 36, height: 29)
+                                        
+                                        Text("Photo optionnelle")
+                                            .font(.custom("Poppins-Light", size: 10))
                                     }
-                                VStack{
-                                    Image(systemName: "camera")
-                                        .resizable()
-                                        .frame(width: 36, height: 29)
-                                    
-                                    Text("Photo optionnelle")
-                                        .font(.custom("Poppins-Light", size: 10))
-                                }
-                                .opacity(0.6)
+                                    .opacity(0.6)
                             }
                         }
                         .zIndex(1)
@@ -213,26 +213,18 @@ struct CreateMapInsert: View {
                                                 }
                                             }
                                             dismissModal = false
-                                            print(mapViewModel.places.last?.nom ?? "")
-                                            print(souvenirViewModel.souvenirsData.last?.nom ?? "")
-                                            print("souvenirTheme: \( souvenirViewModel.selectedTheme ?? .energie )")
-                                            print("souvenirDesc: \(souvenirViewModel.descriptionText)")
-                                            print("mapNom: \(mapViewModel.nomDuLieu)")
-                                            print("mapTheme: \( mapViewModel.selectedTheme ?? .energie )")
-                                            print("mapDesc: \(mapViewModel.descriptionText)")
-                                            print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
+
                                         }else{
                                             isAlertPresented = true
-                                            print(mapViewModel.places.last?.nom ?? "")
-                                            print(souvenirViewModel.souvenirsData.last?.nom ?? "")
-                                            print("souvenirTheme: \( souvenirViewModel.selectedTheme ?? .energie )")
-                                            print("souvenirDesc: \(souvenirViewModel.descriptionText)")
-                                            print("mapNom: \(mapViewModel.nomDuLieu)")
-                                            print("mapTheme: \( mapViewModel.selectedTheme ?? .energie )")
-                                            print("mapDesc: \(mapViewModel.descriptionText)")
-                                            print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
-                                        }
-                                        
+                                    }
+                                        print(mapViewModel.places.last?.nom ?? "")
+                                        print(souvenirViewModel.souvenirsData.last?.nom ?? "")
+                                        print("souvenirTheme: \( souvenirViewModel.selectedTheme ?? .energie )")
+                                        print("souvenirDesc: \(souvenirViewModel.descriptionText)")
+                                        print("mapNom: \(mapViewModel.nomDuLieu)")
+                                        print("mapTheme: \( mapViewModel.selectedTheme ?? .energie )")
+                                        print("mapDesc: \(mapViewModel.descriptionText)")
+                                        print("mapAdresse : \(mapViewModel.addressSelected ?? "erreurAddress")")
                                     }
                                     
                                 }label:{

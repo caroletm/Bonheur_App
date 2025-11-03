@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum SouvenirType : CaseIterable, Codable {
+enum SouvenirType : String, CaseIterable, Codable {
     case mapInsert
     case mission
 }

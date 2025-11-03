@@ -45,8 +45,8 @@ struct SouvenirsDetailsView: View {
                             .font(.custom("SpaceMono-Regular", size: 14))
                             .opacity(0.7)
                         
-                        if souvenir.photo != nil {
-                            if let image = souvenirsViewModel.loadImage(from: souvenir.photo ?? "photoDog") {
+                        if souvenir.photo != "" {
+                            if let image = souvenirsViewModel.loadImage(from: souvenir.photo ?? "") {
                                 
                                 Image(uiImage: image)
                                     .resizable()
@@ -114,7 +114,7 @@ struct SouvenirsDetailsView: View {
                 }
                 .padding(.bottom, 10)
                 
-                if souvenir.photo != nil {
+                if souvenir.photo != "" {
                     if souvenir.type == .mission {
                         Image(.defiValidate)
                             .resizable()
