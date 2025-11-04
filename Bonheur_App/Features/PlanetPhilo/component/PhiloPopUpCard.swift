@@ -8,9 +8,11 @@ import SwiftUI
 
 // Popup Card
 struct PhilosophyPopupCard: View {
+    
+    @Environment(CourantPhiloViewModel.self) private var courantPhiloViewModel
+
     let philosophy: Philosophy
-//    let onClose: () -> Void
-    @Binding var showPopup: Bool
+    
     var body: some View {
         VStack(spacing: 20) {
             HStack {
@@ -22,7 +24,7 @@ struct PhilosophyPopupCard: View {
                 Spacer()
                 
                 Button {
-                    showPopup = true
+                    courantPhiloViewModel.showPopUp.toggle()
                     
                 } label: {
                     Image(systemName: "xmark.circle.fill")
@@ -49,4 +51,9 @@ struct PhilosophyPopupCard: View {
         
         .shadow(radius: 20)
     }
+}
+
+#Preview {
+    PhilosophyPopupCard(philosophy:.bouddhisme)
+        .environment(CourantPhiloViewModel())
 }

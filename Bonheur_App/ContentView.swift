@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var challengeViewModel = ChallengeViewModel()
     @State private var mapViewModel = MapViewModel()
     @State private var authViewModel = AuthViewModel()
+    @State private var courantPhiloViewModel = CourantPhiloViewModel()
     
     var body: some View {
         Group {
@@ -79,6 +80,7 @@ struct ContentView: View {
                 .environment(souvenirsViewModel)
                 .environment(challengeViewModel)
                 .environment(mapViewModel)
+                .environment(courantPhiloViewModel)
                 
                 
             }
@@ -119,4 +121,5 @@ struct ContentView: View {
         .environment(ChallengeViewModel())
         .environment(MapViewModel())
         .environment(CitationViewModel())
+        .environment(CourantPhiloViewModel())
 }

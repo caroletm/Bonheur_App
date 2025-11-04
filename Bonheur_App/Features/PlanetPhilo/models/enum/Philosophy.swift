@@ -12,10 +12,10 @@ enum Philosophy: String, CaseIterable, Hashable {
     
     var title: String {
         switch self {
-        case .epicurisme: return "Épicurisme"
+        case .epicurisme: return "Epicurisme"
         case .confucianisme: return "Confucianisme"
         case .bouddhisme: return "Bouddhisme"
-        case .stoicisme: return "Stoïcisme"
+        case .stoicisme: return "Stoicisme"
         }
     }
     
