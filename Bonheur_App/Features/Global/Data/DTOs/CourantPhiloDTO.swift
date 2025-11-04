@@ -14,6 +14,11 @@ struct CourantPhiloDTO: Codable {
     var icon: String
     var description: String
     
+    // Méthode pour convertir en enum Philosophy
+       func toEnum() -> Philosophy {
+           return Philosophy(rawValue: nom.lowercased()) ?? .bouddhisme
+       }
+    
 }
 // a utiliser dans le cas d'un PUT et PATCH
 struct PartialCourantPhilo: Codable {
