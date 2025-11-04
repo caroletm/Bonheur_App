@@ -4,7 +4,7 @@ import AVFoundation
 
 @Observable
 final class MusicPlayerViewModel {
-    var selectedSegment: Int? = 0
+    var selectedSegment: Int? = nil
     var isPlaying: Bool = false
 
     let planeteMusic: PlaneteMusic

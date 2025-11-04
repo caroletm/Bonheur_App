@@ -20,7 +20,7 @@ struct PlayButtonOctagon: View {
     @Binding var selectedSegment: Int?
     var action: () -> Void
     
-    @State private var glowAnimation = false
+    @State private var breathe = false
     
     var body: some View {
         Button(action: {
@@ -29,19 +29,20 @@ struct PlayButtonOctagon: View {
             }
         }) {
             ZStack {
+                // Effet de respiration (halo)
                 if isPlaying {
                     Circle()
-                        .fill(Color.pinkMusic.opacity(0.4))
+                        .fill(Color.pinkMusic.opacity(0.3))
                         .frame(width: 110, height: 110)
-                        .blur(radius: 20)
-                        .scaleEffect(glowAnimation ? 1.1 : 0.9)
+                        .scaleEffect(breathe ? 1.15 : 0.9)
+                        .blur(radius: 25)
                         .animation(
-                            .easeInOut(duration: 1)
+                            .easeInOut(duration: 2.0)
                                 .repeatForever(autoreverses: true),
-                            value: glowAnimation
+                            value: breathe
                         )
-                        .onAppear { glowAnimation = true }
-                        .onDisappear { glowAnimation = false }
+                        .onAppear { breathe = true }
+                        .onDisappear { breathe = false }
                 }
                 
                 // Bouton principal
@@ -50,7 +51,15 @@ struct PlayButtonOctagon: View {
                     .frame(width: 80, height: 80)
                     .overlay(Circle().stroke(Color.white, lineWidth: 3))
                     .shadow(color: isPlaying ? Color.pinkMusic.opacity(0.6) : .clear, radius: 10)
+                    .scaleEffect(isPlaying ? (breathe ? 1.05 : 0.95) : 1.0)
+                    .animation(
+                        .easeInOut(duration: 2.0)
+                            .repeatForever(autoreverses: true)
+                            .delay(0.2),
+                        value: breathe
+                    )
                 
+                // Icône
                 Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                     .resizable()
                     .scaledToFit()
@@ -62,6 +71,7 @@ struct PlayButtonOctagon: View {
         .buttonStyle(.plain)
     }
 }
+
 
 
 #Preview {

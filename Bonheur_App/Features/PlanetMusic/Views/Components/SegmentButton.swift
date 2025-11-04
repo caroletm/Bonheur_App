@@ -39,7 +39,7 @@ struct SegmentButton: View {
                             .foregroundColor(isSelected ? .white : .gray)
                         
                         Text(label)
-                            .font(.custom("Poppins-Regular", size: 10))
+                            .font(.custom("SpaceMono-Regular", size: 10))
                             .foregroundStyle(isSelected ? .white : .gray)
                     }
                     .position(
