@@ -16,9 +16,6 @@ struct ExploView : View {
     
     @State var showModal: Bool = false
     
-    @State var showDetailPopup : Bool = false
-    
-    
     var body: some View {
         
         NavigationView {
@@ -26,9 +23,10 @@ struct ExploView : View {
             ZStack {
                     Image(.backgroundExplora)
                         .ignoresSafeArea(.all)
-                if !showDetailPopup {
+                
+                if !mapViewModel.showDetailPopup {
                     ZStack {
-                        MapView(showDetailPopup: $showDetailPopup)
+                        MapView()
                         Rectangle()
                             .fill(Color.clear)
                             .overlay(
@@ -55,9 +53,10 @@ struct ExploView : View {
                 }else{
                     ZStack {
                         Color.black.opacity(0.3).ignoresSafeArea(.all)
-                        DetailMapPoint(mapPoint: mapViewModel.selectedMapPoint!, showDetailPopup: $showDetailPopup)
+                        DetailMapPoint(mapPoint: (mapViewModel.selectedMapPoint ?? mapViewModel.places.last) ?? mapPoints[0])
                     }
                 }
+            
             }
             .sheet(isPresented: $showModal) {
                 CreateMapInsert(dismissModal: $showModal)

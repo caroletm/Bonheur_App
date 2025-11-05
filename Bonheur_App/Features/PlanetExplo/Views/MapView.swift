@@ -16,9 +16,7 @@ struct MapView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
     @State private var lastUserLocation: EquatableCoordinate?
-    
-    @Binding var showDetailPopup: Bool
-    
+        
     var body: some View {
         
         ZStack {
@@ -34,7 +32,9 @@ struct MapView: View {
                             Button {
   
                                 mapViewModel.selectedMapPoint = place
-                                showDetailPopup = true
+                                print(" endroit selectionné : \(String(describing: mapViewModel.selectedMapPoint))")
+                                mapViewModel.showDetailPopup = true
+                                print("popup: \( mapViewModel.showDetailPopup)")
                                 
                             }label:{
                                 Image(place.theme.iconName)
@@ -80,7 +80,7 @@ struct MapView: View {
 }
 
 #Preview {
-    MapView(showDetailPopup: .constant(true))
+    MapView()
         .environment(MapViewModel())
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())

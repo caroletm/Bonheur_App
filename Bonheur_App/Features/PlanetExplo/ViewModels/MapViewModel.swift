@@ -129,7 +129,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         
         if let image = image {
             imagePath = saveImageToDocuments(image: image)
-            saveImageToPhotoLibrary(image)
+//            saveImageToPhotoLibrary(image)
         }
         
         let newMapPoint = MapPointDTO(
@@ -189,9 +189,14 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         isManualAddressSelected = false
     }
     
-    //MARK: - Selectionner le detail MapPoint
+    
+    //MARK: - Detail MapPoint
     
     var selectedMapPoint: MapPointDTO? = nil
+    
+    var showDetailPopup: Bool = false
+    
+   
     
     // MARK: - Gestion des images
     
@@ -216,11 +221,11 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
     
-    // Sauvagarde l'image dans la librairie Photo de l'iPhone
-    
-    func saveImageToPhotoLibrary(_ image: UIImage) {
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-    }
+//    // Sauvagarde l'image dans la librairie Photo de l'iPhone
+//    
+//    func saveImageToPhotoLibrary(_ image: UIImage) {
+//        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+//    }
     
     // MARK: - Chargement de l'image
         

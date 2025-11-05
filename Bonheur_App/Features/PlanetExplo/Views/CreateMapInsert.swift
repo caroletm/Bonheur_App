@@ -213,6 +213,8 @@ struct CreateMapInsert: View {
                                                 }
                                             }
                                             dismissModal = false
+                                            mapViewModel.showDetailPopup = true
+                                            print("popup: \(mapViewModel.showDetailPopup)")
 
                                         }else{
                                             isAlertPresented = true
