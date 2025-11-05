@@ -15,8 +15,6 @@ struct DetailMapPoint: View {
     
     var mapPoint: MapPointDTO
     @State var address : String?
-    @Binding var showDetailPopup: Bool
-    
     
     var body: some View {
         
@@ -100,7 +98,8 @@ struct DetailMapPoint: View {
             
             Button {
                 mapViewModel.selectedMapPoint = nil
-                showDetailPopup = false
+                mapViewModel.showDetailPopup = false
+                print("popup: \(mapViewModel.showDetailPopup)")
                 
             }label: {
                 BoutonText(text: "OK", width: 45)
@@ -114,7 +113,7 @@ struct DetailMapPoint: View {
 #Preview {
     ZStack{
         Color.blueDark.ignoresSafeArea(edges: .all)
-        DetailMapPoint(mapPoint: mapPoints[1], showDetailPopup: .constant(false))
+        DetailMapPoint(mapPoint: mapPoints[1])
             .environment(NavigationViewModel())
             .environment(MapViewModel())
     }

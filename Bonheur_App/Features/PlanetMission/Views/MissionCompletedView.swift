@@ -17,12 +17,15 @@ struct MissionCompletedView: View {
     @State private var fitsInOneLine = true
     @State private var memoryChallengeForRecap: SouvenirDTO? = nil
     @State private var showValidationAlert = false
-    @State var showModal : Bool = false
+//    @State var showModal : Bool = false
     
     var body: some View {
+        
         ZStack{
             Image(.backgroundMissions)
                 .ignoresSafeArea()
+            if !souvenirViewmodel.showValidationPopup {
+                
             RectangleFond()
             VStack{
                 VStack{
@@ -196,11 +199,13 @@ struct MissionCompletedView: View {
                                 if let newSouvenir = try? await souvenirViewmodel.buildSouvenirChallenge(name: challenge.nom,missionID: challenge.id!
                                 ) {
                                     memoryChallengeForRecap = newSouvenir
-                                    showModal = true
+
                                 }else {
                                     showValidationAlert = true
                                 }
                             }
+                            print("\(String(describing: memoryChallengeForRecap))")
+                            souvenirViewmodel.showValidationPopup = true
                         }else{
                             showValidationAlert = true
                         }
@@ -228,10 +233,15 @@ struct MissionCompletedView: View {
                 }
                 .padding(.top)
             }.navigationBarBackButtonHidden(true)
-                .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
-                    MissionRecapValidationView(
-                        dismissModal: .constant(false), memoryChallenge: memoryChallenge)
-                }
+//                .sheet(item: $memoryChallengeForRecap) { memoryChallenge in
+//                    MissionRecapValidationView(memoryChallenge: memoryChallenge)
+//                }
+            }else{
+                MissionRecapValidationView(memoryChallenge: memoryChallengeForRecap ?? souvenirs[0])
+            }
+        }
+        .onAppear {
+            souvenirViewmodel.resetFormMission()
         }
     }
 }

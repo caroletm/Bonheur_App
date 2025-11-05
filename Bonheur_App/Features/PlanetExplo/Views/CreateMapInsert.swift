@@ -169,7 +169,6 @@ struct CreateMapInsert: View {
                             }
                             Spacer()
                                 .frame(height: 10)
-
                         }
                         
                         .frame(width: 285)

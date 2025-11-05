@@ -70,7 +70,7 @@ struct ContentView: View {
                                 CreateMapInsert(dismissModal : .constant(false))
                                 
                             case .detailMapPoint(mapPoint: let mapPoint):
-                                DetailMapPoint(mapPoint: mapPoint, showDetailPopup: .constant(false))
+                                DetailMapPoint(mapPoint: mapPoint)
                                 
                             }
                         }
