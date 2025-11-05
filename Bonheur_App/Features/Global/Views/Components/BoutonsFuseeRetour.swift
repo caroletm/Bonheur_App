@@ -23,7 +23,7 @@ struct  BoutonsFuseeRetour: View {
                     BoutonFusee(isPressed: false)
                 }
                 Spacer()
-                    .frame(width: 100)
+                    .frame(width: 230)
                 Button {
                     navigationViewModel.path.append(AppRoute.landing(planete: planete))
                 }label:{

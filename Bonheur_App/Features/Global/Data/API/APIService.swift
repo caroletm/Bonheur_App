@@ -9,7 +9,12 @@ import Foundation
 
 final class APIService {
     static let shared = APIService()
-    let baseURL : String = "http://127.0.0.1:8080"
+    let baseURL : String = "http://192.168.68.55:8080"
+    
+//    ipconfig getifaddr en0
+//    Simplon: 10.80.57.238
+//    localhost: 127.0.0.1
+//    carole : 192.168.68.55
     
     private init() {}
 

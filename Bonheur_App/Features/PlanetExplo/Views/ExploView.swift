@@ -15,7 +15,6 @@ struct ExploView : View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     
     @State var showModal: Bool = false
-    
     @State var showDetailPopup : Bool = false
     
     
@@ -59,7 +58,7 @@ struct ExploView : View {
                     }
                 }
             }
-            .sheet(isPresented: $showModal) {
+            .fullScreenCover(isPresented: $showModal) {
                 CreateMapInsert(dismissModal: $showModal)
                     .presentationDragIndicator(.visible)
             }

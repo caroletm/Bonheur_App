@@ -17,7 +17,11 @@ struct MapPointService {
     }
 
     func createMapPoint(_ dto: MapPointDTO) async throws -> MapPointDTO {
-        return try await APIService.shared.post("/mapPoints", body: dto)
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else {
+            print("Aucun token trouvé dans UserDefaults")
+            throw URLError(.userAuthenticationRequired)
+        }
+        return try await APIService.shared.post("/mapPoints", body: dto, token: token)
     }
 
     func updateMapPoint(_ id: UUID, dto: UpdateMapPointDTO) async throws -> MapPointDTO {

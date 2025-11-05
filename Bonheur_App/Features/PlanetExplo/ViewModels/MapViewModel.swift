@@ -123,6 +123,10 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
             return nil
         }
     }
+    //MARK: - Créer un mapPoint
+    
+//    var showModal: Bool = false
+//    var showDetailPopup : Bool = false
     
     func createMapPoint(nom: String, theme : SouvenirTheme, coordinate : CLLocationCoordinate2D) async {
         var imagePath: String? = nil

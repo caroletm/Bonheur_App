@@ -35,7 +35,7 @@ struct MusicPlayerView: View {
             }
 
             BoutonsFuseeRetour(planete: planeteMusic)
-                .padding(.bottom, 50)
+                .padding(.bottom, 40)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)

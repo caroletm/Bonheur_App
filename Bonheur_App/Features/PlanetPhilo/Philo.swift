@@ -22,8 +22,26 @@ struct PlanetePhiloView : View {
                     .scaledToFill()
                     .ignoresSafeArea()
                 
-                BoutonsFuseeRetour(planete: planetePhilo)
-                    .padding()
+                HStack{
+                    Button {
+                        navigationViewModel.path = NavigationPath()
+                    }label:{
+                        BoutonFusee(isPressed: false)
+                    }
+                    
+                    Spacer()
+                        .frame(width : 200)
+                    
+                    Button {
+                        navigationViewModel.path = NavigationPath()
+                        navigationViewModel.path.append(AppRoute.landing(planete: planetePhilo))
+                    } label: {
+                        BoutonRetour()
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal,30)
+                .offset(x: 0, y: 750)
                 
                 Image("CadreOnboarding")
                     .resizable()

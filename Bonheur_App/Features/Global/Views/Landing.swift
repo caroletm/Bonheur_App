@@ -106,7 +106,7 @@ struct LandingPlanet: View {
                     
                     Button {
                         navigationViewModel.path = NavigationPath()
-                        navigationViewModel.path.append(AppRoute.planeteUserTest)
+//                        navigationViewModel.path.append(AppRoute.planeteUserTest)
                     } label: {
                         BoutonRetour()
                     }

@@ -20,8 +20,14 @@ struct SouvenirsView: View {
     
     var body: some View {
         
-        let groupedSouvenirs = souvenirsViewModel.groupSouvenirsByMonth(souvenirsViewModel.souvenirsData)
-        let sortedSouvenirs = souvenirsViewModel.souvenirsData.sorted { $0.date > $1.date }
+
+        let sortedSouvenirs = souvenirsViewModel.souvenirsData.sorted {
+            if $0.date == $1.date {
+                return $0.id! > $1.id!
+            }
+            return $0.date > $1.date
+        }
+        let groupedSouvenirs = souvenirsViewModel.groupSouvenirsByMonth(sortedSouvenirs)
         let last5Souvenirs = Array(sortedSouvenirs.prefix(5))
         let isFilterOn : Bool =
         souvenirsViewModel.filters.month != nil ||

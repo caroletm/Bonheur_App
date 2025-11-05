@@ -5,7 +5,10 @@ struct PlaneteUser: View {
     @Environment(PlanetViewModel.self) private var planetViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(SouvenirsViewModel.self) private var souvenirViewModel
-    @Environment(CitationViewModel.self) private var citationViewModel // AJOUT
+    @Environment(CitationViewModel.self) private var citationViewModel
+    @Environment(AuthViewModel.self) private var authViewModel
+    
+    // AJOUT
     
     @State private var selectedPlanet: Planete? = nil
     @State private var planetsVisible: Bool = false
@@ -49,6 +52,7 @@ struct PlaneteUser: View {
                     }
                 }
                 
+            
                 // MODAL: Bouton Polaroid souvenir du jour qui déclenche l'ouverture de la modal
                 if planetsVisible {
                     Button(action: {
@@ -61,6 +65,7 @@ struct PlaneteUser: View {
                             .scaleEffect(isPulsing ? 1.05 : 1.0)
                             .shadow(color: .white.opacity(isPulsing ? 0.8 : 0.4), radius: isPulsing ? 15 : 8)
                             .shadow(color: .yellow.opacity(isPulsing ? 0.6 : 0.2), radius: isPulsing ? 20 : 10)
+                        
                     }
                     .offset(x: 145, y: 530)
                     .opacity(planetsVisible ? 1.0 : 0.0)
@@ -102,6 +107,7 @@ struct PlaneteUser: View {
                 .frame(width: 100, height: 100)
                 .offset(x: 0, y: 640)
                 
+                
                 // CHECKLIST: Gauge de progression et bouton (visibles seulement si planetsVisible est true)
                 if planetsVisible {
                     ProgressBarreView(checklistItems: $checklistItems, showChecklistPopup: $showChecklistPopup)
@@ -109,6 +115,7 @@ struct PlaneteUser: View {
                         .opacity(planetsVisible ? 1.0 : 0.0)
                         .animation(.easeInOut(duration: 0.8).delay(1.2), value: planetsVisible)
                 }
+                
                 
                 // Contenu au premier plan contenant les citations aleatoire avant pression du bouton fusée qui est remplacé par le texte de description
                 VStack {
@@ -124,6 +131,18 @@ struct PlaneteUser: View {
                     
                     Spacer()
                 }
+                
+//                Button {
+//                    authViewModel.logout()
+//                }label: {
+//                    Image(systemName: "power.circle")
+//                        .resizable()
+//                        .frame(width: 40, height: 40)
+//                        .foregroundColor(.red)
+//                        .offset(x: -140, y: 600)
+//                }
+//                .zIndex(10)
+
             }
             // MODAL: Configuration de la modal plein écran
             // .fullScreenCover affiche la vue en plein écran sans laisser voir l'arrière-plan
@@ -163,5 +182,6 @@ struct PlaneteUser: View {
         .environment(PlanetViewModel())
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
-        .environment(CitationViewModel()) // AJOUT
+        .environment(CitationViewModel())
+        .environment(AuthViewModel())// AJOUT
 }

@@ -28,12 +28,6 @@ class PlanetViewModel {
             
             planetes = allPlanetes.map { planete in
                 switch planete.nom {
-                case "Memoria":
-                    planete.position = CGPoint(x: 0, y: 440)
-                    planete.circleSize = CGSize(width: 140, height: 140)
-                    planete.circleRelativeOffset = CGPoint(x: 0, y: 0)
-                    planete.route = .planeteSouvenirs
-                    
                     
                 case "Explora":
                     planete.position = CGPoint(x: -100, y: 120)
@@ -44,7 +38,7 @@ class PlanetViewModel {
                 case "Harmonia":
                     planete.position = CGPoint(x: -100, y: 300)
                     planete.circleSize = CGSize(width: 140, height: 140)
-                    planete.circleRelativeOffset = CGPoint(x: 7.5, y: -6)
+                    planete.circleRelativeOffset = CGPoint(x: 0, y: 0)
                     planete.route = .planeteMusic
 
                     
@@ -59,6 +53,12 @@ class PlanetViewModel {
                     planete.circleSize = CGSize(width: 130, height: 130)
                     planete.circleRelativeOffset = CGPoint(x: -2, y: 0)
                     planete.route = .planeteMission
+                    
+                case "Memoria":
+                    planete.position = CGPoint(x: 0, y: 440)
+                    planete.circleSize = CGSize(width: 140, height: 140)
+                    planete.circleRelativeOffset = CGPoint(x: 0, y: 0)
+                    planete.route = .planeteSouvenirs
                     
                 default:
                     break

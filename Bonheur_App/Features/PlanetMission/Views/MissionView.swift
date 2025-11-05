@@ -74,12 +74,15 @@ struct MissionView: View {
                 }
                 .frame(width: 300, height: 380)
                 Spacer()
-                HStack(spacing:70){
+                HStack{
                     Button {
                         navigationViewModel.path = NavigationPath()
                     }label:{
                         BoutonFusee(isPressed: false)
-                    }.padding(.leading,40)
+                    }
+                    
+                    Spacer()
+                        .frame(width : 200)
                     
                     Button {
                         navigationViewModel.path = NavigationPath()
@@ -89,7 +92,8 @@ struct MissionView: View {
                     }
                     Spacer()
                 }
-                .padding(.bottom,50)
+                .padding(.bottom,40)
+                .padding(.horizontal,30)
             }
             .task {
                 await viewmissionmodel.fetchMission()

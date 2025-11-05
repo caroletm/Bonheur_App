@@ -81,6 +81,8 @@ struct ContentView: View {
                 .environment(challengeViewModel)
                 .environment(mapViewModel)
                 .environment(courantPhiloViewModel)
+                .environment(authViewModel)
+
                 
                 
             }
@@ -122,4 +124,5 @@ struct ContentView: View {
         .environment(MapViewModel())
         .environment(CitationViewModel())
         .environment(CourantPhiloViewModel())
+        .environment(AuthViewModel())
 }
