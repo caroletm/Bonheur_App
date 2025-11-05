@@ -115,6 +115,10 @@ class SouvenirsViewModel {
         !descriptionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
+    func imageToString(_ image: UIImage?) -> String? {
+        image?.jpegData(compressionQuality: 0.8)?.base64EncodedString()
+    }
+    
     // MARK: - Création d’un souvenir (mission)
     /// Construit un `SouvenirDefiDTO` et le sauvegarde via le service distant.
     /// - Parameters:
@@ -204,7 +208,11 @@ class SouvenirsViewModel {
         selectedTheme = nil
     }
     
-    // MARK: - Données et service backend
+    // MARK: - Show PopUp validation
+    
+    var showValidationPopup: Bool = false
+    
+    // MARK: - Call API front backend
     
     private let service = SouvenirService()
     

@@ -11,10 +11,11 @@ struct MissionRecapValidationView: View {
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(\.dismiss) private var dismiss
-    @Binding var dismissModal: Bool
+    //    @Binding var dismissModal: Bool
     let memoryChallenge: SouvenirDTO
     
     var body: some View {
+        
         ZStack{
             Image(.backgroundMissions)
                 .resizable()
@@ -37,13 +38,15 @@ struct MissionRecapValidationView: View {
                                 .frame(width: 60, height: 60)
                                 .offset(y: -38)
                             Text("\"\(memoryChallenge.nom)\"")
-                                .font(.custom("Poppins-bold", size: 20))
+                                .font(.custom("SpaceMono-Bold", size: 16))
                                 .foregroundColor(.black)
                                 .padding(.top,10)
                         }
                         HStack{
-                            if let photoName = memoryChallenge.photo, !photoName.isEmpty {
-                                Image(photoName)
+                            
+                            if let image = souvenirsViewModel.loadImage(from: memoryChallenge.photo ?? "")
+                            {
+                                Image(uiImage: image)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 106, height: 138)
@@ -71,11 +74,9 @@ struct MissionRecapValidationView: View {
                     .frame(width: 56, height: 56)
                     .offset(x:0,y:-25)
                 Button {
-                    navigationViewModel.path.append(
-                        AppRoute.planeteUserTest
-                    )
+                    navigationViewModel.path = NavigationPath()
                     souvenirsViewModel.resetFormMission()
-                    dismiss()
+                    souvenirsViewModel.showValidationPopup = false
                 } label: {
                     BoutonText(text: "OK", width: 45)
                 }.padding(.vertical,5)
@@ -93,11 +94,14 @@ struct MissionRecapValidationView: View {
                 )
                 .frame(width:350 , height: 680)
         }
+        .task {
+            await souvenirsViewModel.fetchSouvenirs()
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 #Preview {
-    MissionRecapValidationView(
-        dismissModal: .constant(false), memoryChallenge: souvenirs[1]
+    MissionRecapValidationView(memoryChallenge: souvenirs[1]
     )
     .environment(SouvenirsViewModel())
     .environment(NavigationViewModel())

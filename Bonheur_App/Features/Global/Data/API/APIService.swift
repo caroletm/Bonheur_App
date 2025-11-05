@@ -9,7 +9,9 @@ import Foundation
 
 final class APIService {
     static let shared = APIService()
-    let baseURL : String = "http://127.0.0.1:8080"
+    let baseURL : String = "http://10.80.57.238:8080"
+//    "http://127.0.0.1:8080"
+    
     
     private init() {}
 
