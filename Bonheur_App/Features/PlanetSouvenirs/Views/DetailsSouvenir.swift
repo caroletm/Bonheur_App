@@ -98,7 +98,7 @@ struct SouvenirsDetailsView: View {
                             BoutonFusee(isPressed: false)
                         }
                         Spacer()
-                            .frame(width: 100)
+                            .frame(width: 230)
                         Button {
                             if navigationViewModel.path.isEmpty {
                                 navigationViewModel.path = NavigationPath()
@@ -112,7 +112,7 @@ struct SouvenirsDetailsView: View {
                     }
                     .padding()
                 }
-                .padding(.bottom, 10)
+                .padding(10)
                 
                 if souvenir.photo != "" {
                     if souvenir.type == .mission {
