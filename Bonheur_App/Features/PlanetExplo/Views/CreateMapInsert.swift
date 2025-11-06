@@ -296,6 +296,7 @@ struct CreateMapInsert: View {
                                         }
                                     }
                                     dismissModal = false
+                                    mapViewModel.showDetailPopup = true
 
                                 }else{
                                     isAlertPresented = true

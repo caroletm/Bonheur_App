@@ -22,6 +22,9 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     var places : [MapPointDTO] = []
     let manager = CLLocationManager()
     var userLocation : CLLocationCoordinate2D? = nil
+    
+    //MARK: - Geolocalisation
+    
     var cameraPosition: MapCameraPosition {
         if let loc = userLocation {
             return .region(
@@ -47,8 +50,6 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         manager.startUpdatingLocation() // récupere les positions et met à jour la localisation
     }
     
-    //MARK: - Geolocalisation
-    
     func requestLocationAuthorization() {
         manager.desiredAccuracy = kCLLocationAccuracyBest // pour que ça soit précis
         manager.requestWhenInUseAuthorization() // demande l'autorisation de la localisation
@@ -62,13 +63,6 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
             span: MKCoordinateSpan(latitudeDelta: span, longitudeDelta: span)
         )
     }
-    
-//    // Fonction utilitaire pour comparer deux coordonnées (optionnelles)
-//    func didLocationChange(from old: CLLocationCoordinate2D?, to new: CLLocationCoordinate2D?) -> Bool {
-//        guard let old = old, let new = new else { return true }
-//        return old.latitude != new.latitude || old.longitude != new.longitude
-//    }
-//
     
     // Delegate appelé quand une nouvelle position est détectée
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -89,9 +83,6 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
             center: coordinate,
             span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         )
-        //        withAnimation(.easeInOut(duration: 0.5)) {
-        //            cameraPosition = .region(region)
-        //        }
     }
     
     func centerOnUser() {
@@ -124,9 +115,6 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         }
     }
     //MARK: - Créer un mapPoint
-    
-//    var showModal: Bool = false
-//    var showDetailPopup : Bool = false
     
     func createMapPoint(nom: String, theme : SouvenirTheme, coordinate : CLLocationCoordinate2D) async {
         var imagePath: String? = nil

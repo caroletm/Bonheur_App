@@ -34,7 +34,7 @@ struct DetailMapPoint: View {
                             .padding(.bottom, 10)
                     }
                     
-                    if mapPoint.photo != "" {
+                    if mapPoint.photo != "" || mapPoint.photo != nil {
                         
                         HStack (alignment: .top, spacing: 10) {
                             if let image = mapViewModel.loadImage(from: mapPoint.photo ?? "photoDog") {
