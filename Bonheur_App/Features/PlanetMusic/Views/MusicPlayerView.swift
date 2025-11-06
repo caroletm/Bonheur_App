@@ -13,6 +13,7 @@ struct MusicPlayerView: View {
 
     var body: some View {
         ZStack(alignment: .top) {
+            // Arrière-plan
             Image(.backgroundMusic)
                 .resizable()
                 .scaledToFill()
@@ -20,19 +21,34 @@ struct MusicPlayerView: View {
 
             CadreBlanc()
                 .padding(.top, 120)
+            
+            
 
-    
+            // Sélecteur de musique
             MusicSelectorView(viewModel: viewModel)
                 .padding(.top, 200)
-
+            
+            //Texte
             VStack {
-                Spacer()
-                Text("Choisis ton ambiance :")
-                    .font(.custom("SpaceMono-Bold", size: 20))
-                    .foregroundStyle(.white)
-                    .padding(.top, -300)
-                Spacer()
-            }
+                       Spacer()
+                       Text("Choisis ton ambiance :")
+                           .font(.custom("SpaceMono-Bold", size: 20))
+                           .foregroundStyle(.white)
+                           .padding(.top, -300)
+                       Spacer()
+                   }
+            
+            // Boutons en bas : fusée à gauche, retour au centre
+             VStack {
+                 Spacer()
+                 HStack(spacing: 70) {
+                     // Bouton fusée (bas gauche)
+                     Button {
+                         navigationViewModel.path = NavigationPath()
+                     } label: {
+                         BoutonFusee(isPressed: false)
+                     }
+                     .padding(.leading, 40)
 
             BoutonsFuseeRetour(planete: planeteMusic)
                 .padding(.bottom, 40)

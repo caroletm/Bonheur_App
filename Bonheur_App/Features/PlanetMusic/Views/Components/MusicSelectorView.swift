@@ -2,6 +2,7 @@
 //  MusicSelectorView.swift
 //  Bonheur_App
 //
+//  Vue principale affichant le cercle de sélection des musiques + le bouton Play central.
 //  Created by Apprenant156 on 29/09/2025.
 //
 
@@ -12,10 +13,12 @@ struct MusicSelectorView: View {
 
     var body: some View {
         ZStack {
+            // Cercle de fond gris
             Circle()
                 .fill(Color.greyDarkButton)
                 .frame(width: 270, height: 270)
 
+            // Boucle sur chaque thème musical pour créer un segment interactif
             ForEach(Array(viewModel.planeteMusic.themes.enumerated()), id: \.element.id) { index, theme in
                 let sliceAngle = 360.0 / Double(viewModel.planeteMusic.themes.count)
                 let start = Angle(degrees: Double(index) * sliceAngle - 90)
@@ -33,6 +36,7 @@ struct MusicSelectorView: View {
                 .frame(width: 250, height: 250)
             }
 
+            // Bouton Play/Pause central
             PlayButtonOctagon(
                 isPlaying: $viewModel.isPlaying,
                 selectedSegment: $viewModel.selectedSegment,

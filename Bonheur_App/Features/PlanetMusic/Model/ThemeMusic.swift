@@ -7,7 +7,7 @@
 import Foundation
 import SwiftUI
 
-// Un thème musical avec un nom, un fichier son et un logo
+//thème musical avec un nom, un fichier son et une image
 struct ThemeMusic: Identifiable {
     let id = UUID()
     var nom: String
