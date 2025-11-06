@@ -4,6 +4,7 @@ import SwiftUI
 // Composant réutilisable pour chaque planète-bouton avec animation
 struct PlanetButton: View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
+    @Environment(AuthViewModel.self) private var authViewModel
 
     let planet: Planete
     @State private var isPressed = false
@@ -50,7 +51,7 @@ struct PlanetButton: View {
                     .fontWeight(.bold)
                     .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
                     .offset(x: 0,
-                            y:max(planet.circleSize.height/2, 75) + 15)
+                            y:max(planet.circleSize.height/2, 75) + 5)
                     .scaleEffect((isPressed ? 1.05 : 1.0) * breathingScale)
                     .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
                     .allowsHitTesting(false)
@@ -89,4 +90,5 @@ struct PlanetButton: View {
         .environment(NavigationViewModel())
         .environment(SouvenirsViewModel())
         .environment(CitationViewModel())
+        .environment(AuthViewModel())
 }

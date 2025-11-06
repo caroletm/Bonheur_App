@@ -82,25 +82,17 @@ struct PlaneteUser: View {
                 
                 // Bouton Fusée
                 Button(action: {
-                    // Animation de lancement des planètes
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        rocketPressed = true
-                    }
+                    // Change juste l'état du bouton
+                    rocketPressed.toggle()
                     
+                    // Animation des planètes (indépendante)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         withAnimation(.easeOut(duration: 1.2)) {
                             planetsVisible.toggle()
                         }
-                        
-                        // Reset de l'état de la fusée
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                rocketPressed = false
-                            }
-                        }
                     }
                 }) {
-                    BoutonFusee(isPressed: false)
+                    BoutonFusee(isPressed: rocketPressed)
                 }
                 .buttonStyle(PlainButtonStyle())
                 .contentShape(Circle())
@@ -151,6 +143,11 @@ struct PlaneteUser: View {
                 if !souvenirViewModel.souvenirsData.isEmpty {
                     if let souvenir = souvenirViewModel.souvenirsData.randomElement() {
                         SouvenirsDetailsPolaView(souvenir: souvenir, showSouvenirPopup: $showSouvenirPopup)
+                            .environment(authViewModel)
+                            .environment(planetViewModel)
+                            .environment(navigationViewModel)
+                            .environment(souvenirViewModel)   
+                            .environment(citationViewModel)
                             .presentationDetents([.medium])
                             .presentationDragIndicator(.visible)
                             .presentationCornerRadius(30)
@@ -161,6 +158,8 @@ struct PlaneteUser: View {
             .overlay {
                 if showChecklistPopup {
                     BarrePopUpView(showChecklistPopup: $showChecklistPopup, checklistItems: $checklistItems)
+                        .environment(authViewModel)
+                        .environment(planetViewModel)
                 }
             }
         }

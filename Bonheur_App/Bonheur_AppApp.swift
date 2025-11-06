@@ -15,7 +15,7 @@ struct Bonheur_AppApp: App {
     @State private var navigationViewModel = NavigationViewModel()
     @State private var souvenirViewModel = SouvenirsViewModel()
     @State private var citationViewModel = CitationViewModel()
-    
+    @State private var authViewModel = AuthViewModel()
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -24,6 +24,7 @@ struct Bonheur_AppApp: App {
                 .environment(navigationViewModel)
                 .environment(souvenirViewModel)
                 .environment(citationViewModel)
+                .environment(authViewModel)
         }
     }
 }
