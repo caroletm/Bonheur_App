@@ -11,6 +11,7 @@ final class APIService {
     static let shared = APIService()
     
     let baseURL : String = "http://127.0.0.1:8080"
+
     
 //    ipconfig getifaddr en0
 //    Simplon: 10.80.57.238
