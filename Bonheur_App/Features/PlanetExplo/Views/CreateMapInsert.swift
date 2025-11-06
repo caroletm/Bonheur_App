@@ -13,7 +13,15 @@ struct CreateMapInsert: View {
     @Environment(NavigationViewModel.self) private var navigationViewModel
     @Environment(MapViewModel.self) private var mapViewModel
     @Environment(SouvenirsViewModel.self) private var souvenirViewModel
-    @State private var showCamera = false
+    
+    // Code original de caroletm :
+    // @State private var showCamera = false
+    
+    // Ajout Emmanuel : Variables pour gérer le menu de choix Caméra/Bibliothèque
+    @State private var showImageSourcePicker = false  // Menu de choix entre Caméra et Bibliothèque
+    @State private var showImagePicker = false  // Affichage du picker
+    @State private var selectedSourceType: UIImagePickerController.SourceType = .photoLibrary  // Source choisie
+    
     @State private var showModalDescription = false
     @Binding var dismissModal : Bool
     @State private var showLocalisationPopup : Bool = true
@@ -80,7 +88,11 @@ struct CreateMapInsert: View {
                                     .clipped()
                                     .cornerRadius(10)
                                     .onTapGesture {
-                                        showCamera = true
+                                        // Code original de caroletm :
+                                        // showCamera = true
+                                        
+                                        // Ajout Emmanuel : Afficher le menu de choix au lieu d'ouvrir directement la caméra
+                                        showImageSourcePicker = true
                                     }
                             } else {
                                     Rectangle()
@@ -89,7 +101,11 @@ struct CreateMapInsert: View {
                                         .frame(width: 271, height: 198)
                                         .cornerRadius(10)
                                         .onTapGesture {
-                                            showCamera = true
+                                            // Code original de caroletm :
+                                            // showCamera = true
+                                            
+                                            // Ajout Emmanuel : Afficher le menu de choix au lieu d'ouvrir directement la caméra
+                                            showImageSourcePicker = true
                                         }
                                     VStack{
                                         Image(systemName: "camera")
@@ -186,15 +202,47 @@ struct CreateMapInsert: View {
                     .padding(.vertical,10)
                     .padding(.top, 20)
                     
-                    .sheet(isPresented: $showCamera) {
-                        @Bindable var vm = souvenirViewModel
+                    // ========== Code original de caroletm (commenté par Emmanuel) ==========
+                    // .sheet(isPresented: $showCamera) {
+                    //     @Bindable var vm = souvenirViewModel
+                    //
+                    //     if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                    //         ImagePicker(sourceType: .camera, selectedImage: $vm.image)
+                    //     } else {
+                    //         ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.image)
+                    //     }
+                    // }
+                    // ========== Fin du code original ==========
+                    
+                    // Ajout Emmanuel : Menu de choix pour sélectionner la source de l'image
+                    // Ce confirmationDialog remplace le .sheet original qui ouvrait directement la caméra
+                    .confirmationDialog("Ajouter une photo", isPresented: $showImageSourcePicker) {
                         
+                        // Ajout Emmanuel : Bouton "Prendre une photo" (uniquement si caméra disponible)
                         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                            ImagePicker(sourceType: .camera, selectedImage: $vm.image)
-                        } else {
-                            ImagePicker(sourceType: .photoLibrary, selectedImage: $vm.image)
+                            Button("Prendre une photo") {
+                                selectedSourceType = .camera
+                                showImagePicker = true
+                            }
                         }
+                        
+                        // Ajout Emmanuel : Bouton "Choisir dans la bibliothèque" (toujours disponible)
+                        Button("Choisir dans la bibliothèque") {
+                            selectedSourceType = .photoLibrary
+                            showImagePicker = true
+                        }
+                        
+                        // Ajout Emmanuel : Bouton Annuler
+                        Button("Annuler", role: .cancel) {}
                     }
+                    
+                    // Ajout Emmanuel : Sheet qui affiche l'ImagePicker avec la source choisie
+                    // Cette sheet s'ouvre après la sélection dans le confirmationDialog
+                    .sheet(isPresented: $showImagePicker) {
+                        @Bindable var vm = souvenirViewModel
+                        ImagePicker(sourceType: selectedSourceType, selectedImage: $vm.image)
+                    }
+                    
                     .alert("Creation invalide", isPresented: $isAlertPresented) {
                         Button("OK", role: .cancel) {}
                     } message: {
