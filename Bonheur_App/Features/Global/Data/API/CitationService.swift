@@ -11,5 +11,5 @@ struct CitationService {
     func getAllCitations() async throws -> [CitationDTO] {
         try await APIService.shared.get("/citations")
     }
-
 }
+
