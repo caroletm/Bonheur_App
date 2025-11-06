@@ -1,5 +1,5 @@
 //
-//  BoutonFusée.swift
+//  BoutonFusée.swift
 //  Bonheur_App
 //
 //  Created by caroletm on 11/09/2025.
@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BoutonFusee: View {
 
-   @State var isPressed : Bool
+   let isPressed : Bool  // ✅ CHANGEMENT: remplacer @State par let
   
     struct Octagon: Shape {
         func path(in rect: CGRect) -> Path {
