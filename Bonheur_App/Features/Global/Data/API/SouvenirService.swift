@@ -10,12 +10,12 @@ import Foundation
 struct SouvenirService {
     
     func getAllSouvenirs() async throws -> [SouvenirDTO] {
-        guard let token = UserDefaults.standard.string(forKey: "authToken") else {
-            print("Aucun token trouvé dans UserDefaults")
-            throw URLError(.userAuthenticationRequired)
-        }
-        print("Token trouvé : \(token.prefix(25))...")
-        return try await APIService.shared.get("/souvenirs", token: token)
+//        guard let token = UserDefaults.standard.string(forKey: "authToken") else {
+//            print("Aucun token trouvé dans UserDefaults")
+//            throw URLError(.userAuthenticationRequired)
+//        }
+//        print("Token trouvé : \(token.prefix(25))...")
+     try await APIService.shared.get("/souvenirs")
     }
     
     func getSouvenirById(_ id: UUID) async throws -> SouvenirDTO {
