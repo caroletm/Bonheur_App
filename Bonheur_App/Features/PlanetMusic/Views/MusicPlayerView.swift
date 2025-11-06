@@ -39,20 +39,33 @@ struct MusicPlayerView: View {
                    }
             
             // Boutons en bas : fusée à gauche, retour au centre
-             VStack {
-                 Spacer()
-                 HStack(spacing: 70) {
-                     // Bouton fusée (bas gauche)
-                     Button {
-                         navigationViewModel.path = NavigationPath()
-                     } label: {
-                         BoutonFusee(isPressed: false)
-                     }
-                     .padding(.leading, 40)
-
-            BoutonsFuseeRetour(planete: planeteMusic)
+            VStack {
+                Spacer()
+                
+                HStack {
+                    // Bouton fusée (tout à gauche)
+                    Button {
+                        navigationViewModel.path = NavigationPath()
+                    } label: {
+                        BoutonFusee(isPressed: false)
+                    }
+                    .padding(.leading, 40)
+                    
+                    Spacer() // espace flexible entre les deux boutons
+                    
+                    // Bouton retour (tout à droite)
+                    Button {
+                        navigationViewModel.path = NavigationPath()
+                        navigationViewModel.path.append(AppRoute.landing(planete: planeteMission))
+                    } label: {
+                        BoutonRetour()
+                    }
+                    .padding(.trailing, 40)
+                }
                 .padding(.bottom, 40)
-        }
+            }
+
+         }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
     }
@@ -62,4 +75,5 @@ struct MusicPlayerView: View {
     MusicPlayerView()
         .environment(NavigationViewModel())
 }
+
 
