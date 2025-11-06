@@ -1,15 +1,11 @@
 //
-//  BoutonPlay.swift
+//  PlayButtonOctagon.swift
 //  Bonheur_App
 //
+//  Bouton circulaire de lecture/pause avec effet de respiration animé.
 //  Created by Apprenant156 on 25/09/2025.
 //
-//
-//  BoutonPlay.swift
-//  Bonheur_App
-//
-//  Created by Apprenant156 on 25/09/2025.
-//
+
 
 import SwiftUI
 import AVFoundation

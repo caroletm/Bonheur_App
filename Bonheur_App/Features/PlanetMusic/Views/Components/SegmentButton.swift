@@ -2,6 +2,7 @@
 //  SegmentButton.swift
 //  Bonheur_App
 //
+//  Représente un segment du cercle musical, interactif et animé.
 //  Created by Apprenant156 on 29/09/2025.
 //
 
@@ -14,12 +15,12 @@ struct SegmentButton: View {
     let endAngle: Angle
     let isSelected: Bool
     var action: () -> Void
-    
+
     var body: some View {
         GeometryReader { geo in
             let midAngle = (startAngle.degrees + endAngle.degrees) / 2
             let radius = geo.size.width / 2 * 0.70
-            
+
             Button(action: action) {
                 ZStack {
                     // Fond du segment
@@ -29,15 +30,15 @@ struct SegmentButton: View {
                             SegmentShape(startAngle: startAngle, endAngle: endAngle)
                                 .stroke(Color.white, lineWidth: 2)
                         )
-                    
-                    // Image + label
+
+                    // Icône + label positionnés sur le segment
                     VStack(spacing: 4) {
                         Image(logo)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
                             .foregroundColor(isSelected ? .white : .gray)
-                        
+
                         Text(label)
                             .font(.custom("SpaceMono-Regular", size: 10))
                             .foregroundStyle(isSelected ? .white : .gray)
