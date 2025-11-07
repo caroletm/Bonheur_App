@@ -43,7 +43,6 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    
     override init() {
         super.init()
         manager.delegate = self
@@ -67,7 +66,7 @@ class MapViewModel: NSObject, CLLocationManagerDelegate {
     // Delegate appelé quand une nouvelle position est détectée
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let lastLocation = locations.last else { return }
-        print("Position utilisateur : \(lastLocation.coordinate.latitude), \(lastLocation.coordinate.longitude)")
+//        print("Position utilisateur : \(lastLocation.coordinate.latitude), \(lastLocation.coordinate.longitude)")
         DispatchQueue.main.async {
             self.userLocation = lastLocation.coordinate
         }

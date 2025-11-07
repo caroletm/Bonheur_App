@@ -10,6 +10,7 @@ import SwiftUI
 struct FilteredSouvenirsView: View {
     
     @Environment(SouvenirsViewModel.self) private var souvenirsViewModel
+    @Environment(NavigationViewModel.self) private var navigationViewModel
     
     let columns = [
         GridItem(.flexible()),
@@ -31,7 +32,12 @@ struct FilteredSouvenirsView: View {
                     ForEach(souvenirsViewModel.filteredSouvenirs, id: \.id) { souvenir in
                         let hasPhoto = souvenir.photo != ""
                         
-                        CadreMiniVignette(souvenir : souvenir, hasPhoto: hasPhoto)
+                        Button {
+                            navigationViewModel.path.append(AppRoute.detailSouvenir(souvenir : souvenir))
+                        }label: {
+                            CadreMiniVignette(souvenir : souvenir, hasPhoto: hasPhoto)
+                                .padding(.vertical, 8)
+                        }
                     }
                 }
             } else {
@@ -54,6 +60,7 @@ struct FilteredSouvenirsView: View {
             .ignoresSafeArea(edges: .all)
         FilteredSouvenirsView()
             .environment(SouvenirsViewModel())
+            .environment(NavigationViewModel())
     }
 }
 
