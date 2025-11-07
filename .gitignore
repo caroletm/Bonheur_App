@@ -1,3 +1,5 @@
 .DS_Store
 .xcuserstate
 .mp3
+*.xcuserstate
+xcuserdata/
